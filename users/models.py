@@ -37,7 +37,7 @@ class Driver(models.Model):
     #miscellaneous
     #order_history_list = models.
 
-class Order(model.Models):
+class Order(models.Model):
     ### FOR USER SIDE ###
     #delivery info - need city or state or zip? assuming local a given or can calculate in range
     delivery_address = models.CharField(max_length=50) #check if in range
@@ -53,9 +53,10 @@ class Order(model.Models):
     driver_latitude = models.DecimalField(decimal_places=5, max_digits=9)
     driver_longitude = models.DecimalField(decimal_places=5, max_digits=9)
 
-    #store preferences; can choose to set favorite store
-    activate_favorite_store = models.BooleanField(default=False)
-    favorite_store = models.CharField(max_length=15, choices=STORE_SELECTIONS, default=None,)
+    STORE_SELECTIONS = [
+        ('KRO', 'Kroger'),
+        ('WAL', 'Wal-Mart'),
+    ]
 
     #order information
     store_selection = models.CharField(max_length=15, choices=STORE_SELECTIONS, default=None)
