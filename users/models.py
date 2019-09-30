@@ -7,41 +7,6 @@ class User(models.Model):
     email = models.EmailField(max_length = 50)
     password = models.CharField(max_length=30)
 
-    #delivery info - need city or state or zip? assuming local a given or can calculate in range
-    delivery_address = models.CharField(max_length=50) #check if in range
-    delivery_apt_suite = models.CharField(max_length=20) 
-    delivery_instructions = models.CharField(max_length=120)
-
-    
-    #location
-    latitude = models.DecimalField(decimal_places=5, max_digits=9)
-    longitude = models.DecimalField(decimal_places=5, max_digits=9)
-    
-
-    #store options
-    STORE_SELECTIONS = [
-        ('KRO', 'Kroger'),
-        ('Wal', 'Wal-Mart'),
-    ]
-
-    #store preferences; can choose to set favorite store
-    activate_favorite_store = models.BooleanField(default=False)
-    favorite_store = models.CharField(max_length=15, choices=STORE_SELECTIONS, default=None,)
-
-    #payment information
-    credit_card_number = models.IntegerField()
-    #expiration_date = check format
-    security_number = models.IntegerField()
-
-    #order information
-    store_selection = models.CharField(max_length=15, choices=STORE_SELECTIONS, default=None)
-    order_size = models.CharField(max_length=15) #small, med, large; calculate based on total price before delivery charge
-    order_list = models.CharField(max_length=255)
-    desired_delivery_time_range_lower_bound = models.TimeField()
-    desired_delivery_time_range_upper_bound = models.TimeField()
-    is_delivery_asap = models.BooleanField(default=False)
-
-
 
 
 class Driver(models.Model):
@@ -59,26 +24,52 @@ class Driver(models.Model):
     license_plate_number = models.CharField(max_length=10)
     car_make = models.CharField(max_length=16)
     car_model = models.CharField(max_length=16)
-    
+
     #car personals
     license_identifier_number = models.CharField(max_length=12)
     state_of_drivers_license_issuance = models.CharField(max_length=25)
 
-    #payment information - put under lock and key - high risk
-    credit_card_number = models.IntegerField()
+    #payment information - put under lock and key - high risk -- 3rd party, for our sake.
+    #credit_card_number = models.IntegerField()
     #expiration_date = check format
-    security_number = models.IntegerField()
+    #security_number = models.IntegerField()
 
-    #location
-    latitude = models.DecimalField(decimal_places=5, max_digits=9)
-    longitude = models.DecimalField(decimal_places=5, max_digits=9)
+    #miscellaneous
+    #order_history_list = models.
+
+class Order(model.Models):
+    ### FOR USER SIDE ###
+    #delivery info - need city or state or zip? assuming local a given or can calculate in range
+    delivery_address = models.CharField(max_length=50) #check if in range
+    delivery_apt_suite = models.CharField(max_length=20)
+    delivery_instructions = models.CharField(max_length=120)
+
+
+    #user location -- to be used with mapping
+    dropoff_latitude = models.DecimalField(decimal_places=5, max_digits=9)
+    dropoff_longitude = models.DecimalField(decimal_places=5, max_digits=9)
+
+    #driver location
+    driver_latitude = models.DecimalField(decimal_places=5, max_digits=9)
+    driver_longitude = models.DecimalField(decimal_places=5, max_digits=9)
+
+    #store preferences; can choose to set favorite store
+    activate_favorite_store = models.BooleanField(default=False)
+    favorite_store = models.CharField(max_length=15, choices=STORE_SELECTIONS, default=None,)
+
+    #order information
+    store_selection = models.CharField(max_length=15, choices=STORE_SELECTIONS, default=None)
+    order_size = models.CharField(max_length=15) #small, med, large; calculate based on total price before delivery charge
+    # TODO
+    order_list = models.CharField(max_length=255) #will be list of objs later...
+    desired_delivery_time_range_lower_bound = models.TimeField()
+    desired_delivery_time_range_upper_bound = models.TimeField()
+    is_delivery_asap = models.BooleanField(default=False)
 
     #delivery - order
     order_start_time = models.TimeField()#when they accept the order
     order_deliver_time = models.TimeField()
     current_store_to_go_to = models.CharField(max_length=20)
-    current_order_list = models.CharField(max_length=255)#need to find a way to store as list and make longer
-    current_order_size = models.CharField(max_length=15)#small, med, large
     special_requests = models.CharField(max_length=150)
 
     #delivery - order status
@@ -89,17 +80,3 @@ class Driver(models.Model):
     #delivery - customer
     current_address_dropoff_street_and_street_number = models.CharField(max_length=35)
     customer_name = models.CharField(max_length=20)
-
-    #miscellaneous
-    #order_history_list = models.
-
-
-    
-
-    
-    
-
-
-
-
-
