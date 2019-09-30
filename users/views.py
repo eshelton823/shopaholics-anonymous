@@ -6,6 +6,4 @@ from .forms import UserCreationThroughSignupForm, DriverCreationForm
 
 def user_signup(request):
     form = UserCreationThroughSignupForm(request.POST)
-    return render(request, 'user_signup.html', {'form': form})
-
-
+    return render(request, 'users/user_signup.html', {'form': form})

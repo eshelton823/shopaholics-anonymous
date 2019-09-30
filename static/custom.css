@@ -28,10 +28,6 @@ html {
     display: flex;
     align-items: center;
 }
-.better{
-    background-color: "#000000";
-    background-image: url("./images/bg_stars.gif");
-}
 .anchor {
     padding-top: 10px;
 }
