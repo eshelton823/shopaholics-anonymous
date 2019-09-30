@@ -21,4 +21,5 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^', include('users.urls')),
+    path('shop/', include('shop.urls')),
 ]
