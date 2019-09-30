@@ -28,13 +28,6 @@ html {
     display: flex;
     align-items: center;
 }
-<<<<<<< HEAD
-=======
-.better{
-    background-color: "#000000";
-    background-image: url("./images/bg_stars.gif");
-}
->>>>>>> d0655189094e9f3c832a8a83313ade6b57dc8dcf
 .anchor {
     padding-top: 10px;
 }
