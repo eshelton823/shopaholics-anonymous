@@ -20,6 +20,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^', include('users.urls')),
+    url(r'^auth/', include('social_django.urls', namespace='social')),
+    url(r'^profile/', include('users.urls')),
     path('', include('shop.urls')),
 ]

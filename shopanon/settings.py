@@ -67,6 +67,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -80,13 +82,24 @@ WSGI_APPLICATION = 'shopanon.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': "shopaholics-anonymous",
-        'HOST': "localhost",
-        "PORT": "5432",
     }
 }
 
+# Connect to PostgreSQL
+psql="postgres://kshnflpzmhwcye:3bc77f34ff3114a5e82ecbfd237c91e6824934cc8b367c763226aabde17ee491@ec2-54-221-238-248.compute-1.amazonaws.com:5432/d1k3n8fum6qq6h"
+DATABASES['default'] = dj_database_url.config(default=psql, conn_max_age=600, ssl_require=True)
+
+AUTHENTICATION_BACKENDS = (
+ 'social_core.backends.open_id.OpenIdAuth',  # for Google authentication
+ 'social_core.backends.google.GoogleOpenId',  # for Google authentication
+ 'social_core.backends.google.GoogleOAuth2',  # for Google authentication
+ 'django.contrib.auth.backends.ModelBackend',
+)
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -132,6 +145,3 @@ STATICFILES_DIRS = [
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
-
-# Connect to PostgreSQL
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
