@@ -5,10 +5,3 @@ install:
 - pip install -r requirements-travis.txt
 script:
 - python manage.py test
-deploy:
-  provider: heroku
-  api_key:
-    secure: DdghVPpIakeJe2bXXqWhlSooWlw6e1bq8YPHxLmtsf5fb6O92JgEVOcGbe/JNvSdjAIv7dcnC/YH9WvgakxKfC75sXBgDd59DhwcOAT3TojzpfG+nyLmY/PslHo7oVx8iSwBj8mSfm03l1EmGn4vXIe6bgskjOGgPgYXP1efnLQE0uOjZ5vSnDefA+lt42slCxq4QHzNok9R5iuiw2hBUjbYdFohSenrq+HZruwPs/XqQa2JSCQejV2wNMubheJvSztQQf0BiqbY/GrjKwxhlTFigCLILUckf+RFJK3sQp26h++YyTwqGuXk8C0xArDd00qXs27xkF25iqDIxvqH8tAQ1d/1Sc6yms479ckCcdxLskDXVBF2JXxB7PiKt4b+S23Z8BwvserEq26dE/leCiu2lBrNz93OaGm0gw+O3BXXuFiQwjhB5IPf48eKw1OfyfbVyzoQZ/GOBF+4SqO7NrmgsNSmNle0Bz/P+aGpL5O18ETgbbrdHtNosUhIYHOwfVryz1flZln/He4VZlPPWdQxO2Du4Zdgky+yoKjbl4gSJmtRz3xdROmGhTP36rStrhxgmvt8eB+upOgFoVBbXnAM7wYZ0vHP9OiCQkgb1ROkEYxorPjxHHOlXRxe1fm1I6RAP+UPH9RHPZkkaG4aZAbiA04RUlx5JyMMcbU0GV8=
-  app: shopaholics-anonymous
-  on:
-    repo: uva-cs3240-f19/project-102-shopaholics-anonymous-project
