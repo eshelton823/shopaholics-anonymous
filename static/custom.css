@@ -31,3 +31,38 @@ html {
 .anchor {
     padding-top: 10px;
 }
+
+.all-bg{
+    background-color: rbga(192, 192, 192, .7)
+}
+
+.domcolor {
+    background-color: #5dcc35
+}
+
+.domcolor-t {
+background-color: rgba(93, 204, 53, .5)
+}
+
+.dom-text {
+color: #5dcc35
+}
+
+.accent {
+background-color: #43b3cf;
+border-color: #43b3cf
+}
+
+.accent-text {
+color: #43b3cf
+}
+
+.navbar.navbar-expand-md.navbar-dark.bg-dark.fixed-top li a {
+    color: #5dcc35;
+}
+
+h1 {font-family: "MV Boli"}
+
+.jumbotron{
+background-image: url("../../static/shop/images/groceries.jpg");
+}
