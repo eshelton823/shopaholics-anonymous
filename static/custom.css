@@ -71,6 +71,10 @@ h1 {font-family: "MV Boli"}
 .jumbotron{
 background-image: url("../../static/shop/images/groceries.jpg");
 }
+
+.groc-color{
+background-image: url("../../static/shop/images/groceries-color.jpg");
+}
 .navbar-wrapper {
    position: absolute;
    top: 0;
