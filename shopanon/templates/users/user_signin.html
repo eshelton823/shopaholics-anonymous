@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Sign in for ShopAnon!</h1>
+    <div>
+        <p> Sign in with Google! </p>
+        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{home}}">Login with Google</a>
+    </div>
+{% endblock %}
