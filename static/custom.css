@@ -56,12 +56,17 @@ border-color: #ff8656
 color: #ff8656
 }
 
+.second-accent{
+background-color: #ff569c;
+border-color: #ff569c
+}
+
 .navbar.navbar-expand-md.navbar-dark.bg-dark.fixed-top li a {
     color: #5dcc35;
 }
 
 h1 {font-family: "MV Boli"}
-.A {font-family: "Arial Narrow"}
+.A {font-family: "Calibri"}
 
 .jumbotron{
 background-image: url("../../static/shop/images/groceries.jpg");

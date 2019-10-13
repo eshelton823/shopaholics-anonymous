@@ -3,56 +3,62 @@
 <br>
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4" ><span class="A">Welcome to your dashboard, Tom!</span></h1>
-  <p class="lead">Quickly build an effective pricing table for your potential customers with this Bootstrap example. It’s built with default Bootstrap components and utilities with little customization.</p>
+  <p class="lead">Checkout your information here, plus the status of your shopping!</p>
 </div>
 
 <div class="container">
-  <div class="card-deck mb-3 text-center">
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header">
-        <h4 class="my-0 font-weight-normal">Free</h4>
-      </div>
-      <div class="card-body">
-        <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-        <ul class="list-unstyled mt-3 mb-4">
-          <li>10 users included</li>
-          <li>2 GB of storage</li>
-          <li>Email support</li>
-          <li>Help center access</li>
-        </ul>
-        <button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button>
-      </div>
-    </div>
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header">
-        <h4 class="my-0 font-weight-normal">Pro</h4>
-      </div>
-      <div class="card-body">
-        <h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
-        <ul class="list-unstyled mt-3 mb-4">
-          <li>20 users included</li>
-          <li>10 GB of storage</li>
-          <li>Priority email support</li>
-          <li>Help center access</li>
-        </ul>
-        <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
-      </div>
-    </div>
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header">
-        <h4 class="my-0 font-weight-normal">Enterprise</h4>
-      </div>
-      <div class="card-body">
-        <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
-        <ul class="list-unstyled mt-3 mb-4">
-          <li>30 users included</li>
-          <li>15 GB of storage</li>
-          <li>Phone and email support</li>
-          <li>Help center access</li>
-        </ul>
-        <button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button>
-      </div>
-    </div>
-  </div>
 
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header domcolor">
+        <h4 class="my-0 font-weight-normal">User Information</h4>
+      </div>
+      <div class="card-body">
+        <h1 class="card-title pricing-card-title">Thomas Jefferson</h1>
+        <ul class="list-unstyled mt-3 mb-4">
+            <li>Username: <span class="text-muted">TJFounder</span></li>
+          <li>Password: <span class="text-muted">*****</span></li>
+          <li>Email: <span class="text-muted">tj@virginia.edu</span></li>
+            <li>Phone Number: <span class="text-muted">123-456-7890</span></li>
+          <li>Address: <span class="text-muted">1 West Lawn | Charlottesville, VA | 22903</span></li>
+        </ul>
+        <button type="button" class="btn btn-lg btn-primary accent">Edit User Information</button>
+      </div>
+    </div>
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header domcolor">
+        <h4 class="my-0 font-weight-normal">Customer Preferences</h4>
+      </div>
+      <div class="card-body">
+          <h1 class="card-title pricing-card-title">Primary Identity: <small class="text-muted">Shopper</small></h1>
+        <ul class="list-unstyled mt-3 mb-4">
+          <li>Preferred Store: <span class="text-muted">Kroger</span></li>
+          <li>Price Bracket: <span class="text-muted">$75-$150</span></li>
+          <li>Grocery drop-off Point: <span class="text-muted">Rotunda Steps</span></li>
+          <li><span class="text-muted"></span></li>
+        </ul>
+        <button type="button" class="btn btn-lg btn-primary accent">Change Customer Preferences</button>
+      </div>
+    </div>
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header domcolor">
+        <h4 class="my-0 font-weight-normal">Shopping Status</h4>
+      </div>
+      <div class="card-body">
+        <h1 class="card-title pricing-card-title">Status: <small class="text-muted">Not Shopping</small></h1>
+        <ul class="list-unstyled mt-3 mb-4">
+          <li>Current Order: <span class="text-muted">You aren't shopping right now!</span></li>
+            <li>Anticipated Drop Time: <span class="text-muted">N/A</span></li>
+            <li>Current Driver: <span class="text-muted">N/A</span></li>
+            <li>Tentative Price: <span class="text-muted">$0.00</span></li>
+            <hr>
+          <li>Date of Last Order: <span class="text-muted">8/26/2019</span></li>
+          <li>Price of Last Order: <span class="text-muted">$83.45</span></li>
+            <li>Last Driver: <span class="text-muted">James Madison</span><a href="#"> (see profile)</a></li>
+        </ul>
+        <button type="button" class="btn btn-lg btn-primary accent">Shop Now</button>
+      </div>
+
+    </div>
+
+</div>
 {% endblock %}
