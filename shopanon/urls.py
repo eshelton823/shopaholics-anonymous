@@ -17,10 +17,12 @@ from django.contrib import admin
 from django.conf.urls import url, include
 from django.urls import path
 from django.conf import settings
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^auth/', include('social_django.urls', namespace='social')),
     url(r'^profile/', include('users.urls')),
     path('', include('shop.urls')),
+    path('logout/', LogoutView, {'next_page': settings.LOGOUT_REDIRECT_URL},name='logout'),
 ]

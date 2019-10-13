@@ -99,7 +99,12 @@ AUTHENTICATION_BACKENDS = (
 )
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = "/"
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '468447031403-2ufnan3jvf8im4ap5jgs34jnj2fe7p94'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'CHvIa6iwZiKswPgex7rJnyHh'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
