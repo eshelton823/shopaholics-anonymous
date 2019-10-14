@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.conf.urls import url, include
 from django.urls import path
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
@@ -25,4 +26,4 @@ urlpatterns = [
     url(r'^profile/', include('users.urls')),
     path('', include('shop.urls')),
     path('logout/', LogoutView, {'next_page': settings.LOGOUT_REDIRECT_URL},name='logout'),
-]
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
