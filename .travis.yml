@@ -4,6 +4,7 @@ python:
 install:
 - pip install -r requirements-travis.txt
 script:
+- python manage.py migrate
 - python manage.py test
 notifications:
   slack: shopaholicsanonymous:oeIwEbCPfLc0X9HSbudQ1Yua
