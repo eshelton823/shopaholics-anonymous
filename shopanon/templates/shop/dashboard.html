@@ -2,7 +2,7 @@
 {% block content %}
 <br>
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4" ><span class="A">Welcome to your dashboard, Tom!</span></h1>
+    <h1 class="display-4" ><span class="A">Welcome to your dashboard, {{user.first_name}}!</span></h1>
   <p class="lead">Checkout your information here, plus the status of your shopping!</p>
 </div>
 
@@ -13,11 +13,12 @@
         <h4 class="my-0 font-weight-normal">User Information</h4>
       </div>
       <div class="card-body">
-        <h1 class="card-title pricing-card-title">Thomas Jefferson</h1>
+        <h1 class="card-title pricing-card-title">{{ user.first_name }} {{ user.last_name }}</h1>
         <ul class="list-unstyled mt-3 mb-4">
-            <li>Username: <span class="text-muted">TJFounder</span></li>
+            <li>Username: <span class="text-muted">{{ user.username }}</span></li>
           <li>Password: <span class="text-muted">*****</span></li>
-          <li>Email: <span class="text-muted">tj@virginia.edu</span></li>
+          <li>Email: <span class="text-muted">{{ user.email }}</span></li>
+            <!-- Get on signup! -->
             <li>Phone Number: <span class="text-muted">123-456-7890</span></li>
           <li>Address: <span class="text-muted">1 West Lawn | Charlottesville, VA | 22903</span></li>
         </ul>
