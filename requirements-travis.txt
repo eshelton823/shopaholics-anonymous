@@ -1,4 +1,6 @@
 django
 django-heroku
 gunicorn
+psycopg2-binary
+dj-database-url
 social-auth-app-django
