@@ -1,14 +1,21 @@
 {% extends "baseuser.html" %}
 
 {% block content %}
-    <h1>Sign up for ShopAnon!</h1>
+<h1 style="
+    padding-top: 60px;
+">Sign up for ShopAnon!</h1>
+<hr>
     <div>
+        <h3>Sign up with Google!</h3>
+        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{home}}">Login with Google</a>
+        <br>
+        <hr>
+        <h3>Don't have Google? Sign up here!</h3>
         <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Submit</button>
         </form>
-        <p> Or sign up with Google! </p>
-        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{home}}">Login with Google</a>
+
     </div>
 {% endblock %}

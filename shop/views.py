@@ -7,3 +7,6 @@ def home(request):
 
 def dashboard(request):
     return render(request, 'shop/dashboard.html')
+
+def store(request):
+    return render(request, 'shop/store.html')
