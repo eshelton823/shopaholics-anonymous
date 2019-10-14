@@ -88,7 +88,7 @@ if 'test' in sys.argv or 'test_coverage' in sys.argv: #Covers regular testing an
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': "shopaholics-anonymous",
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
 else:
