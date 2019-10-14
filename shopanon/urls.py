@@ -25,5 +25,5 @@ urlpatterns = [
     url(r'^auth/', include('social_django.urls', namespace='social')),
     url(r'^profile/', include('users.urls')),
     path('', include('shop.urls')),
-    path('logout/', LogoutView, {'next_page': settings.LOGOUT_REDIRECT_URL},name='logout'),
+    path('logout/', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL},name='logout'),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
