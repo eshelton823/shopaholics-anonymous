@@ -28,4 +28,4 @@ urlpatterns = [
     url(r'^profile/', include('users.urls', namespace="users")),
     path('', include('shop.urls', namespace="shop")),
     path('logout/', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL},name='logout'),
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
