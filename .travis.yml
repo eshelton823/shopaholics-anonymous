@@ -7,6 +7,10 @@ script:
 - python manage.py migrate
 - python manage.py collectstatic --no-input
 - python manage.py test
+branches:
+  only:
+  - master
+  - stable
 notifications:
   slack: shopaholicsanonymous:oeIwEbCPfLc0X9HSbudQ1Yua
 deploy:
