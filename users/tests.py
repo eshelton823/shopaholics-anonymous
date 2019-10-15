@@ -1,5 +1,6 @@
 import unittest
 from django.test import Client
+from django.contrib.staticfiles import finders
 from django.test import TestCase
 
 # Create your tests here.
@@ -22,8 +23,10 @@ class PageTests(TestCase):
         response = self.client.get("/store")
         #Check it's 200
         self.assertEqual(response.status_code, 200)
-    def testCSS(self): 
+    def testCSS(self):
         #Get store page
-        response = self.client.get("/static/custom.css")
+        response = finders.find("custom.css")
         #Check it's 200
-        self.assertEqual(response.status_code, 200)
+
+        self.assertIn("custom.css", response)
+        self.assertNotEqual(response, None)
