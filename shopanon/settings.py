@@ -10,7 +10,7 @@ For th  e full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import os, sys
 import django_heroku
 import dj_database_url
 
@@ -82,16 +82,28 @@ WSGI_APPLICATION = 'shopanon.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': "shopaholics-anonymous",
-    }
-}
+DATABASES = {}
 
-# Connect to PostgreSQL
-psql="postgres://kshnflpzmhwcye:3bc77f34ff3114a5e82ecbfd237c91e6824934cc8b367c763226aabde17ee491@ec2-54-221-238-248.compute-1.amazonaws.com:5432/d1k3n8fum6qq6h"
-DATABASES['default'] = dj_database_url.config(default=psql, conn_max_age=600, ssl_require=True)
+if 'test' in sys.argv or 'test_coverage' in sys.argv: #Covers regular testing and django-coverage
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': "shopaholics-anonymous",
+            'TEST':{
+                'ENGINE': 'django.db.backends.sqlite3'
+            }
+        }
+    }
+    # Connect to PostgreSQL
+    psql="postgres://kshnflpzmhwcye:3bc77f34ff3114a5e82ecbfd237c91e6824934cc8b367c763226aabde17ee491@ec2-54-221-238-248.compute-1.amazonaws.com:5432/d1k3n8fum6qq6h"
+    DATABASES['default'] = dj_database_url.config(default=psql, conn_max_age=600, ssl_require=True)
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
@@ -163,12 +175,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') # 'data' is my media folder
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "static"),
+# ]
 
 # Activate Django-Heroku.
-django_heroku.settings(locals())
+if '/app' in os.environ['HOME']:
+    import django_heroku
+    django_heroku.settings(locals())
+
+#db_from_env = dj_database_url.config(conn_max_age=500)
+#DATABASES['default'].update(db_from_env)
