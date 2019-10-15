@@ -183,7 +183,9 @@ STATICFILES_DIRS = [
 ]
 
 # Activate Django-Heroku.
-django_heroku.settings(locals())
+if '/app' in os.environ['HOME']:
+    import django_heroku
+    django_heroku.settings(locals())
 
 #db_from_env = dj_database_url.config(conn_max_age=500)
 #DATABASES['default'].update(db_from_env)
