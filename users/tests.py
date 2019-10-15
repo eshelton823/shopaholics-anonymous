@@ -22,7 +22,7 @@ class PageTests(TestCase):
         response = self.client.get("/store")
         #Check it's 200
         self.assertEqual(response.status_code, 200)
-    def testCSS(self):
+    def testCSS(self): 
         #Get store page
         response = self.client.get("/static/custom.css")
         #Check it's 200
