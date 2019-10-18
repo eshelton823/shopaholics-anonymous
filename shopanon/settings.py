@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'users',
     'shop',
     'social_django',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -180,9 +181,17 @@ STATICFILES_DIRS = [
 ]
 
 # Activate Django-Heroku.
-if '/app' in os.environ['HOME']:
-    import django_heroku
-    django_heroku.settings(locals())
+try:
+    if '/app' in os.environ['HOME']:
+        import django_heroku
+        django_heroku.settings(locals())
+except:
+    pass
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5
+}
 
 #db_from_env = dj_database_url.config(conn_max_age=500)
 #DATABASES['default'].update(db_from_env)

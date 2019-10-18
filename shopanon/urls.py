@@ -19,6 +19,11 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
+from users.views import UserViewSet
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
 
 app_name="shopanon"
 
@@ -28,4 +33,8 @@ urlpatterns = [
     url(r'^profile/', include('users.urls', namespace="users")),
     path('', include('shop.urls', namespace="shop")),
     path('logout/', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL},name='logout'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+]
+              # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
+

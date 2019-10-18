@@ -1,5 +1,13 @@
 from django.urls import path
-from .import views
+from django.conf.urls import include
+from users.views import UserViewSet
+from users import views
+from rest_framework import routers
+
+
+
+# Wire up our API using automatic URL routing.
+# Additionally, we include login URLs for the browsable API.
 
 app_name = "users"
 
