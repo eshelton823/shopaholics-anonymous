@@ -1,8 +1,5 @@
 from django.urls import path
-from django.conf.urls import include
-from users.views import UserViewSet
 from users import views
-from rest_framework import routers
 
 
 
@@ -14,4 +11,5 @@ app_name = "users"
 urlpatterns = [
     path('signup/', views.user_signup, name='user_signup'),
     path('signin/', views.user_signin, name='user_signin'),
+    path('driver_info/', views.driver_info, name='driver_info'),
 ]

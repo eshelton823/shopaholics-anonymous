@@ -19,3 +19,6 @@ def user_signup(request):
     return render(request, 'users/user_signup.html', {'form': form})
 def user_signin(request):
     return render(request, 'users/user_signin.html')
+
+def driver_info(request):
+    return render(request, 'users/driver_info.html')
