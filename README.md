@@ -9,4 +9,5 @@
 3. Run `CREATE USER app WITH PASSWORD 'NotAPassword!';` to create the app user.
 4. Run `CREATE DATABASE shopaholics_anonymous WITH OWNER app;`
 5. Grant necessary permissions with `GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO app;`
-6. Run the server to confirm operation.
+6. To grant the ability to create the test database, add `psql -c "ALTER USER app CREATEDB;" -U postgres`.
+7. Run the server to confirm operation.
