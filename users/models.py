@@ -33,6 +33,9 @@ class User(models.Model):
 
 
 class Order(models.Model):
+    #relationship with user (many-to-many)
+    user = models.CharField(max_length=20)
+    driver = models.CharField(max_length=20)
     ### FOR USER SIDE ###
     #delivery info - need city or state or zip? assuming local a given or can calculate in range
     delivery_address = models.CharField(max_length=50) #check if in range
