@@ -6,15 +6,8 @@ class User(models.Model):
     last_name = models.CharField(max_length=20)
     email = models.EmailField(max_length = 50)
     password = models.CharField(max_length=30)
+    username = models.CharField(max_length=50)
 
-
-
-class Driver(models.Model):
-    #personal
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
-    email = models.EmailField(max_length = 50)
-    password = models.CharField(max_length=50)
     #profile_pic = models.ImageField()
     #phone_number = models.PhoneNumberField(_(""))
     deliveries_made = models.IntegerField()
@@ -35,9 +28,15 @@ class Driver(models.Model):
     #security_number = models.IntegerField()
 
     #miscellaneous
-    #order_history_list = models.
+    # order_history_list = models.ArrayField()
+    is_matching = models.BooleanField()
+    driver_filled = models.BooleanField()
+
 
 class Order(models.Model):
+    #relationship with user (many-to-many)
+    user = models.CharField(max_length=20)
+    driver = models.CharField(max_length=20)
     ### FOR USER SIDE ###
     #delivery info - need city or state or zip? assuming local a given or can calculate in range
     delivery_address = models.CharField(max_length=50) #check if in range

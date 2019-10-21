@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<br>
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4" ><span class="A">Welcome to your dashboard, {{user.first_name}}!</span></h1>
+  <p class="lead">Check out your information here, plus the status of your orders!</p>
+<p>Currently matching: <span class="text-muted">{{ user.is_matching }}</span></p>
+</div>
+
+<div class="container">
+<a class="btn btn-md btn-primary second-accent" href="/dashboard" role="button"> View User Dashboard </a>
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header domcolor">
+        <h4 class="my-0 font-weight-normal">Financial Information</h4>
+      </div>
+      <div class="card-body">
+        <h1 class="card-title pricing-card-title">{{ user.first_name }} {{ user.last_name }}</h1>
+        <ul class="list-unstyled mt-3 mb-4">
+          <li>Total money earned: <span class="text-muted">{{ user.money_earned }}</span></li>
+          <li>Deliveries made: <span class="text-muted">{{ user.deliveries_made }}</span></li>
+            <hr>
+            <li>Bank account: <span class="text-muted">***1234</span></li>
+          <li>Company: <span class="text-muted">Bank of America</span></li>
+            <!-- Get on signup! -->
+        </ul>
+        <button type="button" class="btn btn-lg btn-primary accent">Edit Financial Information</button>
+      </div>
+    </div>
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header domcolor">
+        <h4 class="my-0 font-weight-normal">My Car</h4>
+      </div>
+      <div class="card-body">
+        <!--<h1 class="card-title pricing-card-title">Status: <small class="text-muted">Not Shopping</small></h1>-->
+        <ul class="list-unstyled mt-3 mb-4">
+          <li>License Plate Number: <span class="text-muted">{{ user.license_plate_number }}</span></li>
+            <li>Car Make: <span class="text-muted">{{ user.car_make }}</span></li>
+            <li>Car Model: <span class="text-muted">{{user.car_model }}
+            <li>Driver's License Number: <span class="text-muted">{{ user.license_identifier_number }}</span></li>
+            <li>State of Issue: <span class="text-muted">{{ user.state_of_drivers_license_issuance }}</span></li>
+        </ul>
+        <button type="button" class="btn btn-lg btn-primary accent">Edit Car Information</button>
+      </div>
+    </div>
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header domcolor">
+        <h4 class="my-0 font-weight-normal">Previous Orders</h4>
+      </div>
+      <div class="card-body">
+          <h1 class="card-title pricing-card-title">Primary Identity: <small class="text-muted">Driver</small></h1>
+        <ul class="list-unstyled mt-3 mb-4">
+          <li>Date of Last Order: <span class="text-muted">8/26/2019</span></li>
+          <li>Price of Last Order: <span class="text-muted">$83.45</span></li>
+            <li>Earned: <span class="text-muted">$10</span></li>
+            <li>Last User: <span class="text-muted">Thomas Jefferson</span></li>
+        </ul>
+        <button type="button" class="btn btn-lg btn-primary accent">Change Customer Preferences</button>
+      </div>
+    </div>
+</div>
+{% endblock %}

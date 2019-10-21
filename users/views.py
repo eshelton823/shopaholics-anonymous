@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from .forms import UserCreationThroughSignupForm, DriverCreationForm
+from .forms import UserCreationThroughSignupForm
 from users.models import User
 from rest_framework import viewsets
 from users.serializers import UserSerializer
