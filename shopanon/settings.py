@@ -81,26 +81,16 @@ WSGI_APPLICATION = 'shopanon.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {}
-
-if 'test' in sys.argv: # When testing.
-    DATABASES = { 
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'shopaholics_anonymous',
+        'USER': 'app',
+        'PASSWORD': 'NotAPassword!',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': "shopaholics-anonymous",
-        }
-    }
-    # Connect to PostgreSQL
-    psql="postgres://kshnflpzmhwcye:3bc77f34ff3114a5e82ecbfd237c91e6824934cc8b367c763226aabde17ee491@ec2-54-221-238-248.compute-1.amazonaws.com:5432/d1k3n8fum6qq6h"
-    DATABASES['default'] = dj_database_url.config(default=psql, conn_max_age=600, ssl_require=True)
+}
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
@@ -182,9 +172,11 @@ STATICFILES_DIRS = [
 
 # Activate Django-Heroku.
 try:
-    if '/app' in os.environ['HOME']:
+    if os.environ['HEROKU'] == "TRUE":
         import django_heroku
         django_heroku.settings(locals())
+        # Connect to PostgreSQL if on Heroku
+        DATABASES['default'] = dj_database_url.config(default=psql, conn_max_age=600, ssl_require=True)
 except:
     pass
 
