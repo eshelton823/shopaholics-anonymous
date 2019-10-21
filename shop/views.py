@@ -11,5 +11,12 @@ def dashboard(request):
         return render(request, 'shop/dashboard.html')
     else:
         return redirect('/profile/signin')
+
+def driver_dash(request):
+    if request.user.is_authenticated:
+        return render(request, 'shop/driver_dash.html')
+    else:
+        return redirect('/profile/signin')
+
 def store(request):
     return render(request, 'shop/store.html')

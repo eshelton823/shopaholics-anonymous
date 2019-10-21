@@ -3,14 +3,14 @@
 <br>
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4" ><span class="A">Welcome to your dashboard, {{user.first_name}}!</span></h1>
-  <p class="lead">Check out your information here, plus the status of your shopping!</p>
+  <p class="lead">Check out your information here, plus the status of your orders!</p>
 </div>
 
 <div class="container">
-<a class="btn btn-md btn-primary second-accent" href="{% url 'shop:driver_dash' %}" role="button"> View Driver Dashboard </a>
+<a class="btn btn-md btn-primary second-accent" href="/dashboard" role="button"> View User Dashboard </a>
     <div class="card mb-4 shadow-sm">
       <div class="card-header domcolor">
-        <h4 class="my-0 font-weight-normal">User Information</h4>
+        <h4 class="my-0 font-weight-normal">Driver Information</h4>
       </div>
       <div class="card-body">
         <h1 class="card-title pricing-card-title">{{ user.first_name }} {{ user.last_name }}</h1>
