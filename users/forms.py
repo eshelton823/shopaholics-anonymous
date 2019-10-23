@@ -1,9 +1,9 @@
 from django import forms
-from .models import User
+from .models import Profile
 
 class UserCreationThroughSignupForm(forms.ModelForm):
     class Meta:
-        model = User
+        model = Profile
         fields = '__all__'
 
 #
