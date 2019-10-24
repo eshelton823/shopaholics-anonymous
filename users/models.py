@@ -59,7 +59,7 @@ class Profile(AbstractUser):
     last_name = models.CharField(max_length=20)
     email = models.EmailField(max_length=50)
     password = models.CharField(max_length=100)
-    username = models.CharField(max_length=50)
+    username = models.CharField(max_length=50, unique=True)
     last_login = models.DateTimeField(default=timezone.now)
     # profile_pic = models.ImageField()
     # phone_number = models.PhoneNumberField(_(""))
