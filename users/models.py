@@ -7,7 +7,7 @@ from django.utils import timezone
 class Order(models.Model):
     #relationship with user (many-to-many)
     user = models.CharField(max_length=20)
-    driver = models.CharField(max_length=20)
+    driver = models.CharField(max_length=20, default='')
     ### FOR USER SIDE ###
     #delivery info - need city or state or zip? assuming local a given or can calculate in range
     delivery_address = models.CharField(max_length=50) #check if in range
@@ -84,6 +84,7 @@ class Profile(AbstractUser):
     # order_history_list = models.ArrayField()
     # is_authenticated = models.BooleanField()
     is_matching = models.BooleanField(default=False)
+    has_order = models.BooleanField(default=False)
     driver_filled = models.BooleanField(default=False)
 
 # @receiver(post_save, sender=User)
