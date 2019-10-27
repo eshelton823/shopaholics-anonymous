@@ -1,10 +1,10 @@
-from users.models import User
+from users.models import Profile
 from rest_framework import serializers
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = User
+        model = Profile
         fields = '__all__'
 
 

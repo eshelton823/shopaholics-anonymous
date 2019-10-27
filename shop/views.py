@@ -7,16 +7,17 @@ def home(request):
     return render(request, 'shop/home.html')
 
 def dashboard(request):
-    if request.user.is_authenticated:
+    print(request.user)
+    if request.user.username != "":
         return render(request, 'shop/dashboard.html')
     else:
         return redirect('/profile/signin')
 
 def driver_dash(request):
-    if request.user.is_authenticated:
+    if request.user.driver_filled:
         return render(request, 'shop/driver_dash.html')
     else:
-        return redirect('/profile/signin')
+        return redirect('/profile/driver_info')
 
 def store(request):
     return render(request, 'shop/store.html')
