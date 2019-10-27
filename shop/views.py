@@ -14,10 +14,10 @@ def dashboard(request):
         return redirect('/profile/signin')
 
 def driver_dash(request):
-    if request.user.username != "":
+    if request.user.driver_filled:
         return render(request, 'shop/driver_dash.html')
     else:
-        return redirect('/profile/signin')
+        return redirect('/users/driver_info.html')
 
 def store(request):
     return render(request, 'shop/store.html')
