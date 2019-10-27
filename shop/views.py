@@ -18,10 +18,11 @@ def dashboard(request):
         return redirect('/profile/signin')
 
 def driver_dash(request):
-    if request.user.profile.driver_filled:
-        return render(request, 'shop/driver_dash.html')
-    else:
-        return redirect('/profile/driver_info')
+    # if request.user.profile.driver_filled:
+        context = get_driver_info(request.user)
+        return render(request, 'shop/driver_dash.html', context)
+    # else:
+    #     return redirect('/profile/driver_info')
 
 def store(request):
     if request.user.is_authenticated:
@@ -89,26 +90,61 @@ def get_order_info(user):
         context["identity"] = "Shopper"
     return context
 
+def get_driver_info(d):
+    context = {}
+    if d.profile.has_order:
+        o = Order.objects.filter(driver=d.email)[0]
+        context['current'] = o.user
+    else:
+        context['current'] = "None"
+    if d.profile.is_matching:
+        context['matching'] = "Stop matching"
+        # context['disable'] = ""
+    elif not d.profile.is_matching and d.profile.has_order:
+        context['matching'] = "Order in progress: Cannot change status"
+        # context['disable'] = "disabled"
+    else:
+        context['matching'] = "Start matching"
+        # context['disable'] = ""
+    context['money'] = d.profile.money_earned
+    context['deliveries'] = d.profile.deliveries_made
+    context['plate'] = d.profile.license_plate_number
+    context['make'] = d.profile.car_make
+    context['model'] = d.profile.car_model
+    context['state'] = d.profile.state_of_drivers_license_issuance
+    context['license'] = d.profile.license_identifier_number
+    return context
+
+def swap(request):
+    if request.user.profile.is_matching:
+        request.user.profile.is_matching = False
+        request.user.profile.save()
+    if not request.user.profile.is_matching and not request.user.profile.has_order:
+        request.user.profile.is_matching = True
+        request.user.profile.save()
+    return HttpResponseRedirect(reverse('shop:driver_dash'))
+
+
 def reset(request):
     request.user.profile.is_shopping = False
     request.user.profile.save()
     return HttpResponseRedirect(reverse('shop:dashboard'))
 
 def match(request):
-    drivers = Profile.objects.filter(is_matching=True)
-    orders = Order.objects.filter(driver="")
-    queuedrivers = []
-    queueorders = []
-    for driver in drivers:
-        queuedrivers.append(driver)
-    for order in orders:
-        queuedrivers.append(order)
-    while len(queuedrivers) > 0 and len(queueorders) > 0:
-        d = queuedrivers.pop(0)
-        o = queuedrivers.pop(0)
-        d.has_order = True
-        d.is_matching = False
-        d.save()
-        o.driver = d.email
-        o.save()
+    # drivers = Profile.objects.filter(is_matching=True)
+    # orders = Order.objects.filter(driver="")
+    # queuedrivers = []
+    # queueorders = []
+    # for driver in drivers:
+    #     queuedrivers.append(driver)
+    # for order in orders:
+    #     queuedrivers.append(order)
+    # while len(queuedrivers) > 0 and len(queueorders) > 0:
+    #     d = queuedrivers.pop(0)
+    #     o = queuedrivers.pop(0)
+    #     d.has_order = True
+    #     d.is_matching = False
+    #     d.save()
+    #     o.driver = d.email
+    #     o.save()
     return HttpResponseRedirect(reverse('shop:dashboard'))
