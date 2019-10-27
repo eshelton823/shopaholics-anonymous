@@ -83,15 +83,16 @@ class Profile(AbstractUser):
     # miscellaneous
     # order_history_list = models.ArrayField()
     # is_authenticated = models.BooleanField()
+    current_order = models.CharField(max_length = 50, default="")
     is_matching = models.BooleanField(default=False)
     has_order = models.BooleanField(default=False)
     driver_filled = models.BooleanField(default=False)
 
-# @receiver(post_save, sender=User)
+# @receiver(post_save, sender=Profile)
 # def create_user_profile(sender, instance, created, **kwargs):
 #     if created:
 #         Profile.objects.create(user=instance)
 #
-# @receiver(post_save, sender=User)
+# @receiver(post_save, sender=Profile)
 # def save_user_profile(sender, instance, **kwargs):
 #     instance.profile.save()
