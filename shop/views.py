@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import redirect, reverse
-from users.models import Order
+from users.models import Order, Profile
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from .forms import OrderForm
@@ -41,7 +41,7 @@ def process_order(request):
                 o.delivery_instructions = request.POST['del_instr']
                 o.store_selection = 'WAL'
                 o.user = request.user.email
-
+                o.customer_name = request.user.first_name
                 try:
                     asap = request.POST['asap']
                     o.is_delivery_asap = True
@@ -95,5 +95,20 @@ def reset(request):
     return HttpResponseRedirect(reverse('shop:dashboard'))
 
 def match(request):
-    
+    drivers = Profile.objects.filter(is_matching=True)
+    orders = Order.objects.filter(driver="")
+    queuedrivers = []
+    queueorders = []
+    for driver in drivers:
+        queuedrivers.append(driver)
+    for order in orders:
+        queuedrivers.append(order)
+    while len(queuedrivers) > 0 and len(queueorders) > 0:
+        d = queuedrivers.pop(0)
+        o = queuedrivers.pop(0)
+        d.has_order = True
+        d.is_matching = False
+        d.save()
+        o.driver = d.email
+        o.save()
     return HttpResponseRedirect(reverse('shop:dashboard'))
