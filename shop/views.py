@@ -17,7 +17,7 @@ def driver_dash(request):
     if request.user.driver_filled:
         return render(request, 'shop/driver_dash.html')
     else:
-        return redirect('/users/driver_info.html')
+        return redirect('/profile/driver_info')
 
 def store(request):
     return render(request, 'shop/store.html')
