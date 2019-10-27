@@ -125,7 +125,7 @@ LOGOUT_REDIRECT_URL = "/"
 SOCIAL_AUTH_STRATEGY = 'social_django.strategy.DjangoStrategy'
 SOCIAL_AUTH_STORAGE = 'social_django.models.DjangoStorage'
 
-AUTH_USER_MODEL = 'users.Profile'
+# AUTH_USER_MODEL = 'users.Profile'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '468447031403-2ufnan3jvf8im4ap5jgs34jnj2fe7p94'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'CHvIa6iwZiKswPgex7rJnyHh'

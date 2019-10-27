@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from .forms import UserCreationThroughSignupForm
+# from .forms import UserCreationThroughSignupForm
 from users.models import Profile
 from rest_framework import viewsets
 from users.serializers import UserSerializer
@@ -15,6 +15,8 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 def user_signup(request):
+    if request.user.is_authenticated:
+        return render(request, 'shop/dashboard.html')
     form = UserCreationThroughSignupForm(request.POST)
     return render(request, 'users/user_signup.html', {'form': form})
 

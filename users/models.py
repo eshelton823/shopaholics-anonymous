@@ -1,8 +1,66 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+
+
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # personal -- updated on sign-in and profile
+    # first_name = models.CharField(max_length=20)
+    # last_name = models.CharField(max_length=20)
+    email = models.EmailField(max_length=50)
+    # username = models.CharField(max_length=20, default="")
+    # USERNAME_FIELD = 'username'
+    # EMAIL_FIELD = 'email'
+    # REQUIRED_FIELDS = ['email']
+    # is_anonymous =
+    # password = models.CharField(max_length=100)
+    # username = models.CharField(max_length=50, unique=True)
+    # last_login = models.DateTimeField(default=timezone.now)
+    # profile_pic = models.ImageField()
+    # phone_number = models.PhoneNumberField(_(""))
+    deliveries_made = models.IntegerField(default=0)
+    money_earned = models.DecimalField(decimal_places=2, max_digits=9, default=0)
+
+    # car information
+    license_plate_number = models.CharField(max_length=10, default="0")
+    car_make = models.CharField(max_length=16, default="")
+    car_model = models.CharField(max_length=16, default="")
+
+    # car personals
+    license_identifier_number = models.CharField(max_length=12, default="")
+    state_of_drivers_license_issuance = models.CharField(max_length=25, default="")
+
+    # payment information - put under lock and key - high risk -- 3rd party, for our sake.
+    # credit_card_number = models.IntegerField()
+    # expiration_date = check format
+    # security_number = models.IntegerField()
+
+    # miscellaneous
+    # order_history_list = models.ArrayField()
+    # is_authenticated = models.BooleanField()
+    current_order = models.CharField(max_length = 50, default="")
+    is_matching = models.BooleanField(default=False)
+    has_order = models.BooleanField(default=False)
+    driver_filled = models.BooleanField(default=False)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+
+
+
 
 class Order(models.Model):
     #relationship with user (many-to-many)
@@ -52,47 +110,3 @@ class Order(models.Model):
     current_address_dropoff_street_and_street_number = models.CharField(max_length=35)
     customer_name = models.CharField(max_length=20)
 
-class Profile(AbstractUser):
-    # user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # personal -- updated on sign-in and profile
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
-    email = models.EmailField(max_length=50)
-    password = models.CharField(max_length=100)
-    username = models.CharField(max_length=50, unique=True)
-    last_login = models.DateTimeField(default=timezone.now)
-    # profile_pic = models.ImageField()
-    # phone_number = models.PhoneNumberField(_(""))
-    deliveries_made = models.IntegerField(default=0)
-    money_earned = models.DecimalField(decimal_places=2, max_digits=9, default=0)
-
-    # car information
-    license_plate_number = models.CharField(max_length=10, default="0")
-    car_make = models.CharField(max_length=16, default="")
-    car_model = models.CharField(max_length=16, default="")
-
-    # car personals
-    license_identifier_number = models.CharField(max_length=12, default="")
-    state_of_drivers_license_issuance = models.CharField(max_length=25, default="")
-
-    # payment information - put under lock and key - high risk -- 3rd party, for our sake.
-    # credit_card_number = models.IntegerField()
-    # expiration_date = check format
-    # security_number = models.IntegerField()
-
-    # miscellaneous
-    # order_history_list = models.ArrayField()
-    # is_authenticated = models.BooleanField()
-    current_order = models.CharField(max_length = 50, default="")
-    is_matching = models.BooleanField(default=False)
-    has_order = models.BooleanField(default=False)
-    driver_filled = models.BooleanField(default=False)
-
-# @receiver(post_save, sender=Profile)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         Profile.objects.create(user=instance)
-#
-# @receiver(post_save, sender=Profile)
-# def save_user_profile(sender, instance, **kwargs):
-#     instance.profile.save()
