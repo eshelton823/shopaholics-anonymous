@@ -8,7 +8,7 @@ from django.utils import timezone
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     # personal -- updated on sign-in and profile
     # first_name = models.CharField(max_length=20)
     # last_name = models.CharField(max_length=20)
@@ -43,9 +43,10 @@ class Profile(models.Model):
     # miscellaneous
     # order_history_list = models.ArrayField()
     # is_authenticated = models.BooleanField()
-    current_order = models.CharField(max_length = 50, default="")
-    is_matching = models.BooleanField(default=False)
-    has_order = models.BooleanField(default=False)
+    # current_order = models.CharField(max_length = 50, default="")
+    is_shopping = models.BooleanField(default=False) # THIS ONE IS IF A USER IS SHOPPING
+    is_matching = models.BooleanField(default=False) # THIS ONE IS IF A DRIVER IS MATCHING
+    has_order = models.BooleanField(default=False) # THIS ONE IS IF A DRIVER IS MATCHED WITH AN ORDER
     driver_filled = models.BooleanField(default=False)
 
 
@@ -74,12 +75,12 @@ class Order(models.Model):
 
 
     #user location -- to be used with mapping
-    dropoff_latitude = models.DecimalField(decimal_places=5, max_digits=9)
-    dropoff_longitude = models.DecimalField(decimal_places=5, max_digits=9)
+    dropoff_latitude = models.DecimalField(decimal_places=5, max_digits=9, default=0.0)
+    dropoff_longitude = models.DecimalField(decimal_places=5, max_digits=9, default=0.0)
 
     #driver location
-    driver_latitude = models.DecimalField(decimal_places=5, max_digits=9)
-    driver_longitude = models.DecimalField(decimal_places=5, max_digits=9)
+    driver_latitude = models.DecimalField(decimal_places=5, max_digits=9, default=0.0)
+    driver_longitude = models.DecimalField(decimal_places=5, max_digits=9, default=0.0)
 
     STORE_SELECTIONS = [
         ('KRO', 'Kroger'),
@@ -88,18 +89,20 @@ class Order(models.Model):
 
     #order information
     store_selection = models.CharField(max_length=15, choices=STORE_SELECTIONS, default=None)
-    order_size = models.CharField(max_length=15) #small, med, large; calculate based on total price before delivery charge
+    order_size = models.CharField(max_length=15, default="small") #small, med, large; calculate based on total price before delivery charge
     # TODO
-    order_list = models.CharField(max_length=255) #will be list of objs later...
-    desired_delivery_time_range_lower_bound = models.TimeField()
-    desired_delivery_time_range_upper_bound = models.TimeField()
+    order_cost = models.FloatField(default=0.0)
+    order_list = models.CharField(max_length=1000, default="cheese")
+    # order_list = models.CharField(max_length=255, default=None) #will be list of objs later...
+    desired_delivery_time_range_lower_bound = models.TimeField(default=timezone.now)
+    desired_delivery_time_range_upper_bound = models.TimeField(default=timezone.now)
     is_delivery_asap = models.BooleanField(default=False)
 
     #delivery - order
-    order_start_time = models.TimeField()#when they accept the order
-    order_deliver_time = models.TimeField()
-    current_store_to_go_to = models.CharField(max_length=20)
-    special_requests = models.CharField(max_length=150)
+    order_start_time = models.TimeField(default=timezone.now)#when they accept the order
+    order_deliver_time = models.TimeField(default=timezone.now)
+    current_store_to_go_to = models.CharField(max_length=20, default="")
+    special_requests = models.CharField(max_length=150, default="")
 
     #delivery - order status
     is_on_the_way_to_the_store = models.BooleanField(default=True) #first time driver accepts and this shows they will be on the way
@@ -107,6 +110,6 @@ class Order(models.Model):
     is_on_the_way_from_the_store = models.BooleanField(default=False) #make function that will turn True when driver gets back in car to go to customer
 
     #delivery - customer
-    current_address_dropoff_street_and_street_number = models.CharField(max_length=35)
-    customer_name = models.CharField(max_length=20)
+    current_address_dropoff_street_and_street_number = models.CharField(max_length=35, default="")
+    customer_name = models.CharField(max_length=20, default="")
 

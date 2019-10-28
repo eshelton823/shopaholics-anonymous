@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<br><br><br>
+<div class="container">
+<h3>Your order has been placed! We're in the process of matching you with a driver. When you have been matched,
+your driver's name will appear on your dashboard.</h3>
+</div>
+<br><hr>
+<h4><span class="dom-text">What do I do now?</span></h4>
+<br>
+<div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="col-md-4 text-center">
+          <h6>I want to check out my order status!</h6>
+        <p><a class="btn btn-secondary second-accent" href="dashboard" role="button">Return to Dashboard &raquo;</a></p>
+      </div>
+      <div class="col-md-4 text-center">
+          <h6>I want to shop some more!</h6>
+        <p><a class="btn btn-secondary second-accent" href="store" role="button">Place Another Order &raquo;</a></p>
+      </div>
+      <div class="col-md-4 text-center">
+          <h6>I'm not sure; take me home!</h6>
+        <p><a class="btn btn-secondary second-accent" href="home" role="button">Return to Home &raquo;</a></p>
+      </div>
+    </div>
+
+
+{% endblock %}

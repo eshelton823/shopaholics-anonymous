@@ -29,14 +29,14 @@
       </div>
 
       <div class="card-body">
-        <h1 class="card-title pricing-card-title">Status: <small class="text-muted">Not Shopping</small></h1>
+        <h1 class="card-title pricing-card-title">Status: <small class="text-muted">{{ status }}</small></h1>
         <ul class="list-unstyled mt-3 mb-4">
-          <li>Current Order: <span class="text-muted">You aren't shopping right now!</span></li>
-            <li>Anticipated Drop Time: <span class="text-muted">N/A</span></li>
-            <li>Current Driver: <span class="text-muted">N/A </span><a class="btn btn-sm btn-primary second-accent" href="#" role="button"> Message </a></li>
-            <li>Tentative Price: <span class="text-muted">$0.00</span></li>
+          <li>Current Order: <span class="text-muted">{{ current_order }}</span></li>
+            <li>Anticipated Drop Time: <span class="text-muted">{{ drop }}</span></li>
+            <li>Current Driver: <span class="text-muted">{{ driver }} </span><a class="btn btn-sm btn-primary second-accent" href="#" role="button"> Message </a><a class="btn btn-sm btn-primary domcolor" href="match" role="button"> Manual Match Attempt </a></li>
+            <li>Tentative Price: <span class="text-muted">{{ price }}</span></li>
         </ul>
-        <button type="button" class="btn btn-lg btn-primary accent">Shop Now</button>
+        <a role="button" class="btn btn-lg btn-primary accent" href="store">Shop Now</a>
       </div>
     </div>
     <div class="card mb-4 shadow-sm">
@@ -44,7 +44,7 @@
         <h4 class="my-0 font-weight-normal">Previous Orders</h4>
       </div>
       <div class="card-body">
-          <h1 class="card-title pricing-card-title">Primary Identity: <small class="text-muted">Shopper</small></h1>
+          <h1 class="card-title pricing-card-title">Primary Identity: <small class="text-muted">{{ identity }}</small></h1>
         <ul class="list-unstyled mt-3 mb-4">
           <li>Date of Last Order: <span class="text-muted">8/26/2019</span></li>
           <li>Price of Last Order: <span class="text-muted">$83.45</span></li>
@@ -53,5 +53,9 @@
         <button type="button" class="btn btn-lg btn-primary accent">Change Customer Preferences</button>
       </div>
     </div>
+</div>
+
+<div>
+  <a role="button" class="btn btn-sm btn-primary domcolor" href="shop/reset">Reset User Status</a>
 </div>
 {% endblock %}
