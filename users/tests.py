@@ -21,8 +21,8 @@ class PageTests(TestCase):
     def testStorePage(self):
         #Get store page
         response = self.client.get("/store")
-        #Check it's 200
-        self.assertEqual(response.status_code, 200)
+        #Check it's 302 -- redirect on no sign in.
+        self.assertEqual(response.status_code, 302)
     def testCSS(self):
         #Get store page
         response = finders.find("custom.css")
