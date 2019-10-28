@@ -5,3 +5,4 @@ psycopg2-binary
 dj-database-url
 social-auth-app-django
 djangorestframework
+bs4
