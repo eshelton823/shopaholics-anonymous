@@ -2,31 +2,21 @@ import unittest
 from django.test import Client
 from django.contrib.staticfiles import finders
 from django.test import TestCase
+from django.contrib.auth.models import User
 
 # Create your tests here.
-class PageTests(TestCase):
+class UserModelTests(TestCase):
     def setUp(self):
+        # These tsests need a user.
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        login = self.client.login(username='testuser', password='12345')
         # Every test needs a client.
         self.client = Client()
-    def testLogInPage(self):
-        #Get sign in page
-        response = self.client.get("/profile/signin/")
-        #Check it's 200
-        self.assertEqual(response.status_code, 200)
-    def testHomePage(self):
-        #Get home page
-        response = self.client.get("/")
-        #Check it's 200
-        self.assertEqual(response.status_code, 200)
-    def testStorePage(self):
-        #Get store page
-        response = self.client.get("/store")
-        #Check it's 302 -- redirect on no sign in.
-        self.assertEqual(response.status_code, 302)
-    def testCSS(self):
-        #Get store page
-        response = finders.find("custom.css")
-        #Check it's 200
 
-        self.assertIn("custom.css", response)
-        self.assertNotEqual(response, None)
+    def testCreated(self):
+        print(self.user, self.user.password)
+        self.assertNotEqual(self.user, None)
+
+    def testHasProfile(self):
+        print("Shopping?", self.user.profile.is_shopping)
+        self.assertNotEqual(self.user.profile, None)
