@@ -9,6 +9,8 @@ def getItems(query):
     r = requests.get(url, cookies=cookie)
     soup = BeautifulSoup(r.text, 'html.parser')
     items = soup.findAll("div", {"data-tl-id" : re.compile('ProductTileListView-*')})
-    print(items)
+    for item in items:
+        title = item.find("a", {'class':'product-title-link line-clamp line-clamp-2'})
+        print(title.decode_contents())
 
 getItems("milk")
