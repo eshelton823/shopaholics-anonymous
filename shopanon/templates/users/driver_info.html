@@ -11,29 +11,31 @@
         <h4 class="my-0 font-weight-normal">Enter your information below:</h4>
       </div>
       <div class="card-body">
-        <form>
+        <form action="{% url 'users:add_driver_info' %}" method="post">
+            {% csrf_token %}
             <div class="form-group">
                 <label for="licensePlateNumberInput">License Plate Number</label>
-                <input type="email" class="form-control" id="licensePlateNumberInput">
+                <input type="text" class="form-control" id="licensePlateNumberInput" name="licensePlateNumberInput" required>
             </div>
             <div class="form-group">
                 <label for="carMakeInput">Car Make</label>
-                <input type="email" class="form-control" id="carMakeInput">
+                <input type="text" class="form-control" id="carMakeInput" name="carMakeInput" required>
             </div>
             <div class="form-group">
                 <label for="carModelInput">Car Model</label>
-                <input type="email" class="form-control" id="carModelInput">
+                <input type="text" class="form-control" id="carModelInput" name ="carModelInput" required>
             </div>
             <div class="form-group">
                 <label for="driverLicenseNumberInput">License Number</label>
-                <input type="email" class="form-control" id="driverLicenseNumberInput">
+                <input type="text" class="form-control" id="driverLicenseNumberInput" name="driverLicenseNumberInput" required>
             </div>
             <div class="form-group">
                 <label for="stateOfLicenseIssuanceInput">State Of License Issuance</label>
-                <input type="email" class="form-control" id="stateOfLicenseIssuanceInput">
+                <input type="text" class="form-control" id="stateOfLicenseIssuanceInput" name="stateOfLicenseIssuanceInput" required>
             </div>
+        <input type="submit" class="btn btn-lg btn-primary accent" value="Submit">
         </form>
-        <button type="button" class="btn btn-lg btn-primary accent">Submit</button>
+
       </div>
     </div>
 </div>

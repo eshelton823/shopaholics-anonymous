@@ -50,12 +50,12 @@
           <li>Price of Last Order: <span class="text-muted">$83.45</span></li>
             <li>Last Driver: <span class="text-muted">James Madison </span></li>
         </ul>
-        <button type="button" class="btn btn-lg btn-primary accent">Change Customer Preferences</button>
+        <a role="button" class="btn btn-lg btn-primary accent" href="{% url 'shop:reset' %}">Resolve Order</a>
       </div>
     </div>
 </div>
 
-<div>
-  <a role="button" class="btn btn-sm btn-primary domcolor" href="reset">Reset User Status</a>
-</div>
+<!--<div>-->
+  <!--<a role="button" class="btn btn-sm btn-primary domcolor" href="{% url 'shop:reset' %}">Reset User Status</a>-->
+<!--</div>-->
 {% endblock %}

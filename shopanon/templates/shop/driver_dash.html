@@ -4,12 +4,12 @@
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4" ><span class="A">Welcome to your dashboard, {{user.first_name}}!</span></h1>
   <p class="lead">Check out your information here, plus the status of your orders!</p>
-<p>Currently matching: <span class="text-muted">{{ user.is_matching }}</span></p>
+<p>Currently matching: <span class="text-muted">{{ current }}</span></p>
 </div>
 
 <div class="container">
 <a class="btn btn-md btn-primary second-accent" href="/dashboard" role="button"> View User Dashboard </a>
-  <a class="btn btn-sm btn-primary domcolor" href="{% url 'shop:swap' %}" role="button" >{{ matching }}</a>
+  <a class="btn btn-sm btn-primary accent" href="{% url 'shop:swap' %}" role="button" >{{ matching }}</a>
 
     <div class="card mb-4 shadow-sm">
       <div class="card-header domcolor">
@@ -46,17 +46,21 @@
     </div>
     <div class="card mb-4 shadow-sm">
       <div class="card-header domcolor">
-        <h4 class="my-0 font-weight-normal">Previous Orders</h4>
+        <h4 class="my-0 font-weight-normal">Current Order</h4>
       </div>
       <div class="card-body">
-          <h1 class="card-title pricing-card-title">Primary Identity: <small class="text-muted">Driver</small></h1>
+          <!--<h1 class="card-title pricing-card-title">Primary Identity: <small class="text-muted">Driver</small></h1>-->
         <ul class="list-unstyled mt-3 mb-4">
-          <li>Date of Last Order: <span class="text-muted">8/26/2019</span></li>
-          <li>Price of Last Order: <span class="text-muted">$83.45</span></li>
-            <li>Earned: <span class="text-muted">$10</span></li>
-            <li>Last User: <span class="text-muted">Thomas Jefferson</span></li>
+          <li>Due Date: <span class="text-muted">{{ late_time }}</span></li>
+          <li>Dropoff Location: <span class="text-muted">{{ drop }}</span></li>
+            <li>Cost: <span class="text-muted">{{ cost }}</span></li>
+            <li>Grocery List: <span class="text-muted">{{ list }}</span></li>
+            <li>Customer: <span class="text-muted">{{ current }}</span></li>
+          <li>Dropoff Address: <span class="text-muted">{{ address }}</span>     Apartment: <span class="text-muted">{{ apt }}</span></li>
+          <li>Delivery Instructions: <span class="text-muted">{{ instructions }}</span></li>
+          <li>Customer: <span class="text-muted">{{ current }} </span><a class="btn btn-sm btn-primary second-accent" href="#" role="button"> Message </a></li>
         </ul>
-        <button type="button" class="btn btn-lg btn-primary accent">Change Customer Preferences</button>
+        <!--<button type="button" class="btn btn-lg btn-primary accent">Change Customer Preferences</button>-->
       </div>
     </div>
 </div>
