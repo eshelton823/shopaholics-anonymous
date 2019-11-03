@@ -1,6 +1,40 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
-<h1>Hello world!</h1>
-<p> This is the driver form page. It will have things soon.</p>
+<br>
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4" ><span class="A">Sign up to be a driver!</span></h1>
+</div>
 
+<div class="container">
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header domcolor">
+        <h4 class="my-0 font-weight-normal">Enter your information below:</h4>
+      </div>
+      <div class="card-body">
+        <form>
+            <div class="form-group">
+                <label for="licensePlateNumberInput">License Plate Number</label>
+                <input type="email" class="form-control" id="licensePlateNumberInput">
+            </div>
+            <div class="form-group">
+                <label for="carMakeInput">Car Make</label>
+                <input type="email" class="form-control" id="carMakeInput">
+            </div>
+            <div class="form-group">
+                <label for="carModelInput">Car Model</label>
+                <input type="email" class="form-control" id="carModelInput">
+            </div>
+            <div class="form-group">
+                <label for="driverLicenseNumberInput">License Number</label>
+                <input type="email" class="form-control" id="driverLicenseNumberInput">
+            </div>
+            <div class="form-group">
+                <label for="stateOfLicenseIssuanceInput">State Of License Issuance</label>
+                <input type="email" class="form-control" id="stateOfLicenseIssuanceInput">
+            </div>
+        </form>
+        <button type="button" class="btn btn-lg btn-primary accent">Submit</button>
+      </div>
+    </div>
+</div>
 {% endblock %}
