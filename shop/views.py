@@ -21,6 +21,8 @@ def dashboard(request):
         return redirect('/profile/signin')
 
 def driver_dash(request):
+    if request.user.username == "":
+        return redirect('/profile/signin')
     if request.user.profile.driver_filled:
         context = get_driver_info(request.user)
         return render(request, 'shop/driver_dash.html', context)
@@ -69,13 +71,14 @@ def failure(request):
 
 def get_order_info(user):
     context = {}
-    print(user.profile.is_shopping)
+    # print(user.profile.is_shopping)
     if not user.profile.is_shopping:
         context['status'] = "Not Shopping"
         context['current_order'] = "You aren't shopping right now!"
         context['price'] = "$0.00"
         context['driver'] = "N/A"
         context['drop'] = "N/A"
+        context['disabled'] = "Not Currently Shopping"
     else:
         context['status'] = "Shopping"
         o = Order.objects.filter(user=user.email)[0]
@@ -87,6 +90,7 @@ def get_order_info(user):
         else:
             context["driver"] = "Unmatched"
         context['drop'] = o.desired_delivery_time_range_upper_bound
+        context['disabled'] = "Resolve Order"
     if user.profile.has_order or user.profile.is_matching:
         context["identity"] = "Driver"
     else:
@@ -151,11 +155,14 @@ def swap(request):
 
 
 def reset(request):
+    if not request.user.profile.is_shopping:
+        return HttpResponseRedirect(reverse('shop:dashboard'))
     request.user.profile.is_shopping = False
     o = Order.objects.filter(user=request.user.email)[0]
+    print(o)
     o.user = "COMPLETE"
     o.customer_name = "COMPLETE"
-    d = Profile.objects.filter(driver=o.driver)[0]
+    d = Profile.objects.filter(email=o.driver)[0]
     d.has_order = False
     o.driver = "COMPLETE"
     request.user.profile.save()
@@ -167,17 +174,12 @@ def match(request):
     # NOTE: Currently a person could be matched to their own order!! Decide as a team if that's OK or not
     drivers = Profile.objects.filter(is_matching=True)
     orders = Order.objects.filter(driver="")
-    # print(drivers)
-    # print(orders)
     queuedrivers = []
     queueorders = []
     for driver in drivers:
-        # print(driver.email)
         queuedrivers.append(driver)
     for order in orders:
         queueorders.append(order)
-    # print(queuedrivers)
-    # print(queueorders)
     while len(queuedrivers) > 0 and len(queueorders) > 0:
         d = queuedrivers.pop(0)
         o = queueorders.pop(0)

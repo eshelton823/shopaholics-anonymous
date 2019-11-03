@@ -44,3 +44,31 @@ def add_driver_info(request):
             return HttpResponseRedirect(reverse('shop:failure'))
     print("big fail")
     return HttpResponseRedirect(reverse('shop:failure'))
+
+def driver_edit_form(request):
+    context = get_info(request.user)
+    return render(request, 'users/edit_driver_info.html', context)
+
+
+# def edit_driver_info(request):
+#     if request.method == "POST":
+#         try:
+#             u = request.user.profile
+#
+#             u.save()
+#             return HttpResponseRedirect(reverse('shop:dashboard'))
+#         except:
+#             print("smaller fail")
+#             return HttpResponseRedirect(reverse('shop:failure'))
+#     print("big fail")
+#     return HttpResponseRedirect(reverse('shop:failure'))
+
+
+def get_info(d):
+    context = {}
+    context['plate'] = d.profile.license_plate_number
+    context['make'] = d.profile.car_make
+    context['model'] = d.profile.car_model
+    context['license'] = d.profile.license_identifier_number
+    context['state'] = d.profile.state_of_drivers_license_issuance
+    return context

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+
+<br>
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4" ><span class="A">Edit Driver Information</span></h1>
+</div>
+
+<div class="container">
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header domcolor">
+        <h4 class="my-0 font-weight-normal">Change your information below:</h4>
+      </div>
+      <div class="card-body">
+        <form action="{% url 'users:add_driver_info' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="licensePlateNumberInput">License Plate Number</label>
+                <input type="text" class="form-control" id="licensePlateNumberInput" name="licensePlateNumberInput" value="{{ plate }}" placeholder="{{ plate }}" required>
+            </div>
+            <div class="form-group">
+                <label for="carMakeInput">Car Make</label>
+                <input type="text" class="form-control" id="carMakeInput" name="carMakeInput" value="{{ make }}" placeholder="{{ make }}" required>
+            </div>
+            <div class="form-group">
+                <label for="carModelInput">Car Model</label>
+                <input type="text" class="form-control" id="carModelInput" name ="carModelInput" value="{{ model }}" placeholder="{{ model }}" required>
+            </div>
+            <div class="form-group">
+                <label for="driverLicenseNumberInput">License Number</label>
+                <input type="text" class="form-control" id="driverLicenseNumberInput" name="driverLicenseNumberInput" value="{{ license }}" placeholder="{{ license }}" required>
+            </div>
+            <div class="form-group">
+                <label for="stateOfLicenseIssuanceInput">State Of License Issuance</label>
+                <input type="text" class="form-control" id="stateOfLicenseIssuanceInput" name="stateOfLicenseIssuanceInput" value="{{ state }}" placeholder="{{ state }}" required>
+            </div>
+        <input type="submit" class="btn btn-lg btn-primary accent" value="Submit">
+        </form>
+
+      </div>
+    </div>
+</div>
+{% endblock %}
