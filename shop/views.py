@@ -119,7 +119,7 @@ def swap(request):
     if request.user.profile.is_matching:
         request.user.profile.is_matching = False
         request.user.profile.save()
-    if not request.user.profile.is_matching and not request.user.profile.has_order:
+    elif not request.user.profile.is_matching and not request.user.profile.has_order:
         request.user.profile.is_matching = True
         request.user.profile.save()
     return HttpResponseRedirect(reverse('shop:driver_dash'))
@@ -131,20 +131,21 @@ def reset(request):
     return HttpResponseRedirect(reverse('shop:dashboard'))
 
 def match(request):
-    # drivers = Profile.objects.filter(is_matching=True)
-    # orders = Order.objects.filter(driver="")
-    # queuedrivers = []
-    # queueorders = []
-    # for driver in drivers:
-    #     queuedrivers.append(driver)
-    # for order in orders:
-    #     queuedrivers.append(order)
-    # while len(queuedrivers) > 0 and len(queueorders) > 0:
-    #     d = queuedrivers.pop(0)
-    #     o = queuedrivers.pop(0)
-    #     d.has_order = True
-    #     d.is_matching = False
-    #     d.save()
-    #     o.driver = d.email
-    #     o.save()
+    # NOTE: Currently a person could be matched to their own order!! Decide as a team if that's OK or not
+    drivers = Profile.objects.filter(is_matching=True)
+    orders = Order.objects.filter(driver="")
+    queuedrivers = []
+    queueorders = []
+    for driver in drivers:
+        queuedrivers.append(driver)
+    for order in orders:
+        queuedrivers.append(order)
+    while len(queuedrivers) > 0 and len(queueorders) > 0:
+        d = queuedrivers.pop(0)
+        o = queueorders.pop(0)
+        d.has_order = True
+        d.is_matching = False
+        d.save()
+        o.driver = d.email
+        o.save()
     return HttpResponseRedirect(reverse('shop:dashboard'))
