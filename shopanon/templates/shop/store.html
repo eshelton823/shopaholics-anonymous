@@ -2,8 +2,8 @@
 {% block content %}
    <div class="container">
   <div class="py-5 text-center">
-    <img class="d-block mx-auto mb-4" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-    <h2>Shop Now!</h2>
+    <br>
+    <h1>Shop Now!</h1>
     <p class="lead">Search for groceries, add them to your cart, set your pickup date and time, and fill out payment info. We'll take care of the rest!</p>
   </div>
 <div class="row">
@@ -47,17 +47,9 @@
         </li>
       </ul>
 
-      <form class="card p-2">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Promo code">
-          <div class="input-group-append">
-            <button type="submit" class="btn btn-secondary second-accent">Redeem</button>
-          </div>
-        </div>
-      </form>
     </div>
     <div class="col-md-8 order-md-1">
-      <h2 class="mb-3">Build My Cart</h2>
+      <h3 class="mb-3">Build My Cart</h3>
       <div class="d-md-flex w-100 my-md-3 pl-md-3">
   <div class="card domcolor-t mr-md-9 pt-3 px-3 px-md-5 text-center overflow-hidden">
     <div class="my-3 py-3">
@@ -95,60 +87,86 @@
     </div>
   </div>
 </div>
-      <form class="needs-validation" novalidate>
-        <h4 class="mb-3">Payment</h4>
-
-        <div class="d-block my-3">
-          <div class="custom-control custom-radio">
-            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
-            <label class="custom-control-label" for="credit">Credit card</label>
-          </div>
-          <div class="custom-control custom-radio">
-            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
-            <label class="custom-control-label" for="debit">Debit card</label>
-          </div>
-          <div class="custom-control custom-radio">
-            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
-            <label class="custom-control-label" for="paypal">PayPal</label>
-          </div>
-        </div>
+      <form action="{% url 'shop:process_order' %}" method="post">
+        {% csrf_token %}
+        <h4 class="mb-3">Order Information</h4>
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label for="cc-name">Name on card</label>
-            <input type="text" class="form-control" id="cc-name" placeholder="" required>
-            <small class="text-muted">Full name as displayed on card</small>
+            <label for="del_add">Delivery Address</label>
+            <input type="text" class="form-control" id="del_add" name="del_add" placeholder="" required>
+            <small class="text-muted">E.g. 123 Main St. Charlottesville, VA 22903</small>
             <div class="invalid-feedback">
-              Name on card is required
+              Delivery address is required
             </div>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="cc-number">Credit card number</label>
-            <input type="text" class="form-control" id="cc-number" placeholder="" required>
-            <div class="invalid-feedback">
-              Credit card number is required
-            </div>
+            <label for="appt_suite">Apartment Suite Number</label>
+            <input type="text" class="form-control" id="appt_suite" name="appt_suite" placeholder="None">
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-3 mb-3">
-            <label for="cc-expiration">Expiration</label>
-            <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
-            <div class="invalid-feedback">
-              Expiration date required
-            </div>
-          </div>
-          <div class="col-md-3 mb-3">
-            <label for="cc-cvv">CVV</label>
-            <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
-            <div class="invalid-feedback">
-              Security code required
-            </div>
-          </div>
+        <div class="mb-3">
+          <label for="del_instr">Special Instructions</label>
+          <input type="text" class="form-control" id="del_instr" name="del_instr" value="" placeholder="Add any special instructions here">
         </div>
+        <br>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="asap" name="asap" value="0" onclick="document.getElementById('d_time').disabled=this.checked;">
+          <label class="custom-control-label" for="asap">This is an ASAP delivery</label>
+        </div>
+        <hr>
+        <div class="col-md-4 mb-3">
+            <label for="d_time">Delivery Time Range</label>
+            <select class="custom-select d-block w-100" id="d_time" name="d_time" required>
+              <option value="">Choose...</option>
+              <option>5-7 days</option>
+              <option>3-5 days</option>
+              <option>1-2 days</option>
+              <option>Same day</option>
+            </select>
+            <div class="invalid-feedback">
+              Please provide a valid option.
+            </div>
+          </div>
         <hr class="mb-4">
-        <button class="btn btn-primary btn-lg btn-block accent" type="submit">Start Matching with Driver</button>
+        <input class="btn btn-primary btn-lg btn-block accent" type="submit" value="Start Matching With Driver">
       </form>
     </div>
   </div>
    </div>
 {% endblock %}
+
+        <!--<br>-->
+        <!--<h4 class="mb-3">Payment Information</h4>-->
+        <!--<div class="row">-->
+          <!--<div class="col-md-6 mb-3">-->
+            <!--<label for="cc-name">Name on card</label>-->
+            <!--<input type="text" class="form-control" id="cc-name" placeholder="" required>-->
+            <!--<small class="text-muted">Full name as displayed on card</small>-->
+            <!--<div class="invalid-feedback">-->
+              <!--Name on card is required-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--<div class="col-md-6 mb-3">-->
+            <!--<label for="cc-number">Credit card number</label>-->
+            <!--<input type="text" class="form-control" id="cc-number" placeholder="" required>-->
+            <!--<div class="invalid-feedback">-->
+              <!--Credit card number is required-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row">-->
+          <!--<div class="col-md-3 mb-3">-->
+            <!--<label for="cc-expiration">Expiration</label>-->
+            <!--<input type="text" class="form-control" id="cc-expiration" placeholder="" required>-->
+            <!--<div class="invalid-feedback">-->
+              <!--Expiration date required-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--<div class="col-md-3 mb-3">-->
+            <!--<label for="cc-cvv">CVV</label>-->
+            <!--<input type="text" class="form-control" id="cc-cvv" placeholder="" required>-->
+            <!--<div class="invalid-feedback">-->
+              <!--Security code required-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
