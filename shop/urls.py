@@ -17,5 +17,6 @@ urlpatterns = [
     path('failure', views.failure, name='failure'),
     path('reset', views.reset, name="reset"),
     path('match', views.match, name="match"),
+    path('search', views.search, name="search"),
 
 ]

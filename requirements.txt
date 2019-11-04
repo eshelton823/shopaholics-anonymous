@@ -8,3 +8,4 @@ djangorestframework
 twilio
 Faker
 python-dotenv
+bs4

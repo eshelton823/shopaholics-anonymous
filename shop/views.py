@@ -4,6 +4,7 @@ from users.models import Order, Profile
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from .forms import OrderForm
+from .scrape import getItems
 # Create your views here.
 
 def home(request):
@@ -62,6 +63,17 @@ def success(request):
 
 def failure(request):
     return render(request, 'shop/failure.html')
+
+def search(request):
+    if not request.user.is_authenticated:
+        return redirect('/profile/signin')
+    query = request.GET.get('search');
+    if query is None:
+        return render(request, 'shop/search.html')
+    else:
+        context = {}
+        context['items'] = getItems(query)
+        return render(request, 'shop/search.html', context)
 
 
 def get_order_info(user):
