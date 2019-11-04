@@ -12,9 +12,14 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os, sys
 import dj_database_url
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+dotenv_path = os.path.join(BASE_DIR, '.env')
+load_dotenv(dotenv_path)
 
 
 # Quick-start development settings - unsuitable for production
@@ -42,6 +47,7 @@ INSTALLED_APPS = [
     'shop',
     'social_django',
     'rest_framework',
+    'chat.apps.ChatConfig',
 ]
 
 MIDDLEWARE = [
@@ -167,6 +173,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID', 'ACa028e554758a86af942aac4a9604bff2')
+TWILIO_API_KEY = os.environ.get('TWILIO_API_KEY', 'SK80fc9b264b9c10cc5ea416fb6c709016')
+TWILIO_API_SECRET = os.environ.get('TWILIO_API_SECRET', 'vCehwvuELDq6SvtXlKhUftjKOtVTKvL7')
+TWILIO_CHAT_SERVICE_SID = os.environ.get('TWILIO_CHAT_SERVICE_SID', 'IS8bc83def1e234d238bae23ccacf6315f')
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
