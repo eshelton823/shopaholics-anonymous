@@ -87,10 +87,12 @@ def get_order_info(user):
         context['price'] = o.order_cost
         if o.driver != "":
             context['driver'] = o.driver
+            context['disabled'] = "Resolve Order"
         else:
             context["driver"] = "Unmatched"
+            context['disabled'] = "Drop Order"
         context['drop'] = o.desired_delivery_time_range_upper_bound
-        context['disabled'] = "Resolve Order"
+
     if user.profile.has_order or user.profile.is_matching:
         context["identity"] = "Driver"
     else:
@@ -157,17 +159,23 @@ def swap(request):
 def reset(request):
     if not request.user.profile.is_shopping:
         return HttpResponseRedirect(reverse('shop:dashboard'))
-    request.user.profile.is_shopping = False
     o = Order.objects.filter(user=request.user.email)[0]
-    print(o)
-    o.user = "COMPLETE"
-    o.customer_name = "COMPLETE"
-    d = Profile.objects.filter(email=o.driver)[0]
-    d.has_order = False
-    o.driver = "COMPLETE"
-    request.user.profile.save()
-    o.save()
-    d.save()
+    if o.driver != "":
+        o.user = "COMPLETE"
+        o.customer_name = "COMPLETE"
+        o.driver = "COMPLETE"
+        o.save()
+        d = Profile.objects.filter(email=o.driver)[0]
+        d.has_order = False
+        d.save()
+    else:
+        o.user = "DROPPED"
+        o.customer_name = "DROPPED"
+        o.driver = "DROPPED"
+        o.save()
+    u = Profile.objects.filter(email=request.user.email)[0]
+    u.is_shopping = False
+    u.save()
     return HttpResponseRedirect(reverse('shop:dashboard'))
 
 def match(request):
