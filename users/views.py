@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponseRedirect
-# from .forms import UserCreationThroughSignupForm
+from .forms import UserCreationThroughSignupForm
 from users.models import Profile
 from rest_framework import viewsets
 from users.serializers import UserSerializer
@@ -25,3 +25,50 @@ def user_signin(request):
 
 def driver_info(request):
     return render(request, 'users/driver_info.html')
+
+
+def add_driver_info(request):
+    if request.method == "POST":
+        try:
+            u = request.user.profile
+            u.license_plate_number = request.POST['licensePlateNumberInput']
+            u.car_make = request.POST['carMakeInput']
+            u.car_model = request.POST['carModelInput']
+            u.license_identifier_number = request.POST['driverLicenseNumberInput']
+            u.state_of_drivers_license_issuance = request.POST['stateOfLicenseIssuanceInput']
+            u.driver_filled = True
+            u.save()
+            return HttpResponseRedirect(reverse('shop:driver_dash'))
+        except:
+            print("smaller fail")
+            return HttpResponseRedirect(reverse('shop:failure'))
+    print("big fail")
+    return HttpResponseRedirect(reverse('shop:failure'))
+
+def driver_edit_form(request):
+    context = get_info(request.user)
+    return render(request, 'users/edit_driver_info.html', context)
+
+
+# def edit_driver_info(request):
+#     if request.method == "POST":
+#         try:
+#             u = request.user.profile
+#
+#             u.save()
+#             return HttpResponseRedirect(reverse('shop:dashboard'))
+#         except:
+#             print("smaller fail")
+#             return HttpResponseRedirect(reverse('shop:failure'))
+#     print("big fail")
+#     return HttpResponseRedirect(reverse('shop:failure'))
+
+
+def get_info(d):
+    context = {}
+    context['plate'] = d.profile.license_plate_number
+    context['make'] = d.profile.car_make
+    context['model'] = d.profile.car_model
+    context['license'] = d.profile.license_identifier_number
+    context['state'] = d.profile.state_of_drivers_license_issuance
+    return context

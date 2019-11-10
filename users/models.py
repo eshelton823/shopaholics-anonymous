@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
-
+from django.contrib.postgres.fields import JSONField
 
 
 
@@ -48,7 +48,8 @@ class Profile(models.Model):
     is_matching = models.BooleanField(default=False) # THIS ONE IS IF A DRIVER IS MATCHING
     has_order = models.BooleanField(default=False) # THIS ONE IS IF A DRIVER IS MATCHED WITH AN ORDER
     driver_filled = models.BooleanField(default=False)
-
+    started_matching = models.TimeField(null=True, blank=True)
+    cart = JSONField(default={'items':[]})
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -91,16 +92,17 @@ class Order(models.Model):
     store_selection = models.CharField(max_length=15, choices=STORE_SELECTIONS, default=None)
     order_size = models.CharField(max_length=15, default="small") #small, med, large; calculate based on total price before delivery charge
     # TODO
-    order_cost = models.FloatField(default=0.0)
+    order_cost = models.DecimalField(decimal_places=5, max_digits=9, default=0.0)
     order_list = models.CharField(max_length=1000, default="cheese")
     # order_list = models.CharField(max_length=255, default=None) #will be list of objs later...
-    desired_delivery_time_range_lower_bound = models.TimeField(default=timezone.now)
-    desired_delivery_time_range_upper_bound = models.TimeField(default=timezone.now)
+    desired_delivery_time_range_lower_bound = models.TimeField(null=True, blank=True)
+    desired_delivery_time_range_upper_bound = models.TimeField(null=True, blank=True)
     is_delivery_asap = models.BooleanField(default=False)
 
     #delivery - order
-    order_start_time = models.TimeField(default=timezone.now)#when they accept the order
-    order_deliver_time = models.TimeField(default=timezone.now)
+    order_placed = models.TimeField(default=timezone.now)
+    order_start_time = models.TimeField(null=True, blank=True)#when they accept the order
+    order_deliver_time = models.TimeField(null=True, blank=True)
     current_store_to_go_to = models.CharField(max_length=20, default="")
     special_requests = models.CharField(max_length=150, default="")
 
@@ -112,4 +114,3 @@ class Order(models.Model):
     #delivery - customer
     current_address_dropoff_street_and_street_number = models.CharField(max_length=35, default="")
     customer_name = models.CharField(max_length=20, default="")
-

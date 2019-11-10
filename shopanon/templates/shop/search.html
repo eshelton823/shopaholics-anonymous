@@ -10,7 +10,7 @@
     {% for item in items  %}
     <div>
         <img src="{{ item.image }}">
-        <p>{{ item.title }}</p>
+        <a href="https://walmart.com/ip/{{item.id}}" target="_blank"><p>{{ item.title }}</p></a>
         <p>{{ item.price }}</p>
         <button class="btn btn-secondary my-2 my-sm-0 second-accent">Add to cart</button>
     </div>

@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
+{% if disabled %}
+<br>
+<br>
+<br>
+<h3 class="text-center accent-text">You already have an order submitted; you can only shop for one order at a time!</h3>
+{% endif %}
+
    <div class="container">
   <div class="py-5 text-center">
     <br>
@@ -12,21 +19,37 @@
         <span class="accent-text">Your shopping session</span>
         <!--<span class="badge badge-secondary badge-pill">3</span>-->
       </h4>
+      <div class="card domcolor-t pt-1 px-1 px-md-1">
+        <div class="my-3 p-3">
+          <h3 class="card-title">My Shopping List</h3>
+          <ul class="list-group list-group-flush list-group-cart">
+            {% for item in user.profile.cart.items %}
+              <li class="list-group-item">
+                <div class="row">
+                  <form action="" method="post" class="col-md-2">
+                      {% csrf_token %}
+                      <input type="hidden" name="delete" value="{{item}}"></input>
+                      <input class="btn btn-secondary my-2 my-sm-0 second-accent" type="submit" value="X"/>
+                  </form>
+                  <p class="col-md-7">{{item.title}}</p>
+                  <p class="col-md-3">{{item.price}}</p>
+                </div>
+              </li>
+            {% empty %}
+              No items.
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
       <ul class="list-group mb-3">
         <li class="list-group-item d-flex justify-content-between lh-condensed">
           <div>
             <h6 class="my-0">Store</h6>
             <small class="text-muted">Distance: 3.7 mi</small>
           </div>
-          <span class="text-muted">Kroger, Barracks Road</span>
+          <span class="text-muted">Walmart, Hilton Heights</span>
         </li>
-        <li class="list-group-item d-flex justify-content-between lh-condensed">
-          <div>
-            <h6 class="my-0">Date of Delivery</h6>
-            <small class="text-muted">Pickup Time: 3:00 pm</small>
-          </div>
-          <span class="text-muted">10/15/2019</span>
-        </li>
+
         <li class="list-group-item d-flex justify-content-between lh-condensed">
           <div>
             <h6 class="my-0">Estimated Price</h6>
@@ -51,39 +74,39 @@
     <div class="col-md-8 order-md-1">
       <h3 class="mb-3">Build My Cart</h3>
       <div class="d-md-flex w-100 my-md-3 pl-md-3">
-  <div class="card domcolor-t mr-md-9 pt-3 px-3 px-md-5 text-center overflow-hidden">
+  <div class="card domcolor-t mr-md-9 w-100 pt-3 px-3 px-md-2 text-center overflow-hidden">
     <div class="my-3 py-3">
       <h3 class="card-title">Search</h3>
-      <form class="form-inline my-2 my-lg-0 card-body">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+      <form class="form-inline my-2 my-lg-0 card-body" method="GET">
+        <input class="form-control mr-sm-2 w-75" type="text" placeholder="Search" aria-label="Search" name="search">
         <button class="btn btn-secondary my-2 my-sm-0 second-accent" type="submit">Search</button>
       </form>
-      <ul class="list-group list-group-flush">
-    <li class="list-group-item">-</li>
-    <li class="list-group-item">-</li>
-    <li class="list-group-item">-</li>
-        <li class="list-group-item">-</li>
-    <li class="list-group-item">-</li>
-    <li class="list-group-item">-</li>
-        <li class="list-group-item">-</li>
-
-  </ul>
-    </div>
-  </div>
-  <div class="card domcolor-t mr-md-1 pt-3 px-3 px-md-5 text-center overflow-hidden">
-    <div class="my-3 p-3">
-      <h3 class="card-title">My Shopping List</h3>
-      <ul class="list-group list-group-flush">
-    <li class="list-group-item">-</li>
-    <li class="list-group-item">-</li>
-    <li class="list-group-item">-</li>
-        <li class="list-group-item">-</li>
-    <li class="list-group-item">-</li>
-    <li class="list-group-item">-</li>
-        <li class="list-group-item">-</li>
-    <li class="list-group-item">-</li>
-    <li class="list-group-item">-</li>
-  </ul>
+      <ul class="list-group list-group-flush list-group-items">
+        {% for item in items %}
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-md-3">
+                <img src="{{ item.image }}" style="height:50%">
+              </div>
+              <div class="col-md-3">
+                <a href="https://walmart.com/ip/{{item.id}}" target="_blank"><p>{{ item.title }}</p></a>
+              </div>
+              <div class="col-md-3">
+                <p>{{ item.price }}</p>
+              </div>
+              <div class="col-md-3">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="item" value="{{item}}"></input>
+                    <input type="submit" value="Add to cart"/>
+                </form>
+              </div>
+            </div>
+          </li>
+        {% empty %}
+          No items.
+        {% endfor %}
+      </ul>
     </div>
   </div>
 </div>
@@ -121,14 +144,17 @@
               <option>5-7 days</option>
               <option>3-5 days</option>
               <option>1-2 days</option>
-              <option>Same day</option>
             </select>
             <div class="invalid-feedback">
               Please provide a valid option.
             </div>
           </div>
         <hr class="mb-4">
+        {% if disabled %}
+        <input class="btn btn-primary btn-lg btn-block accent" type="submit" value="Start Matching With Driver" disabled>
+        {% else %}
         <input class="btn btn-primary btn-lg btn-block accent" type="submit" value="Start Matching With Driver">
+        {% endif %}
       </form>
     </div>
   </div>
