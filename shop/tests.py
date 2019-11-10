@@ -19,7 +19,7 @@ class ViewTests(TestCase):
         response = self.client.get("/profile/signin/")
         #Check it's 200
         self.assertEqual(response.status_code, 200)
-    def testHomePage(self):
+    def testHomePage(self): 
         #Get home page
         response = self.client.get("/")
         #Check it's 200
