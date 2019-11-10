@@ -232,6 +232,18 @@ class MatchTests(TestCase):
         self.assertEquals(d1.money_earned, 45.0)
 
     @mock.patch('shop.views.match', side_effect=match)
+    @mock.patch('shop.views.reset', side_effect=reset)
+    def test_driver_increases_orders(self, mock_reset, mock_match):
+        mock_match()
+        request = self.factory.get('/dashboard')
+        request.user = self.user
+        o1 = Order.objects.get(delivery_instructions="drop check")
+        driver = Profile.objects.get(email=o1.driver).email
+        mock_reset(request)
+        d1 = Profile.objects.get(email=driver)
+        self.assertEquals(d1.deliveries_made, 1)
+
+    @mock.patch('shop.views.match', side_effect=match)
     def test_match_not_shopping(self, mock_match):
         mock_match()
         u1 = User.objects.get(email="c1@email.com")

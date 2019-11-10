@@ -238,6 +238,7 @@ def match():
         d.has_order = True
         d.is_matching = False
         d.started_matching = None
+        d.deliveries_made += 1
         d.save()
         o.order_start_time = timezone.now()
         o.driver = d.email
