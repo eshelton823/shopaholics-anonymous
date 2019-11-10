@@ -245,28 +245,32 @@ def reset(request):
         o.customer_name = "DROPPED"
         o.driver = "DROPPED"
         o.save()
-    u = Profile.objects.filter(email=request.user.email)[0]
-    u.is_shopping = False
-    u.save()
+    request.user.profile.is_shopping = False
+    request.user.save()
     return HttpResponseRedirect(reverse('shop:dashboard'))
 
 def match():
-    print('matching!')
+    # print("matching!")
     # NOTE: Currently a person could be matched to their own order!! Decide as a team if that's OK or not
     drivers = Profile.objects.filter(is_matching=True).order_by('started_matching')
-    orders = Order.objects.filter(driver="").order_by('order_placed')
+    orders = Order.objects.filter(driver="").order_by('id')
     queuedrivers = []
     queueorders = []
     for driver in drivers:
+        # print("DRIVER")
+        # print(driver.email)
         queuedrivers.append(driver)
     for order in orders:
+        # print("ORDER")
+        # print(order.delivery_instructions)
         queueorders.append(order)
-    while len(queuedrivers) > 0 and len(queueorders) > 0:
+    while (len(queuedrivers) > 0) and (len(queueorders) > 0):
         d = queuedrivers.pop(0)
         o = queueorders.pop(0)
         d.has_order = True
         d.is_matching = False
         d.started_matching = None
+        d.deliveries_made += 1
         d.save()
         o.order_start_time = timezone.now()
         o.driver = d.email
