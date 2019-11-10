@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
-
+from django.contrib.postgres.fields import JSONField
 
 
 
@@ -113,3 +113,5 @@ class Order(models.Model):
     #delivery - customer
     current_address_dropoff_street_and_street_number = models.CharField(max_length=35, default="")
     customer_name = models.CharField(max_length=20, default="")
+
+    cart = JSONField(null=True, blank=True)

@@ -121,5 +121,5 @@ background: rgba(255, 255, 255, .8);
 }
 .list-group-cart{
     max-height: 300px;
-    overflow: scroll;
+    overflow-y: auto;
 }

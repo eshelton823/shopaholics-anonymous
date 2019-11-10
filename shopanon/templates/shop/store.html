@@ -23,18 +23,12 @@
         <div class="my-3 p-3">
           <h3 class="card-title">My Shopping List</h3>
           <ul class="list-group list-group-flush list-group-cart">
-        <li class="list-group-item">-</li>
-        <li class="list-group-item">-</li>
-        <li class="list-group-item">-</li>
-            <li class="list-group-item">-</li>
-        <li class="list-group-item">-</li>
-        <li class="list-group-item">-</li>
-            <li class="list-group-item">-</li>
-        <li class="list-group-item">-</li>
-        <li class="list-group-item">-</li>
-        <li class="list-group-item">-</li>
-        <li class="list-group-item">-</li>
-      </ul>
+            {% for item in shopping_list %}
+              <li>Item</li>
+            {% empty %}
+              No items.
+            {% endfor %}
+          </ul>
         </div>
       </div>
       <ul class="list-group mb-3">
