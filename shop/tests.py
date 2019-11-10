@@ -49,3 +49,7 @@ class ViewTests(TestCase):
         response = self.client.get("/dashboard")
         #Check it's 200, now signed in
         self.assertEqual(response.status_code, 200)
+
+class MatchTests(TestCase):
+    def setUp(self):
+        pass

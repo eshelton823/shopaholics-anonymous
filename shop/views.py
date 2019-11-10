@@ -3,6 +3,7 @@ from django.shortcuts import redirect, reverse
 from users.models import Order, Profile
 from django.http import HttpResponseRedirect
 from django.utils import timezone
+from django.contrib import messages
 from .forms import OrderForm
 # Create your views here.
 
@@ -31,7 +32,12 @@ def driver_dash(request):
 
 def store(request):
     if request.user.is_authenticated:
-        return render(request, 'shop/store.html')
+        context = {}
+        if request.user.profile.is_shopping:
+            context['disabled'] = True
+        else:
+            context['disabled'] = False
+        return render(request, 'shop/store.html', context)
     else:
         return redirect('profile/signin')
 
@@ -51,6 +57,8 @@ def process_order(request):
                 try:
                     asap = request.POST['asap']
                     o.is_delivery_asap = True
+                    o.desired_delivery_time_range_lower_bound = timezone.now()
+                    o.desired_delivery_time_range_upper_bound = timezone.now()
                 except:
                     o.desired_delivery_time_range_lower_bound = timezone.now() + timezone.timedelta(days=int(request.POST['d_time'][0]))
                     o.desired_delivery_time_range_upper_bound = timezone.now() + timezone.timedelta(days=int(request.POST['d_time'][2]))
@@ -97,12 +105,8 @@ def get_order_info(user):
         context["identity"] = "Driver"
     else:
         context["identity"] = "Shopper"
-    return context
-
-def get_driver_info(d):
-    context = {}
-    if d.profile.has_order:
-        o = Order.objects.filter(driver=d.email)[0]
+    if user.profile.is_shopping:
+        o = Order.objects.filter(user=user.email)[0]
         # print(o)
         context['current'] = o.customer_name
         if o.is_delivery_asap:
@@ -126,7 +130,39 @@ def get_driver_info(d):
         context['address'] = "N/A"
         context['apt'] = "N/A"
         context['instructions'] = "N/A"
+    return context
+
+def get_driver_info(d):
+    context = {}
+    if d.profile.has_order:
+        o = Order.objects.filter(driver=d.email)[0]
+        # print(o)
+        context['current'] = o.customer_name
+        context['status'] = "You have an order!"
+        if o.is_delivery_asap:
+            context['late_time'] = "ASAP"
+        else:
+            context['late_time'] = o.desired_delivery_time_range_upper_bound
+        context['address'] = o.delivery_address
+        if o.delivery_apt_suite != "":
+            context['apt'] = o.delivery_apt_suite
+        else:
+            context['apt'] = "Not specified"
+        context['instructions'] = o.delivery_instructions
+        context['cost'] = o.order_cost
+        context['list'] = o.order_list
+        # print(o.customer_name)
+    else:
+        context['current'] = "None"
+        context['late_time'] = "N/A"
+        context['cost'] = "N/A"
+        context['list'] = "N/A"
+        context['address'] = "N/A"
+        context['apt'] = "N/A"
+        context['instructions'] = "N/A"
+        context['status'] = "Not matching"
     if d.profile.is_matching:
+        context['status'] = "Waiting for a match"
         context['matching'] = "Stop matching"
         # context['disable'] = ""
     elif not d.profile.is_matching and d.profile.has_order:
@@ -148,9 +184,11 @@ def get_driver_info(d):
 def swap(request):
     if request.user.profile.is_matching:
         request.user.profile.is_matching = False
+        request.user.profile.started_matching = None
         request.user.profile.save()
     elif not request.user.profile.is_matching and not request.user.profile.has_order:
         request.user.profile.is_matching = True
+        request.user.profile.started_matching = timezone.now()
         request.user.profile.save()
         match(request)
     return HttpResponseRedirect(reverse('shop:driver_dash'))
@@ -160,14 +198,16 @@ def reset(request):
     if not request.user.profile.is_shopping:
         return HttpResponseRedirect(reverse('shop:dashboard'))
     o = Order.objects.filter(user=request.user.email)[0]
+    price = o.order_cost
     if o.driver != "":
+        d = Profile.objects.filter(email=o.driver)[0]
+        d.has_order = False
+        d.money_earned += price
+        d.save()
         o.user = "COMPLETE"
         o.customer_name = "COMPLETE"
         o.driver = "COMPLETE"
         o.save()
-        d = Profile.objects.filter(email=o.driver)[0]
-        d.has_order = False
-        d.save()
     else:
         o.user = "DROPPED"
         o.customer_name = "DROPPED"
@@ -180,8 +220,8 @@ def reset(request):
 
 def match(request):
     # NOTE: Currently a person could be matched to their own order!! Decide as a team if that's OK or not
-    drivers = Profile.objects.filter(is_matching=True)
-    orders = Order.objects.filter(driver="")
+    drivers = Profile.objects.filter(is_matching=True).order_by('started_matching')
+    orders = Order.objects.filter(driver="").order_by('order_placed')
     queuedrivers = []
     queueorders = []
     for driver in drivers:
@@ -191,10 +231,11 @@ def match(request):
     while len(queuedrivers) > 0 and len(queueorders) > 0:
         d = queuedrivers.pop(0)
         o = queueorders.pop(0)
-        print(d)
         d.has_order = True
         d.is_matching = False
+        d.started_matching = None
         d.save()
+        o.order_start_time = timezone.now()
         o.driver = d.email
         o.save()
     return HttpResponseRedirect(reverse('shop:dashboard'))

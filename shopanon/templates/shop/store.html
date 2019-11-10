@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
+{% if disabled %}
+<br>
+<br>
+<br>
+<h3 class="text-center accent-text">You already have an order submitted; you can only shop for one order at a time!</h3>
+{% endif %}
+
    <div class="container">
   <div class="py-5 text-center">
     <br>
@@ -18,15 +25,9 @@
             <h6 class="my-0">Store</h6>
             <small class="text-muted">Distance: 3.7 mi</small>
           </div>
-          <span class="text-muted">Kroger, Barracks Road</span>
+          <span class="text-muted">Walmart, Hilton Heights</span>
         </li>
-        <li class="list-group-item d-flex justify-content-between lh-condensed">
-          <div>
-            <h6 class="my-0">Date of Delivery</h6>
-            <small class="text-muted">Pickup Time: 3:00 pm</small>
-          </div>
-          <span class="text-muted">10/15/2019</span>
-        </li>
+
         <li class="list-group-item d-flex justify-content-between lh-condensed">
           <div>
             <h6 class="my-0">Estimated Price</h6>
@@ -127,7 +128,11 @@
             </div>
           </div>
         <hr class="mb-4">
+        {% if disabled %}
+        <input class="btn btn-primary btn-lg btn-block accent" type="submit" value="Start Matching With Driver" disabled>
+        {% else %}
         <input class="btn btn-primary btn-lg btn-block accent" type="submit" value="Start Matching With Driver">
+        {% endif %}
       </form>
     </div>
   </div>
