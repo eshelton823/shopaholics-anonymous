@@ -81,16 +81,19 @@ class ViewTests(TestCase):
 class MatchTests(TestCase):
     def setUp(self):
         #has order
-        # User.objects.create_user(username="customer1", password='12345', email='c1@email.com')
-        # User.objects.get(username="customer1").profile.is_shopping=True
+        User.objects.create_user(username="customer1", password='12345', email='c1@email.com')
+        u1 = User.objects.get(username="customer1")
+        u1.profile.email = u1.email
+        u1.save()
+
         # User.objects.create_user(username="customer2", password='12345', email='c2@email.com')
         # User.objects.get(username="customer2").profile.is_shopping = True
         #has no order
         User.objects.create_user(username="customer3", password='12345', email='c3@email.com')
-        u1 = User.objects.get(username="customer3")
-        u1.profile.is_shopping = True
-        u1.profile.email = u1.email
-        u1.save()
+        u3 = User.objects.get(username="customer3")
+        u3.profile.is_shopping = True
+        u3.profile.email = u3.email
+        u3.save()
         # User.objects.create_user(username="customer4", password='12345', email='c4@email.com')
         # User.objects.create_user(username="customer5", password='12345', email='c5@email.com')
 
@@ -165,13 +168,8 @@ class MatchTests(TestCase):
     @mock.patch('shop.views.reset', side_effect=reset)
     def test_drop_unmatched_not_shopping(self, mock_reset):
         request = self.factory.get('/dashboard')
-        # self.user = User.objects.get(user='c3@gmail.com')
         request.user = self.user
-        # print(request.user.email)
-        # print(request.user.profile.is_shopping)
         mock_reset(request)
-        # print(request.user.email)
-        # print(request.user.profile.is_shopping)
         self.assertFalse(request.user.profile.is_shopping)
 
     @mock.patch('shop.views.reset', side_effect=reset)
@@ -188,7 +186,6 @@ class MatchTests(TestCase):
         mock_match()
         request = self.factory.get('/dashboard')
         request.user = self.user
-        # request.user = User.objects.get(user='c3@gmail.com')
         mock_reset(request)
         self.assertFalse(request.user.profile.is_shopping)
 
@@ -196,7 +193,7 @@ class MatchTests(TestCase):
     @mock.patch('shop.views.reset', side_effect=reset)
     def test_resolve_order_driver(self, mock_reset, mock_match):
         mock_match()
-        request = self.client.get('/dashboard')
+        request = self.factory.get('/dashboard')
         request.user = self.user
         mock_reset(request)
         d = User.objects.get(email="d3@email.com")
@@ -206,7 +203,7 @@ class MatchTests(TestCase):
     @mock.patch('shop.views.reset', side_effect=reset)
     def test_resolve_order_driver_match(self, mock_reset, mock_match):
         mock_match()
-        request = self.client.get('/dashboard')
+        request = self.factory.get('/dashboard')
         request.user = self.user
         mock_reset(request)
         d = User.objects.get(email="d3@email.com")
@@ -216,8 +213,7 @@ class MatchTests(TestCase):
     @mock.patch('shop.views.reset', side_effect=reset)
     def test_resolve_order_order(self, mock_reset, mock_match):
         mock_match()
-        # print("here2")
-        request = self.client.get('/dashboard')
+        request = self.factory.get('/dashboard')
         request.user = self.user
         mock_reset(request)
         o1 = Order.objects.get(delivery_instructions="drop check")
@@ -227,8 +223,7 @@ class MatchTests(TestCase):
     @mock.patch('shop.views.reset', side_effect=reset)
     def test_driver_gets_money(self, mock_reset, mock_match):
         mock_match()
-        # print("here2")
-        request = self.client.get('/dashboard')
+        request = self.factory.get('/dashboard')
         request.user = self.user
         o1 = Order.objects.get(delivery_instructions="drop check")
         driver = Profile.objects.get(email=o1.driver).email
@@ -236,4 +231,112 @@ class MatchTests(TestCase):
         d1 = Profile.objects.get(email=driver)
         self.assertEquals(d1.money_earned, 45.0)
 
+    @mock.patch('shop.views.match', side_effect=match)
+    def test_match_not_shopping(self, mock_match):
+        mock_match()
+        u1 = User.objects.get(email="c1@email.com")
+        self.assertFalse(u1.profile.is_shopping)
 
+    @mock.patch('shop.views.match', side_effect=match)
+    def test_match_not_matched(self, mock_match):
+        mock_match()
+        # u1 = User.objects.get(email="c1@email.com")
+        o = Order.objects.filter(user="c1@gmail.com")
+        self.assertEquals(len(o), 0)
+
+    @mock.patch('shop.views.match', side_effect=match)
+    def test_match_not_driver(self, mock_match):
+        mock_match()
+        # u1 = User.objects.get(email="c1@email.com")
+        o = Order.objects.filter(driver="c1@gmail.com")
+        self.assertEquals(len(o), 0)
+
+
+class SwapTests(TestCase):
+    def setUp(self):
+        User.objects.create_user(username="driver3", password='12345', email='d3@email.com')
+        d1 = User.objects.get(username="driver3")
+        # d1.profile.is_matching = True
+        d1.profile.started_matching = timezone.now() + timezone.timedelta(days=-2)
+        d1.profile.email = d1.email
+        d1.profile.driver_filled = True
+        d1.save()
+
+        Order.objects.create(user='c3@email.com', driver='None', order_placed = timezone.now() + timezone.timedelta(days=-1), delivery_instructions="swap check", store_selection="WAL", order_cost=45)
+
+        User.objects.create_user(username="customer3", password='12345', email='c3@email.com')
+        u3 = User.objects.get(username="customer3")
+        u3.profile.is_shopping = True
+        u3.profile.email = u3.email
+        u3.save()
+
+        self.client = Client()
+        self.user = User.objects.get(username="driver3")
+        self.factory = RequestFactory()
+
+    @mock.patch('shop.views.swap', side_effect=swap)
+    def test_match_default_not_matched(self, mock_swap):
+        request = self.factory
+        request.user = self.user
+        self.assertFalse(request.user.profile.is_matching)
+
+    @mock.patch('shop.views.swap', side_effect=swap)
+    def test_match_set_matching(self, mock_swap):
+        request = self.factory
+        request.user = self.user
+        mock_swap(request)
+        self.assertTrue(request.user.profile.is_matching)
+
+    @mock.patch('shop.views.swap', side_effect=swap)
+    def test_match_set_not_matching(self, mock_swap):
+        request = self.factory
+        request.user = self.user
+        mock_swap(request)
+        mock_swap(request)
+        self.assertFalse(request.user.profile.is_matching)
+
+    @mock.patch('shop.views.swap', side_effect=swap)
+    def test_match_set_swap_and_match(self, mock_swap):
+        request = self.factory.get('/driver_dash')
+        o1 = Order.objects.get(delivery_instructions="swap check")
+        o1.driver = ""
+        o1.save()
+        request.user = self.user
+        mock_swap(request)
+        self.assertFalse(User.objects.get(email="d3@email.com").profile.is_matching)
+
+    # @mock.patch('shop.views.match', side_effect=match)
+    @mock.patch('shop.views.swap', side_effect=swap)
+    def test_match_set_swap_and_call_match(self, mock_swap):
+        request = self.factory
+        request.user = self.user
+        o1 = Order.objects.get(delivery_instructions="swap check")
+        o1.driver = ""
+        o1.save()
+        mock_swap(request)
+        # mock_swap(request)
+        self.assertFalse(User.objects.get(email="d3@email.com").profile.is_matching)
+
+    # @mock.patch('shop.views.match', side_effect=match)
+    @mock.patch('shop.views.swap', side_effect=swap)
+    def test_match_set_swap_and_get_order(self, mock_swap):
+        request = self.factory
+        request.user = self.user
+        o1 = Order.objects.get(delivery_instructions="swap check")
+        o1.driver = ""
+        o1.save()
+        mock_swap(request)
+        # mock_swap(request)
+        self.assertTrue(User.objects.get(email="d3@email.com").profile.has_order)
+
+    # @mock.patch('shop.views.match', side_effect=match)
+    @mock.patch('shop.views.swap', side_effect=swap)
+    def test_match_set_swap_and_check_unchanged(self, mock_swap):
+        request = self.factory
+        request.user = self.user
+        o1 = Order.objects.get(delivery_instructions="swap check")
+        o1.driver = ""
+        o1.save()
+        mock_swap(request)
+        mock_swap(request)
+        self.assertFalse(User.objects.get(email="d3@email.com").profile.is_matching)
