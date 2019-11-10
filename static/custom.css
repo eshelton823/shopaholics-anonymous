@@ -118,3 +118,7 @@ h1 {font-family: "MV Boli"}
 .carousel-caption{
 background: rgba(255, 255, 255, .8);
 }
+.list-group-cart{
+    max-height: 300px;
+    overflow: scroll;
+}

@@ -113,4 +113,3 @@ class Order(models.Model):
     #delivery - customer
     current_address_dropoff_street_and_street_number = models.CharField(max_length=35, default="")
     customer_name = models.CharField(max_length=20, default="")
-
