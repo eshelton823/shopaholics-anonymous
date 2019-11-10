@@ -10,3 +10,4 @@ Faker
 python-dotenv
 bs4
 stripe
+mock
