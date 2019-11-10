@@ -190,7 +190,7 @@ def swap(request):
         request.user.profile.is_matching = True
         request.user.profile.started_matching = timezone.now()
         request.user.profile.save()
-        match(request)
+        match()
     return HttpResponseRedirect(reverse('shop:driver_dash'))
 
 
@@ -218,7 +218,8 @@ def reset(request):
     u.save()
     return HttpResponseRedirect(reverse('shop:dashboard'))
 
-def match(request):
+def match():
+    print('matching!')
     # NOTE: Currently a person could be matched to their own order!! Decide as a team if that's OK or not
     drivers = Profile.objects.filter(is_matching=True).order_by('started_matching')
     orders = Order.objects.filter(driver="").order_by('order_placed')
