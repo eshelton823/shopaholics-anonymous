@@ -27,27 +27,27 @@ class UserModelTests(TestCase):
         print("Shopping?", self.user.profile.is_shopping)
         self.assertNotEqual(self.user.profile, None)
 
-class ManualLoginTests(TestCase):
-    def setUp(self):
-        User.objects.create(username="u1", password=make_password("u2"), email="u1@email.com")
-        u1 = User.objects.get(username='u1')
-        u1.logout()
-        self.client = Client()
-        self.factory = RequestFactory()
-        self.user = User.objects.get(username="u1")
-
-    def test_login_success(self):
-        data = {'username': 'u1', 'password': 'u2'}
-        response = self.client.post("/validate_login/", data)
-        # redirect = response.status_code
-        self.assertTrue(User.objects.get(username='u1').is_authenticated)
-
-    def test_login_failure_username(self):
-        data = {'username': 'u2', 'password': 'u2'}
-        response = self.client.post("/validate_login/", data)
-        self.assertFalse(User.objects.get(username='u1').is_authenticated)
-
-    def test_login_failure_password(self):
-        data = {'username': 'u2', 'password': 'u3'}
-        response = self.client.post("/validate_login/", data)
-        self.assertFalse(User.objects.get(username='u1').is_authenticated)
+# class ManualLoginTests(TestCase):
+#     def setUp(self):
+#         User.objects.create(username="u1", password=make_password("u2"), email="u1@email.com")
+#         u1 = User.objects.get(username='u1')
+#         u1.logout()
+#         self.client = Client()
+#         self.factory = RequestFactory()
+#         self.user = User.objects.get(username="u1")
+#
+#     def test_login_success(self):
+#         data = {'username': 'u1', 'password': 'u2'}
+#         response = self.client.post("/validate_login/", data)
+#         # redirect = response.status_code
+#         self.assertTrue(User.objects.get(username='u1').is_authenticated)
+#
+#     def test_login_failure_username(self):
+#         data = {'username': 'u2', 'password': 'u2'}
+#         response = self.client.post("/validate_login/", data)
+#         self.assertFalse(User.objects.get(username='u1').is_authenticated)
+#
+#     def test_login_failure_password(self):
+#         data = {'username': 'u2', 'password': 'u3'}
+#         response = self.client.post("/validate_login/", data)
+#         self.assertFalse(User.objects.get(username='u1').is_authenticated)

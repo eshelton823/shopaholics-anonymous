@@ -4,7 +4,7 @@
     <h1>Sign in for ShopAnon!</h1>
     <div>
         <p> Sign in with Google! </p>
-        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{home}}">Login with Google</a>
+        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{dashboard}}">Login with Google</a>
 
     </div>
 <hr>
@@ -17,17 +17,16 @@
         <h4 class="my-0 font-weight-normal">Enter your information:</h4>
       </div>
       <div class="card-body">
+        <p class="accent-text">{{ error }}</p>
         <form action="{% url 'users:validate_login' %}" method="post">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username</label>
-                <p class="accent-text">{{ username }}</p>
                 <input type="text" class="form-control" id="username" name="username" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <p class="accent-text">{{ password }}</p>
-                <input type="text" class="form-control" id="password" name ="password" required>
+                <input type="password" class="form-control" id="password" name ="password" required>
             </div>
 
         <input type="submit" class="btn btn-lg btn-primary accent" value="Submit">

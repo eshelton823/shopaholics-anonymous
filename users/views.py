@@ -33,15 +33,13 @@ def validate_login(request):
         try:
             if len(User.objects.filter(username=request.POST['username'])) == 0:
                 context = {}
-                context['password'] = ""
-                context['username'] = "Incorrect Username"
+                context['error'] = "Incorrect Credentials; Please Try Again"
                 return render(request, 'users/user_signin.html', context)
             u = User.objects.get(username=request.POST['username'])
             check = check_password(request.POST['password'], u.password)
             if not check:
                 context = {}
-                context['username'] = ""
-                context['password'] = "Incorrect Password"
+                context['error'] = "Incorrect Credentials; Please Try Again"
                 return render(request, 'users/user_signin.html', context)
             user = authenticate(username=request.POST['username'], password=request.POST['password'])
             if user is not None:
