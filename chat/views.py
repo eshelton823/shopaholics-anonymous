@@ -1,4 +1,5 @@
 from django.shortcuts import render
+import users
 
 # Create your views here.
 
@@ -15,7 +16,13 @@ from twilio.jwt.access_token.grants import ChatGrant
 fake = Faker()
 
 def token(request):
-    identity = request.GET.get('identity', fake.user_name())
+    #identity = request.GET.get('identity', fake.user_name())
+    identity = ""
+    if(request.user.is_authenticated):
+        identity = request.user.username
+    else:
+        #TODO: kick back to sign in.
+        pass
     device_id = request.GET.get('device', 'default')  # unique device ID
 
     account_sid = settings.TWILIO_ACCOUNT_SID
