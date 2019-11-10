@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.contrib import messages
 from .forms import OrderForm
 from .scrape import getItems
+import json, ast
 # Create your views here.
 
 def home(request):
@@ -34,10 +35,29 @@ def driver_dash(request):
 def store(request):
     if request.user.is_authenticated:
         context = {}
+        if(request.method == "POST"):
+            if(request.POST.get('delete', '')):
+                item = request.POST.get('delete', '')
+                request.user.profile.cart["items"].remove(ast.literal_eval(item))
+            else:
+                item = request.POST.get('item', '')
+                res = ast.literal_eval(item)
+                try:
+                    request.user.profile.cart["items"]
+                except:
+                    request.user.profile.cart = {"items":{}}
+                    print("Made new.")
+                request.user.profile.cart['items'].append(res)
+                print("Request:", request.user.profile.cart['items'])
+            request.user.save()
+        query = request.GET.get('search');
+        if query is not None:
+            context['items'] = getItems(query)
         if request.user.profile.is_shopping:
             context['disabled'] = True
         else:
             context['disabled'] = False
+        print(request.user.profile.cart['items'])
         return render(request, 'shop/store.html', context)
     else:
         return redirect('profile/signin')

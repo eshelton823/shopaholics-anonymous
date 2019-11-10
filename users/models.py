@@ -49,6 +49,7 @@ class Profile(models.Model):
     has_order = models.BooleanField(default=False) # THIS ONE IS IF A DRIVER IS MATCHED WITH AN ORDER
     driver_filled = models.BooleanField(default=False)
     started_matching = models.TimeField(null=True, blank=True)
+    cart = JSONField(default={'items':[]})
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -113,5 +114,3 @@ class Order(models.Model):
     #delivery - customer
     current_address_dropoff_street_and_street_number = models.CharField(max_length=35, default="")
     customer_name = models.CharField(max_length=20, default="")
-
-    cart = JSONField(null=True, blank=True)

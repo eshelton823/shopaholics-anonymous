@@ -123,3 +123,7 @@ background: rgba(255, 255, 255, .8);
     max-height: 300px;
     overflow-y: auto;
 }
+.list-group-items{
+    max-height: 300px;
+    overflow-y: auto;
+}
