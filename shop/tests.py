@@ -1,11 +1,36 @@
-import unittest
+# import unittest
 from django.test import Client
 from django.contrib.staticfiles import finders
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import User
 from users.models import Profile, Order
 from django.utils import timezone
+import mock
 from shop.views import match, reset, swap
+# import shop.views
+
+# def match():
+#     print('matching!')
+#     # NOTE: Currently a person could be matched to their own order!! Decide as a team if that's OK or not
+#     drivers = Profile.objects.filter(is_matching=True).order_by('started_matching')
+#     orders = Order.objects.filter(driver="").order_by('order_placed')
+#     queuedrivers = []
+#     queueorders = []
+#     for driver in drivers:
+#         queuedrivers.append(driver)
+#     for order in orders:
+#         queueorders.append(order)
+#     while len(queuedrivers) > 0 and len(queueorders) > 0:
+#         d = queuedrivers.pop(0)
+#         o = queueorders.pop(0)
+#         d.has_order = True
+#         d.is_matching = False
+#         d.started_matching = None
+#         d.save()
+#         o.order_start_time = timezone.now()
+#         o.driver = d.email
+#         o.save()
+#     return True
 
 # Create your tests here.
 class ViewTests(TestCase):
@@ -56,42 +81,52 @@ class ViewTests(TestCase):
 class MatchTests(TestCase):
     def setUp(self):
         #has order
-        User.objects.create_user(username="customer1", password='12345', email='c1@email.com')
-        User.objects.get(username="customer1").profile.is_shopping=True
-        User.objects.create_user(username="customer2", password='12345', email='c2@email.com')
-        User.objects.get(username="customer2").profile.is_shopping = True
+        # User.objects.create_user(username="customer1", password='12345', email='c1@email.com')
+        # User.objects.get(username="customer1").profile.is_shopping=True
+        # User.objects.create_user(username="customer2", password='12345', email='c2@email.com')
+        # User.objects.get(username="customer2").profile.is_shopping = True
         #has no order
         User.objects.create_user(username="customer3", password='12345', email='c3@email.com')
-        User.objects.get(username="customer3").profile.is_shopping = True
+        u1 = User.objects.get(username="customer3")
+        u1.profile.is_shopping = True
+        u1.profile.email = u1.email
+        u1.save()
         # User.objects.create_user(username="customer4", password='12345', email='c4@email.com')
         # User.objects.create_user(username="customer5", password='12345', email='c5@email.com')
 
         #has order
-        User.objects.create_user(username="driver1", password='12345', email='d1@email.com')
-        User.objects.get(username="driver1").profile.has_order=True
+        # User.objects.create_user(username="driver1", password='12345', email='d1@email.com')
+        # User.objects.get(username="driver1").profile.has_order=True
 
         #is matching
-        User.objects.create_user(username="driver2", password='12345', email='d2@email.com')
-        User.objects.get(username="driver2").profile.is_matching=True
-        User.objects.get(username="driver2").profile.start_matching=timezone.now() + timezone.timedelta(days=-1)
+        # User.objects.create_user(username="driver2", password='12345', email='d2@email.com')
+        # User.objects.get(username="driver2").profile.is_matching=True
+        # User.objects.get(username="driver2").profile.start_matching=timezone.now() + timezone.timedelta(days=-1)
 
 
         User.objects.create_user(username="driver3", password='12345', email='d3@email.com')
-        User.objects.get(username="driver3").profile.is_matching = True
-        User.objects.get(username="driver3").profile.start_matching = timezone.now() + timezone.timedelta(days=-2)
+        d1 = User.objects.get(username="driver3")
+        d1.profile.is_matching = True
+        d1.profile.started_matching = timezone.now() + timezone.timedelta(days=-2)
+        d1.profile.email = d1.email
+        d1.save()
+        # print(User.objects.get(username="driver3").profile.is_matching)
         # User.objects.create_user(username="driver4", password='12345', email='d4@email.com')
         #
         # #in limbo
         # User.objects.create_user(username="driver5", password='12345', email='d5@email.com')
 
         #is matching, has order
-        User.objects.create_user(username="both1", password='12345', email='b1@email.com')
-        User.objects.get(username="both1").profile.is_matching = True
-        User.objects.get(username="both1").profile.start_matching = timezone.now()
-        User.objects.get(username="both1").profile.is_matching = True
-        User.objects.get(username="both1").profile.is_shopping = True
+        b1 = User.objects.create_user(username="both1", password='12345', email='b1@email.com')
+        b1.profile.is_matching = True
+        b1.profile.started_matching = timezone.now()
+        b1.profile.email = b1.email
+        b1.profile.is_shopping = True
+        b1.save()
+
         #is matching, no order
-        # User.objects.create_user(username="both2", password='12345', email='b2@email.com',is_matching=True)
+        # User.objects.create_user(username="both2", password='12345', email='b2@email.com')
+        # User.objects.get(username="both2").profile.is_matching=True
         #
         # #in limbo
         # User.objects.create_user(username="both3", password='12345', email='b3@email.com')
@@ -101,74 +136,104 @@ class MatchTests(TestCase):
         #
         # #waiting for matches
         # Order.objects.create(user='c2@email.com', driver='d1@email.com', store_selection="WAL")
-        Order.objects.create(user='c3@email.com', order_placed = timezone.now() + timezone.timedelta(days=-1), delivery_instructions="drop check", store_selection="WAL")
-        # Order.objects.create(user='b1@email.com', order_placed=timezone.now() + timezone.timedelta(hours=-1), store_selection="WAL")
+        Order.objects.create(user='c3@email.com', order_placed = timezone.now() + timezone.timedelta(days=-1), delivery_instructions="drop check", store_selection="WAL", order_cost=45)
+        Order.objects.create(user='b1@email.com', order_placed=timezone.now() + timezone.timedelta(hours=-1), store_selection="WAL")
 
         self.factory = RequestFactory()
         self.client = Client()
-
-    def test_match_earlier_driver(self):
         self.user = User.objects.get(email='c3@email.com')
-        self.client.get('/dashboard')
-        self.client.get('shop:match')
+
+    @mock.patch('shop.views.match', side_effect=match)
+    def test_match_earlier_driver(self, mock_match):
+        mock_match()
         o3 = Order.objects.get(user='c3@email.com')
         self.assertEqual(o3.driver, 'd3@email.com')
 
-    def test_match_earlier_order(self):
-        match()
+    @mock.patch('shop.views.match', side_effect=match)
+    def test_match_earlier_order(self, mock_match):
+        mock_match()
         o1 = Order.objects.get(user='c3@email.com')
         self.assertNotEqual(o1.driver, "")
 
-    def test_match_multiple(self):
-        match()
+    @mock.patch('shop.views.match', side_effect=match)
+    def test_match_multiple(self, mock_match):
+        mock_match()
         o1 = Order.objects.get(user='c3@email.com')
         o2 = Order.objects.get(user='b1@email.com')
         self.assertTrue(o1.driver != "" and o2.driver != "")
 
-    def test_drop_unmatched_not_shopping(self):
-        request = self.client.get('/dashboard')
-        request.user = User.objects.get(user='c3@gmail.com')
-        reset(request)
+    @mock.patch('shop.views.reset', side_effect=reset)
+    def test_drop_unmatched_not_shopping(self, mock_reset):
+        request = self.factory.get('/dashboard')
+        # self.user = User.objects.get(user='c3@gmail.com')
+        request.user = self.user
+        # print(request.user.email)
+        # print(request.user.profile.is_shopping)
+        mock_reset(request)
+        # print(request.user.email)
+        # print(request.user.profile.is_shopping)
         self.assertFalse(request.user.profile.is_shopping)
 
-    def test_drop_unmatched_order_unlinked(self):
-        request = self.client.get('/dashboard')
-        request.user = User.objects.get(user='c3@gmail.com')
-        reset(request)
+    @mock.patch('shop.views.reset', side_effect=reset)
+    def test_drop_unmatched_order_unlinked(self, mock_reset):
+        request = self.factory.get('/dashboard')
+        request.user = self.user
+        mock_reset(request)
         o1 = Order.objects.get(delivery_instructions="drop check")
         self.assertEquals(o1.user, "DROPPED")
 
-    def test_resolve_order_user(self):
-        match()
-        request = self.client.get('/dashboard')
-        request.user = User.objects.get(user='c3@gmail.com')
-        reset(request)
+    @mock.patch('shop.views.match', side_effect=match)
+    @mock.patch('shop.views.reset', side_effect=reset)
+    def test_resolve_order_user(self, mock_reset, mock_match):
+        mock_match()
+        request = self.factory.get('/dashboard')
+        request.user = self.user
+        # request.user = User.objects.get(user='c3@gmail.com')
+        mock_reset(request)
         self.assertFalse(request.user.profile.is_shopping)
 
-    def test_resolve_order_driver(self):
-        match()
+    @mock.patch('shop.views.match', side_effect=match)
+    @mock.patch('shop.views.reset', side_effect=reset)
+    def test_resolve_order_driver(self, mock_reset, mock_match):
+        mock_match()
         request = self.client.get('/dashboard')
-        request.user = User.objects.get(email='c3@gmail.com')
-        reset(request)
+        request.user = self.user
+        mock_reset(request)
         d = User.objects.get(email="d3@email.com")
         self.assertFalse(d.profile.has_order)
 
-    def test_resolve_order_driver_match(self):
-        match()
+    @mock.patch('shop.views.match', side_effect=match)
+    @mock.patch('shop.views.reset', side_effect=reset)
+    def test_resolve_order_driver_match(self, mock_reset, mock_match):
+        mock_match()
         request = self.client.get('/dashboard')
-        request.user = User.objects.get(email='c3@gmail.com')
-        reset(request)
+        request.user = self.user
+        mock_reset(request)
         d = User.objects.get(email="d3@email.com")
         self.assertFalse(d.profile.is_matching)
 
-    def test_resolve_order_order(self):
-        match()
-        print("here2")
+    @mock.patch('shop.views.match', side_effect=match)
+    @mock.patch('shop.views.reset', side_effect=reset)
+    def test_resolve_order_order(self, mock_reset, mock_match):
+        mock_match()
+        # print("here2")
         request = self.client.get('/dashboard')
-        request.user = User.objects.get(email='c3@gmail.com')
-        reset(request)
+        request.user = self.user
+        mock_reset(request)
         o1 = Order.objects.get(delivery_instructions="drop check")
-        self.assertEquals(o1.user, "COMPLETED")
+        self.assertEquals(o1.user, "COMPLETE")
 
+    @mock.patch('shop.views.match', side_effect=match)
+    @mock.patch('shop.views.reset', side_effect=reset)
+    def test_driver_gets_money(self, mock_reset, mock_match):
+        mock_match()
+        # print("here2")
+        request = self.client.get('/dashboard')
+        request.user = self.user
+        o1 = Order.objects.get(delivery_instructions="drop check")
+        driver = Profile.objects.get(email=o1.driver).email
+        mock_reset(request)
+        d1 = Profile.objects.get(email=driver)
+        self.assertEquals(d1.money_earned, 45.0)
 
 
