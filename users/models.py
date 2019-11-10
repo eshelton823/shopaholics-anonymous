@@ -14,7 +14,7 @@ class Profile(models.Model):
     # last_name = models.CharField(max_length=20)
     email = models.EmailField(max_length=50)
     # username = models.CharField(max_length=20, default="")
-    # USERNAME_FIELD = 'username'
+    USERNAME_FIELD = 'username'
     # EMAIL_FIELD = 'email'
     # REQUIRED_FIELDS = ['email']
     # is_anonymous =
