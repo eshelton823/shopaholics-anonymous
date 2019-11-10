@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<form class="form-control-lg" method="GET">
+    <div class="form-group">
+        <input class="mr-sm-2" type='text' name="search"></input>
+        <button class="btn btn-secondary my-2 my-sm-0 second-accent" type="submit" name="Submit">Submit</button>
+    </div>
+</form>
+{% if items %}
+    {% for item in items  %}
+    <div>
+        <img src="{{ item.image }}">
+        <a href="https://walmart.com/ip/{{item.id}}" target="_blank"><p>{{ item.title }}</p></a>
+        <p>{{ item.price }}</p>
+        <button class="btn btn-secondary my-2 my-sm-0 second-accent">Add to cart</button>
+    </div>
+    {% endfor %}
+{% endif %}
+{% endblock %}

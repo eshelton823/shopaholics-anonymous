@@ -1,4 +1,5 @@
-body {
+main {
+    padding-top:55px;
     padding-bottom:70px;
 }
 html {
@@ -120,5 +121,9 @@ background: rgba(255, 255, 255, .8);
 }
 .list-group-cart{
     max-height: 300px;
-    overflow: scroll;
+    overflow-y: auto;
+}
+.list-group-items{
+    max-height: 300px;
+    overflow-y: auto;
 }

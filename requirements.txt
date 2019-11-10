@@ -5,3 +5,9 @@ psycopg2-binary
 dj-database-url
 social-auth-app-django
 djangorestframework
+twilio
+Faker
+python-dotenv
+bs4
+stripe
+mock

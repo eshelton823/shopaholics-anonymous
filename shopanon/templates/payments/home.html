@@ -1,0 +1,10 @@
+<h2>Finish Ordering! </h2>
+<form action="{% url 'payments:charge' %}" method="post">
+  {% csrf_token %}
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="{{ key }}"
+        data-description="Complete Payment"
+        data-amount="500"
+        data-locale="auto">
+    </script>
+</form>

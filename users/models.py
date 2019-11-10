@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
-
+from django.contrib.postgres.fields import JSONField
 
 
 
@@ -49,6 +49,7 @@ class Profile(models.Model):
     has_order = models.BooleanField(default=False) # THIS ONE IS IF A DRIVER IS MATCHED WITH AN ORDER
     driver_filled = models.BooleanField(default=False)
     started_matching = models.TimeField(null=True, blank=True)
+    cart = JSONField(default={'items':[]})
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
