@@ -1,9 +1,11 @@
 from django.shortcuts import render
 import users
+import random
+import string
 
 # Create your views here.
 
-
+from users.models import Order
 from .models import Room
 
 from django.conf import settings
@@ -48,7 +50,8 @@ def token(request):
     return JsonResponse(response)
 
 def all_rooms(request):
-    rooms = Room.objects.all()
+    slug = Order.chat_room
+    rooms = Room.objects.get(slug = slug)
     return render(request, 'chat/index.html', {'rooms': rooms})
 
 

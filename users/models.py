@@ -87,6 +87,8 @@ class Order(models.Model):
         ('WAL', 'Wal-Mart'),
     ]
 
+    chat_room = ""
+
     #order information
     store_selection = models.CharField(max_length=15, choices=STORE_SELECTIONS, default=None)
     order_size = models.CharField(max_length=15, default="small") #small, med, large; calculate based on total price before delivery charge
