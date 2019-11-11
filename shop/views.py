@@ -4,6 +4,7 @@ from users.models import Order, Profile, get_default_cart
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.contrib import messages
+from django.conf import settings
 from .forms import OrderForm
 from .scrape import getItems
 import json, ast
@@ -54,6 +55,7 @@ def driver_dash(request):
 def store(request):
     if request.user.is_authenticated:
         context = {}
+        context['key'] = settings.STRIPE_PUBLISHABLE_KEY
         if(request.method == "POST"):
             if(request.POST.get('delete', '')):
                 item = request.POST.get('delete', '')
@@ -79,6 +81,7 @@ def store(request):
         context['subtotal_string'] = ('${:,.2f}'.format(subtotal))
         context['driver_margin_string'] = ('${:,.2f}'.format(DRIVER_MARGIN))
         context["total_string"] = ('${:,.2f}'.format(total))
+        context['stripe_price'] = total*100
         if query is not None:
             context['items'] = getItems(query)
         if request.user.profile.is_shopping:

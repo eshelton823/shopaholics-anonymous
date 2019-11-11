@@ -57,7 +57,7 @@
         </ul>
         {% if status == "Shopping" %}
         {% if chat_room %}
-        <iframe src="/rooms/{{ chat_room }}" class="w-100" height="500px">
+        <iframe src="/rooms/{{ chat_room }}" class="w-100" height="500px"></iframe>
         {% endif %}
         <a role="button" class="btn btn-lg btn-primary accent" href="{% url 'shop:reset' %}">{{ disabled }}</a>
         {% endif %}

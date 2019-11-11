@@ -160,7 +160,13 @@
         {% if disabled %}
         <input class="btn btn-primary btn-lg btn-block bg-warning" type="submit" value="Cannot Submit: Order In Progress" disabled>
         {% else %}
-        <input class="btn btn-primary btn-lg btn-block accent" type="submit" value="Proceed With Checkout">
+        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="{{ key }}"
+            data-description="Complete Payment"
+            data-amount="{{stripe_price}}"
+            data-locale="auto">
+        </script>
+        
         {% endif %}
       </form>
     </div>
