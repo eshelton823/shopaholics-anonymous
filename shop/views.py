@@ -1,16 +1,36 @@
 from django.shortcuts import render
 from django.shortcuts import redirect, reverse
-from users.models import Order, Profile
+from users.models import Order, Profile, get_default_cart
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.contrib import messages
+from django.conf import settings
 from .forms import OrderForm
 from .scrape import getItems
 import json, ast
+import decimal
+import random
+import string
+from chat.models import Room
 # Create your views here.
+
+DRIVER_MARGIN = 10.00
+TAX = .06
 
 def home(request):
     return render(request, 'shop/home.html')
+
+def order_to_list(o):
+    context = {}
+    ol = ast.literal_eval(o.order_list)
+    for i in range(len(ol['items'])):
+        print(ol['items'][i]['title'])
+        if(i == 0):
+            context['current_order'] = ol['items'][i]['title']
+        else:
+            context['current_order'] = context['current_order'] + ", " + ol['items'][i]['title']
+    print(context)
+    return context['current_order']
 
 def dashboard(request):
     # print(request.user)
@@ -35,11 +55,12 @@ def driver_dash(request):
 def store(request):
     if request.user.is_authenticated:
         context = {}
+        context['key'] = settings.STRIPE_PUBLISHABLE_KEY
         if(request.method == "POST"):
             if(request.POST.get('delete', '')):
                 item = request.POST.get('delete', '')
                 request.user.profile.cart["items"].remove(ast.literal_eval(item))
-            else:
+            elif (request.POST.get('item', '')):
                 item = request.POST.get('item', '')
                 res = ast.literal_eval(item)
                 try:
@@ -51,13 +72,22 @@ def store(request):
                 print("Request:", request.user.profile.cart['items'])
             request.user.save()
         query = request.GET.get('search')
+        subtotal = 0.0
+        for item in request.user.profile.cart['items']:
+            subtotal += (float(item['price'][1:]))
+        tax = (subtotal+DRIVER_MARGIN)*(TAX)
+        total = (subtotal+DRIVER_MARGIN)*(1+TAX)
+        context['tax_string'] = '${:,.2f}'.format(tax)
+        context['subtotal_string'] = ('${:,.2f}'.format(subtotal))
+        context['driver_margin_string'] = ('${:,.2f}'.format(DRIVER_MARGIN))
+        context["total_string"] = ('${:,.2f}'.format(total))
+        context['stripe_price'] = total*100
         if query is not None:
             context['items'] = getItems(query)
         if request.user.profile.is_shopping:
             context['disabled'] = True
         else:
             context['disabled'] = False
-        print(request.user.profile.cart['items'])
         return render(request, 'shop/store.html', context)
     else:
         return redirect('profile/signin')
@@ -68,6 +98,8 @@ def process_order(request):
         # try:
             o = Order()
             o.delivery_address = request.POST['del_add']
+            o.order_list = request.user.profile.cart.copy()
+            request.user.profile.cart = get_default_cart()
             try:
                 o.delivery_apt_suite = request.POST['appt_suite']
             finally:
@@ -85,7 +117,6 @@ def process_order(request):
                     o.desired_delivery_time_range_upper_bound = timezone.now() + timezone.timedelta(days=int(request.POST['d_time'][2]))
                 finally:
                     o.save()
-                    print("here")
                     request.user.profile.is_shopping = True
                     request.user.save()
                 return HttpResponseRedirect(reverse('shop:success'))
@@ -101,7 +132,7 @@ def failure(request):
 def search(request):
     if not request.user.is_authenticated:
         return redirect('/profile/signin')
-    query = request.GET.get('search');
+    query = request.GET.get('search')
     if query is None:
         return render(request, 'shop/search.html')
     else:
@@ -123,7 +154,7 @@ def get_order_info(user):
     else:
         context['status'] = "Shopping"
         o = Order.objects.filter(user=user.email)[0]
-        context['current_order'] = o.order_list
+        context['current_order'] = order_to_list(o)
         # print(user.email)
         context['price'] = o.order_cost
         if o.driver != "":
@@ -133,6 +164,7 @@ def get_order_info(user):
             context["driver"] = "Unmatched"
             context['disabled'] = "Drop Order"
         context['drop'] = o.desired_delivery_time_range_upper_bound
+        context['chat_room'] = o.chat_room
 
     if user.profile.has_order or user.profile.is_matching:
         context["identity"] = "Driver"
@@ -140,6 +172,7 @@ def get_order_info(user):
         context["identity"] = "Shopper"
     if user.profile.is_shopping:
         o = Order.objects.filter(user=user.email)[0]
+        context['chat_room'] = o.chat_room
         # print(o)
         context['current'] = o.customer_name
         if o.is_delivery_asap:
@@ -184,6 +217,8 @@ def get_driver_info(d):
         context['instructions'] = o.delivery_instructions
         context['cost'] = o.order_cost
         context['list'] = o.order_list
+        context['chat_room'] = o.chat_room
+        #context['current_order'] = order_to_list(o)
         # print(o.customer_name)
     else:
         context['current'] = "None"
@@ -280,5 +315,8 @@ def match(request):
         d.save()
         o.order_start_time = timezone.now()
         o.driver = d.email
+        slug = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
+        Room.objects.create(name='Shopper Chat', slug=slug, description="Chat about your order")
+        o.chat_room = slug
         o.save()
     return HttpResponseRedirect(reverse('shop:dashboard'))
