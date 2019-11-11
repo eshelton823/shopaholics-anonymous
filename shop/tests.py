@@ -148,19 +148,22 @@ class MatchTests(TestCase):
 
     @mock.patch('shop.views.match', side_effect=match)
     def test_match_earlier_driver(self, mock_match):
-        mock_match()
+        request = self.factory.get('/dashboard')
+        mock_match(request)
         o3 = Order.objects.get(user='c3@email.com')
         self.assertEqual(o3.driver, 'd3@email.com')
 
     @mock.patch('shop.views.match', side_effect=match)
     def test_match_earlier_order(self, mock_match):
-        mock_match()
+        request = self.factory.get('/dashboard')
+        mock_match(request)
         o1 = Order.objects.get(user='c3@email.com')
         self.assertNotEqual(o1.driver, "")
 
     @mock.patch('shop.views.match', side_effect=match)
     def test_match_multiple(self, mock_match):
-        mock_match()
+        request = self.factory.get('/dashboard')
+        mock_match(request)
         o1 = Order.objects.get(user='c3@email.com')
         o2 = Order.objects.get(user='b1@email.com')
         self.assertTrue(o1.driver != "" and o2.driver != "")
@@ -183,8 +186,8 @@ class MatchTests(TestCase):
     @mock.patch('shop.views.match', side_effect=match)
     @mock.patch('shop.views.reset', side_effect=reset)
     def test_resolve_order_user(self, mock_reset, mock_match):
-        mock_match()
         request = self.factory.get('/dashboard')
+        mock_match(request)
         request.user = self.user
         mock_reset(request)
         self.assertFalse(request.user.profile.is_shopping)
@@ -192,8 +195,8 @@ class MatchTests(TestCase):
     @mock.patch('shop.views.match', side_effect=match)
     @mock.patch('shop.views.reset', side_effect=reset)
     def test_resolve_order_driver(self, mock_reset, mock_match):
-        mock_match()
         request = self.factory.get('/dashboard')
+        mock_match(request)
         request.user = self.user
         mock_reset(request)
         d = User.objects.get(email="d3@email.com")
@@ -202,8 +205,8 @@ class MatchTests(TestCase):
     @mock.patch('shop.views.match', side_effect=match)
     @mock.patch('shop.views.reset', side_effect=reset)
     def test_resolve_order_driver_match(self, mock_reset, mock_match):
-        mock_match()
         request = self.factory.get('/dashboard')
+        mock_match(request)
         request.user = self.user
         mock_reset(request)
         d = User.objects.get(email="d3@email.com")
@@ -212,8 +215,8 @@ class MatchTests(TestCase):
     @mock.patch('shop.views.match', side_effect=match)
     @mock.patch('shop.views.reset', side_effect=reset)
     def test_resolve_order_order(self, mock_reset, mock_match):
-        mock_match()
         request = self.factory.get('/dashboard')
+        mock_match(request)
         request.user = self.user
         mock_reset(request)
         o1 = Order.objects.get(delivery_instructions="drop check")
@@ -222,8 +225,9 @@ class MatchTests(TestCase):
     @mock.patch('shop.views.match', side_effect=match)
     @mock.patch('shop.views.reset', side_effect=reset)
     def test_driver_gets_money(self, mock_reset, mock_match):
-        mock_match()
         request = self.factory.get('/dashboard')
+        mock_match(request)
+
         request.user = self.user
         o1 = Order.objects.get(delivery_instructions="drop check")
         driver = Profile.objects.get(email=o1.driver).email
@@ -234,8 +238,9 @@ class MatchTests(TestCase):
     @mock.patch('shop.views.match', side_effect=match)
     @mock.patch('shop.views.reset', side_effect=reset)
     def test_driver_increases_orders(self, mock_reset, mock_match):
-        mock_match()
         request = self.factory.get('/dashboard')
+        mock_match(request)
+
         request.user = self.user
         o1 = Order.objects.get(delivery_instructions="drop check")
         driver = Profile.objects.get(email=o1.driver).email
@@ -245,20 +250,23 @@ class MatchTests(TestCase):
 
     @mock.patch('shop.views.match', side_effect=match)
     def test_match_not_shopping(self, mock_match):
-        mock_match()
+        request = self.factory.get('/dashboard')
+        mock_match(request)
         u1 = User.objects.get(email="c1@email.com")
         self.assertFalse(u1.profile.is_shopping)
 
     @mock.patch('shop.views.match', side_effect=match)
     def test_match_not_matched(self, mock_match):
-        mock_match()
+        request = self.factory.get('/dashboard')
+        mock_match(request)
         # u1 = User.objects.get(email="c1@email.com")
         o = Order.objects.filter(user="c1@gmail.com")
         self.assertEquals(len(o), 0)
 
     @mock.patch('shop.views.match', side_effect=match)
     def test_match_not_driver(self, mock_match):
-        mock_match()
+        request = self.factory.get('/dashboard')
+        mock_match(request)
         # u1 = User.objects.get(email="c1@email.com")
         o = Order.objects.filter(driver="c1@gmail.com")
         self.assertEquals(len(o), 0)

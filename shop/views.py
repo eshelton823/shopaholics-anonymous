@@ -223,7 +223,7 @@ def swap(request):
         request.user.profile.is_matching = True
         request.user.profile.started_matching = timezone.now()
         request.user.profile.save()
-        match()
+        match(request)
     return HttpResponseRedirect(reverse('shop:driver_dash'))
 
 
@@ -233,10 +233,15 @@ def reset(request):
     o = Order.objects.filter(user=request.user.email)[0]
     price = o.order_cost
     if o.driver != "":
-        d = Profile.objects.filter(email=o.driver)[0]
-        d.has_order = False
-        d.money_earned += price
-        d.save()
+        if o.driver == request.user.email:
+            request.user.profile.has_order = False
+            request.user.profile.money_earned += price
+            request.user.save()
+        else:
+            d = Profile.objects.filter(email=o.driver)[0]
+            d.has_order = False
+            d.money_earned += price
+            d.save()
         o.user = "COMPLETE"
         o.customer_name = "COMPLETE"
         o.driver = "COMPLETE"
@@ -250,7 +255,7 @@ def reset(request):
     request.user.save()
     return HttpResponseRedirect(reverse('shop:dashboard'))
 
-def match():
+def match(request):
     # print("matching!")
     # NOTE: Currently a person could be matched to their own order!! Decide as a team if that's OK or not
     drivers = Profile.objects.filter(is_matching=True).order_by('started_matching')
@@ -268,7 +273,7 @@ def match():
     while (len(queuedrivers) > 0) and (len(queueorders) > 0):
         d = queuedrivers.pop(0)
         o = queueorders.pop(0)
-        d.has_order = False
+        d.has_order = True
         d.is_matching = False
         d.started_matching = None
         d.deliveries_made += 1
