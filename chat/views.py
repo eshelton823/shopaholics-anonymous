@@ -1,8 +1,11 @@
 from django.shortcuts import render
+import users
+import random
+import string
 
 # Create your views here.
 
-
+from users.models import Order
 from .models import Room
 
 from django.conf import settings
@@ -15,7 +18,13 @@ from twilio.jwt.access_token.grants import ChatGrant
 fake = Faker()
 
 def token(request):
-    identity = request.GET.get('identity', fake.user_name())
+    #identity = request.GET.get('identity', fake.user_name())
+    identity = ""
+    if(request.user.is_authenticated):
+        identity = request.user.username
+    else:
+        #TODO: kick back to sign in.
+        pass
     device_id = request.GET.get('device', 'default')  # unique device ID
 
     account_sid = settings.TWILIO_ACCOUNT_SID
@@ -41,7 +50,8 @@ def token(request):
     return JsonResponse(response)
 
 def all_rooms(request):
-    rooms = Room.objects.all()
+    slug = Order.chat_room
+    rooms = Room.objects.get(slug = slug)
     return render(request, 'chat/index.html', {'rooms': rooms})
 
 
