@@ -12,10 +12,11 @@ def getItems(query):
     parsed = []
     for item in items:
         title = item.find("a", {'class':'product-title-link line-clamp line-clamp-2'})
+        id = title['href'].split("/")[-1]
         img = item.find("img", {'data-pnodetype':"item-pimg"})
         price = item.find('span', {'class':'price-group'})
         if title is None or img is None or price is None:
             continue
         #print(title.decode_contents(), img['src'], price.decode_contents())
-        parsed.append({'title':title.get_text(), 'image':img['src'], 'price':price.get_text()})
+        parsed.append({'title':title.get_text(), 'id':id, 'image':img['src'], 'price':price.get_text()})
     return parsed

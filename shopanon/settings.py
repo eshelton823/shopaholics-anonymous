@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'social_django',
     'rest_framework',
     'chat.apps.ChatConfig',
+    'payments.apps.PaymentsConfig',
 ]
 
 MIDDLEWARE = [
@@ -201,6 +202,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 5
 }
+
+STRIPE_SECRET_KEY = 'sk_test_UOuZY2U5guw9Y8olZDsaP89K00HekxiNCv'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_nFDTgMeTUNTeWXpgc2OeA2Sg00entXQnpW'
+
 
 #db_from_env = dj_database_url.config(conn_max_age=500)
 #DATABASES['default'].update(db_from_env)

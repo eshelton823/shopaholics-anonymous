@@ -20,7 +20,7 @@
           <li>Email: <span class="text-muted">{{ user.email }}</span></li>
             <!-- Get on signup! -->
         </ul>
-        <button type="button" class="btn btn-lg btn-primary accent">Edit User Information</button>
+        <!--<button type="button" class="btn btn-lg btn-primary accent">Edit User Information</button>-->
       </div>
     </div>
     <div class="card mb-4 shadow-sm">
@@ -33,29 +33,36 @@
         <ul class="list-unstyled mt-3 mb-4">
           <li>Current Order: <span class="text-muted">{{ current_order }}</span></li>
             <li>Anticipated Drop Time: <span class="text-muted">{{ drop }}</span></li>
-            <li>Current Driver: <span class="text-muted">{{ driver }} </span><a class="btn btn-sm btn-primary second-accent" href="#" role="button"> Message </a><a class="btn btn-sm btn-primary domcolor" href="match" role="button"> Manual Match Attempt </a></li>
+            <li>Current Driver: <span class="text-muted">{{ driver }} </span><a class="btn btn-sm btn-primary second-accent" href="#" role="button"> Message </a><a class="btn btn-sm btn-primary domcolor" href="{% url 'shop:match' %}" role="button"> Manual Match Attempt </a></li>
             <li>Tentative Price: <span class="text-muted">{{ price }}</span></li>
         </ul>
+        {% if status == "Shopping" %}
+        {% else %}
         <a role="button" class="btn btn-lg btn-primary accent" href="store">Shop Now</a>
+        {% endif %}
       </div>
     </div>
     <div class="card mb-4 shadow-sm">
       <div class="card-header domcolor">
-        <h4 class="my-0 font-weight-normal">Previous Orders</h4>
+        <h4 class="my-0 font-weight-normal">Current Order</h4>
       </div>
       <div class="card-body">
           <h1 class="card-title pricing-card-title">Primary Identity: <small class="text-muted">{{ identity }}</small></h1>
         <ul class="list-unstyled mt-3 mb-4">
-          <li>Date of Last Order: <span class="text-muted">8/26/2019</span></li>
-          <li>Price of Last Order: <span class="text-muted">$83.45</span></li>
-            <li>Last Driver: <span class="text-muted">James Madison </span></li>
+          <li>Due Date: <span class="text-muted">{{ late_time }}</span></li>
+            <li>Cost: <span class="text-muted">{{ cost }}</span></li>
+            <li>Grocery List: <span class="text-muted">{{ list }}</span></li>
+          <li>Dropoff Address: <span class="text-muted">{{ address }}</span>     Apartment: <span class="text-muted">{{ apt }}</span></li>
+          <li>Delivery Instructions: <span class="text-muted">{{ instructions }}</span></li>
         </ul>
-        <button type="button" class="btn btn-lg btn-primary accent">Change Customer Preferences</button>
+        {% if status == "Shopping" %}
+        <a role="button" class="btn btn-lg btn-primary accent" href="{% url 'shop:reset' %}">{{ disabled }}</a>
+        {% endif %}
       </div>
     </div>
 </div>
 
-<div>
-  <a role="button" class="btn btn-sm btn-primary domcolor" href="shop/reset">Reset User Status</a>
-</div>
+<!--<div>-->
+  <!--<a role="button" class="btn btn-sm btn-primary domcolor" href="{% url 'shop:reset' %}">Reset User Status</a>-->
+<!--</div>-->
 {% endblock %}
