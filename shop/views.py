@@ -7,6 +7,9 @@ from django.contrib import messages
 from .forms import OrderForm
 from .scrape import getItems
 import json, ast
+import random
+import string
+from chat.models import Room
 # Create your views here.
 
 def home(request):
@@ -133,6 +136,7 @@ def get_order_info(user):
             context["driver"] = "Unmatched"
             context['disabled'] = "Drop Order"
         context['drop'] = o.desired_delivery_time_range_upper_bound
+        context['chat_room'] = o.chat_room
 
     if user.profile.has_order or user.profile.is_matching:
         context["identity"] = "Driver"
@@ -140,6 +144,7 @@ def get_order_info(user):
         context["identity"] = "Shopper"
     if user.profile.is_shopping:
         o = Order.objects.filter(user=user.email)[0]
+        context['chat_room'] = o.chat_room
         # print(o)
         context['current'] = o.customer_name
         if o.is_delivery_asap:
@@ -184,6 +189,7 @@ def get_driver_info(d):
         context['instructions'] = o.delivery_instructions
         context['cost'] = o.order_cost
         context['list'] = o.order_list
+        context['chat_room'] = o.chat_room
         # print(o.customer_name)
     else:
         context['current'] = "None"
@@ -275,5 +281,8 @@ def match():
         d.save()
         o.order_start_time = timezone.now()
         o.driver = d.email
+        slug = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
+        Room.objects.create(name='Shopper Chat', slug=slug, description="Chat about your order")
+        o.chat_room = slug
         o.save()
     return HttpResponseRedirect(reverse('shop:dashboard'))

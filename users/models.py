@@ -88,7 +88,7 @@ class Order(models.Model):
         ('WAL', 'Wal-Mart'),
     ]
 
-    chat_room = ""
+    chat_room = models.CharField(max_length=32)
 
     #order information
     store_selection = models.CharField(max_length=15, choices=STORE_SELECTIONS, default=None)

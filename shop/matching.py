@@ -28,10 +28,12 @@ def match():
             queueorders.append(order)
         while len(queuedrivers) > 0 and len(queueorders) > 0:
             d = queuedrivers.pop(0)
-            o = queuedrivers.pop(0)
+            o = queueorders.pop(0)
             slug = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
-            Room.objects.create(name='Shopper Chat', slug=slug, description="Chat with your driver")
+            Room.objects.create(name='Shopper Chat', slug=slug, description="Chat about your order")
             o.chat_room = slug
+            print(slug)
+            o.save()
             update_query_driver_has_order = "update users_user set has_order = True where email = " + str(d[3])
             update_query_driver_is_matching = "update users_user set is_matching = False where email = " + str(d[3])
             update_query_order =  "update users_order set driver = " + str(d[3]) + "where id = " + str(o[0])
