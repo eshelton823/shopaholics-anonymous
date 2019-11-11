@@ -24,7 +24,12 @@ def home(request):
 def order_to_list(o):
     context = {}
     ol = json.loads(o.order_list)
-    ol = ast.literal_eval(ast.literal_eval(ol))
+    ol = ast.literal_eval(ol)
+    try:
+        print(ol["items"])
+    except:
+        ol = ast.literal_eval(ol)
+        print(ol["items"])
     print("\n")
     print("Starting with:", ol)
     print(len(ol))
