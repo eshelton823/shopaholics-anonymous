@@ -55,15 +55,18 @@
         <a class="nav-link accent-text" href="{% url 'shop:dashboard' %}">Dashboard</a>
       </li>
       <li class="nav-item">
+        <a class="nav-link accent-text" href="{% url 'shop:store' %}">Store</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <li class="nav-item">
          {% if user.username != "" %}
             <a class="nav-link accent-text" href="{% url 'logout' %}">Sign Out</a>
          {% else %}
             <a class="nav-link accent-text" href="{% url 'users:user_signin' %}">Sign In</a>
          {% endif %}
       </li>
-      <li class="nav-item">
-        <a class="nav-link accent-text" href="{% url 'shop:store' %}">Store</a>
-      </li>
+    </ul>
       <!--<li class="nav-item dropdown">-->
         <!--<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>-->
         <!--<div class="dropdown-menu" aria-labelledby="dropdown01">-->
