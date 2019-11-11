@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect, reverse
 from users.models import Order, Profile, get_default_cart
 from django.http import HttpResponseRedirect
+from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import timezone
 from django.contrib import messages
 from django.conf import settings
@@ -22,7 +23,14 @@ def home(request):
 
 def order_to_list(o):
     context = {}
-    ol = ast.literal_eval(o.order_list)
+    ol = json.loads(o.order_list)
+    ol = ast.literal_eval(ast.literal_eval(ol))
+    print("\n")
+    print("Starting with:", ol)
+    print(len(ol))
+    print("\n")
+    print("Items", ol["items"])
+    print("\n")
     for i in range(len(ol['items'])):
         print(ol['items'][i]['title'])
         if(i == 0):
@@ -98,7 +106,8 @@ def process_order(request):
         # try:
             o = Order()
             o.delivery_address = request.POST['del_add']
-            o.order_list = request.user.profile.cart.copy()
+            o.order_list = json.dumps(request.user.profile.cart)
+            print(o.order_list)
             request.user.profile.cart = get_default_cart()
             try:
                 o.delivery_apt_suite = request.POST['appt_suite']
