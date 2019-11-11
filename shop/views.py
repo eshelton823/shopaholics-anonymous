@@ -43,7 +43,7 @@ def store(request):
             if(request.POST.get('delete', '')):
                 item = request.POST.get('delete', '')
                 request.user.profile.cart["items"].remove(ast.literal_eval(item))
-            else:
+            elif (request.POST.get('item', '')):
                 item = request.POST.get('item', '')
                 res = ast.literal_eval(item)
                 try:
