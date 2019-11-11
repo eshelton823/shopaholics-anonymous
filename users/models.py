@@ -6,6 +6,9 @@ from django.utils import timezone
 from django.contrib.postgres.fields import JSONField
 
 
+def get_default_cart():
+    return {'items': []}
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
@@ -49,7 +52,7 @@ class Profile(models.Model):
     has_order = models.BooleanField(default=False) # THIS ONE IS IF A DRIVER IS MATCHED WITH AN ORDER
     driver_filled = models.BooleanField(default=False)
     started_matching = models.TimeField(null=True, blank=True)
-    cart = JSONField(default={'items':[]})
+    cart = JSONField(default=get_default_cart)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -93,7 +96,7 @@ class Order(models.Model):
     order_size = models.CharField(max_length=15, default="small") #small, med, large; calculate based on total price before delivery charge
     # TODO
     order_cost = models.DecimalField(decimal_places=5, max_digits=9, default=0.0)
-    order_list = models.CharField(max_length=1000, default="cheese")
+    order_list = JSONField(default=get_default_cart)
     # order_list = models.CharField(max_length=255, default=None) #will be list of objs later...
     desired_delivery_time_range_lower_bound = models.TimeField(null=True, blank=True)
     desired_delivery_time_range_upper_bound = models.TimeField(null=True, blank=True)
