@@ -14,7 +14,7 @@ class Profile(models.Model):
     # last_name = models.CharField(max_length=20)
     email = models.EmailField(max_length=50)
     # username = models.CharField(max_length=20, default="")
-    # USERNAME_FIELD = 'username'
+    USERNAME_FIELD = 'username'
     # EMAIL_FIELD = 'email'
     # REQUIRED_FIELDS = ['email']
     # is_anonymous =
@@ -66,11 +66,11 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Order(models.Model):
     #relationship with user (many-to-many)
-    user = models.CharField(max_length=20)
-    driver = models.CharField(max_length=20, default='')
+    user = models.CharField(max_length=50)
+    driver = models.CharField(max_length=50, default='')
     ### FOR USER SIDE ###
     #delivery info - need city or state or zip? assuming local a given or can calculate in range
-    delivery_address = models.CharField(max_length=50) #check if in range
+    delivery_address = models.CharField(max_length=100) #check if in range
     delivery_apt_suite = models.CharField(max_length=20)
     delivery_instructions = models.CharField(max_length=120)
 

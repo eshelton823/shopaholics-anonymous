@@ -65,7 +65,7 @@ def store(request):
 def process_order(request):
     # if this is a POST request we need to process the form data
     if request.method == "POST":
-        try:
+        # try:
             o = Order()
             o.delivery_address = request.POST['del_add']
             try:
@@ -85,11 +85,12 @@ def process_order(request):
                     o.desired_delivery_time_range_upper_bound = timezone.now() + timezone.timedelta(days=int(request.POST['d_time'][2]))
                 finally:
                     o.save()
+                    print("here")
                     request.user.profile.is_shopping = True
                     request.user.save()
                 return HttpResponseRedirect(reverse('shop:success'))
-        except:
-            return HttpResponseRedirect(reverse('shop:failure'))
+        # except:
+        #     return HttpResponseRedirect(reverse('shop:failure'))
 
 def success(request):
     return render(request, 'shop/success.html')
