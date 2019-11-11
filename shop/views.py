@@ -50,7 +50,7 @@ def store(request):
                 request.user.profile.cart['items'].append(res)
                 print("Request:", request.user.profile.cart['items'])
             request.user.save()
-        query = request.GET.get('search');
+        query = request.GET.get('search')
         if query is not None:
             context['items'] = getItems(query)
         if request.user.profile.is_shopping:
@@ -268,7 +268,7 @@ def match():
     while (len(queuedrivers) > 0) and (len(queueorders) > 0):
         d = queuedrivers.pop(0)
         o = queueorders.pop(0)
-        d.has_order = True
+        d.has_order = False
         d.is_matching = False
         d.started_matching = None
         d.deliveries_made += 1
