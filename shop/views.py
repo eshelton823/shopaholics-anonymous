@@ -23,12 +23,12 @@ def home(request):
 def order_to_list(o):
     context = {}
     ol = ast.literal_eval(o.order_list)
-    ol = json.loads(ol)
-    for i in range(len(ol)):
+    for i in range(len(ol['items'])):
+        print(ol['items'][i]['title'])
         if(i == 0):
             context['current_order'] = ol['items'][i]['title']
-
-        context['current_order'] = context['current_order'] + ", " + ol['items'][i]['title']
+        else:
+            context['current_order'] = context['current_order'] + ", " + ol['items'][i]['title']
     print(context)
     return context['current_order']
 
