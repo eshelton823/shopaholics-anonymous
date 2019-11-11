@@ -7,7 +7,11 @@ from django.contrib import messages
 from .forms import OrderForm
 from .scrape import getItems
 import json, ast
+import decimal
 # Create your views here.
+
+DRIVER_MARGIN = 10.00
+TAX = .06
 
 def home(request):
     return render(request, 'shop/home.html')
@@ -51,13 +55,21 @@ def store(request):
                 print("Request:", request.user.profile.cart['items'])
             request.user.save()
         query = request.GET.get('search');
+        subtotal = 0.0
+        for item in request.user.profile.cart['items']:
+            subtotal += (float(item['price'][1:]))
+        tax = (subtotal+DRIVER_MARGIN)*(TAX)
+        total = (subtotal+DRIVER_MARGIN)*(1+TAX)
+        context['tax_string'] = '${:,.2f}'.format(tax);
+        context['subtotal_string'] = ('${:,.2f}'.format(subtotal))
+        context['driver_margin_string'] = ('${:,.2f}'.format(DRIVER_MARGIN))
+        context["total_string"] = ('${:,.2f}'.format(total))
         if query is not None:
             context['items'] = getItems(query)
         if request.user.profile.is_shopping:
             context['disabled'] = True
         else:
             context['disabled'] = False
-        print(request.user.profile.cart['items'])
         return render(request, 'shop/store.html', context)
     else:
         return redirect('profile/signin')

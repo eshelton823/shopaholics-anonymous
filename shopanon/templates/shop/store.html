@@ -55,18 +55,25 @@
             <h6 class="my-0">Estimated Price</h6>
             <small class="text-muted">Note: Price may vary depending on store availability</small>
           </div>
-          <span class="text-muted">$35.45</span>
+          <span class="text-muted">{{subtotal_string}}</span>
         </li>
         <li class="list-group-item d-flex justify-content-between lh-condensed">
           <div class="">
             <h6 class="my-0">Driver margin</h6>
             <small>Rate: Flat Fee</small>
           </div>
-          <span class="text-muted">$10</span>
+          <span class="text-muted">{{driver_margin_string}}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+          <div class="">
+            <h6 class="my-0">Estimated tax</h6>
+            <small>6% in Charlottesville</small>
+          </div>
+          <span class="text-muted">{{tax_string}}</span>
         </li>
         <li class="list-group-item d-flex justify-content-between bg-light">
           <span>Total (USD)</span>
-          <strong>$45.45</strong>
+          <strong>{{total_string}}</strong>
         </li>
       </ul>
 
