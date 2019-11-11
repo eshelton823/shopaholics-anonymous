@@ -51,12 +51,14 @@
         <ul class="list-unstyled mt-3 mb-4">
           <li>Due Date: <span class="text-muted">{{ late_time }}</span></li>
             <li>Cost: <span class="text-muted">{{ cost }}</span></li>
-            <li>Grocery List: <span class="text-muted">{{ list }}</span></li>
+            <li>Grocery List: <span class="text-muted">{{ current_order }}</span></li>
           <li>Dropoff Address: <span class="text-muted">{{ address }}</span>     Apartment: <span class="text-muted">{{ apt }}</span></li>
           <li>Delivery Instructions: <span class="text-muted">{{ instructions }}</span></li>
         </ul>
         {% if status == "Shopping" %}
+        {% if chat_room %}
         <iframe src="/rooms/{{ chat_room }}" class="w-100" height="500px">
+        {% endif %}
         <a role="button" class="btn btn-lg btn-primary accent" href="{% url 'shop:reset' %}">{{ disabled }}</a>
         {% endif %}
       </div>

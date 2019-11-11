@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import redirect, reverse
-from users.models import Order, Profile
+from users.models import Order, Profile, get_default_cart
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.contrib import messages
@@ -18,6 +18,18 @@ TAX = .06
 
 def home(request):
     return render(request, 'shop/home.html')
+
+def order_to_list(o):
+    context = {}
+    ol = ast.literal_eval(o.order_list)
+    ol = json.loads(ol)
+    for i in range(len(ol)):
+        if(i == 0):
+            context['current_order'] = ol['items'][i]['title']
+
+        context['current_order'] = context['current_order'] + ", " + ol['items'][i]['title']
+    print(context)
+    return context['current_order']
 
 def dashboard(request):
     # print(request.user)
@@ -83,6 +95,8 @@ def process_order(request):
         # try:
             o = Order()
             o.delivery_address = request.POST['del_add']
+            o.order_list = request.user.profile.cart.copy();
+            request.user.profile.cart = get_default_cart();
             try:
                 o.delivery_apt_suite = request.POST['appt_suite']
             finally:
@@ -100,7 +114,6 @@ def process_order(request):
                     o.desired_delivery_time_range_upper_bound = timezone.now() + timezone.timedelta(days=int(request.POST['d_time'][2]))
                 finally:
                     o.save()
-                    print("here")
                     request.user.profile.is_shopping = True
                     request.user.save()
                 return HttpResponseRedirect(reverse('shop:success'))
@@ -138,7 +151,7 @@ def get_order_info(user):
     else:
         context['status'] = "Shopping"
         o = Order.objects.filter(user=user.email)[0]
-        context['current_order'] = o.order_list
+        context['current_order'] = order_to_list(o)
         # print(user.email)
         context['price'] = o.order_cost
         if o.driver != "":
@@ -202,6 +215,7 @@ def get_driver_info(d):
         context['cost'] = o.order_cost
         context['list'] = o.order_list
         context['chat_room'] = o.chat_room
+        #context['current_order'] = order_to_list(o)
         # print(o.customer_name)
     else:
         context['current'] = "None"
