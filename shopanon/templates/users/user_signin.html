@@ -1,20 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Sign in for ShopAnon!</h1>
-    <div>
-        <p> Sign in with Google! </p>
-        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{dashboard}}">Login with Google</a>
+    <div style="padding-top:50px">
+      <div class="container">
+        <div class="card mb-4 shadow-sm">
+        <div class="card-header domcolor">
+        <h4> Sign in with Google! </h4>
+        </div>
+        <div class="card-body">
+          <a class="btn btn-lg btn-primary accent" href="{% url 'social:begin' 'google-oauth2' %}?next={{dashboard}}"><i class="fab fa-google"></i> Login with Google</a>
 
+        </div>
+      </div>
+      </div>
     </div>
-<hr>
-<div>
-
-        <h3>Don't have Google? Sign in here!</h3>
+    <hr>
+    <div>
+        <h3></h3>
         <div class="container">
-    <div class="card mb-4 shadow-sm">
+          <div class="card mb-4 shadow-sm">
       <div class="card-header domcolor">
-        <h4 class="my-0 font-weight-normal">Enter your information:</h4>
+        <h4 class="my-0 font-weight-normal">Don't have Google?</h4>
       </div>
       <div class="card-body">
         <p class="accent-text">{{ error }}</p>
