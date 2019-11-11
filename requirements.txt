@@ -7,4 +7,5 @@ social-auth-app-django
 djangorestframework
 twilio
 Faker
+python-dotenv
 bs4
