@@ -268,7 +268,7 @@ def match():
     while (len(queuedrivers) > 0) and (len(queueorders) > 0):
         d = queuedrivers.pop(0)
         o = queueorders.pop(0)
-        d.has_order = True
+        d.has_order = False
         d.is_matching = False
         d.started_matching = None
         d.deliveries_made += 1
