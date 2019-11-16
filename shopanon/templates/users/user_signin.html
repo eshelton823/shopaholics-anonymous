@@ -28,7 +28,7 @@
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" name="username" required>
+                <input type="text" class="form-control" id="username" name="username" pattern="[A-Za-z0-9]*" title="Please enter only letters or numbers" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
