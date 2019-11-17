@@ -39,7 +39,7 @@ $(function() {
    if(onLoad == false){
      if(Notification.permission === "granted" && fromUser !== username){
        console.log("Notifying.");
-       var notification = new Notification("New message: "+message);
+       var notification = new Notification("New message from " +fromUser+": "+message);
      }
      // Otherwise, we need to ask the user for permission
      else if (Notification.permission === "denied") {
