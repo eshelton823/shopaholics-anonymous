@@ -67,8 +67,6 @@ $(function() {
   // Extract the room's channel name from the page URL
   let channelName = window.location.pathname.split("/").slice(-2, -1)[0];
 
-  print(`Attempting to join the chat channel...`);
-
   chatClient
     .getChannelByUniqueName(channelName)
     .then(function(channel) {
@@ -91,13 +89,22 @@ $(function() {
 
     // Set up channel after it has been found / created
 function setupChannel(name) {
-  roomChannel.join().then(function(channel) {
-    print(
-      `Joined channel!`,
-      true
-    );
-    channel.getMessages(30).then(processPage);
-  });
+  try{
+    if(roomChannel.state.status !== "joined"){
+      roomChannel.join().then(function(channel) {
+        print(
+          `Created and joined channel!`,
+          true
+        );
+      });
+    }
+    else{
+      roomChannel.getMessages(30).then(processPage);
+    }
+  }
+  catch{
+    console.log("Failed to join on normal route.")
+  }
 
   // Listen for new messages sent to the channel
   roomChannel.on("messageAdded", function(message) {
@@ -105,6 +112,7 @@ function setupChannel(name) {
   });
 }
 function processPage(page) {
+  console.log("Processing...");
   page.items.forEach(message => {
     printMessage(message.author, message.body);
   });
