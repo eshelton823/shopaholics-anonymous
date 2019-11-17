@@ -1,4 +1,7 @@
 $(function() {
+  Notification.requestPermission().then(function(result) {
+    console.log(result);
+  });
   // Reference to the chat messages area
   let $chatWindow = $("#messages");
 
@@ -23,7 +26,7 @@ $(function() {
   }
 
 // Helper function to print chat message to the chat window
- function printMessage(fromUser, message) {
+ function printMessage(fromUser, message, onLoad) {
    let $user = $('<span class="username">').text(fromUser + ":");
    if (fromUser === username) {
      $user.addClass("me");
@@ -33,6 +36,21 @@ $(function() {
    $container.append($user).append($message);
    $chatWindow.append($container);
    $chatWindow.scrollTop($chatWindow[0].scrollHeight);
+   if(onLoad == false){
+     if(Notification.permission === "granted" && fromUser !== username){
+       console.log("Notifying.");
+       var notification = new Notification("New message: "+message);
+     }
+     // Otherwise, we need to ask the user for permission
+     else if (Notification.permission === "denied") {
+       Notification.requestPermission().then(function (permission) {
+         // If the user accepts, let's create a notification
+        if (permission === "granted") {
+          var notification = new Notification("New message: "+message);
+        }
+      });
+    }
+   }
  }
 
   // Get an access token for the current user, passing a device ID
@@ -108,13 +126,13 @@ function setupChannel(name) {
 
   // Listen for new messages sent to the channel
   roomChannel.on("messageAdded", function(message) {
-    printMessage(message.author, message.body);
+    printMessage(message.author, message.body, false);
   });
 }
 function processPage(page) {
   console.log("Processing...");
   page.items.forEach(message => {
-    printMessage(message.author, message.body);
+    printMessage(message.author, message.body, true);
   });
   if (page.hasNextPage) {
     page.nextPage().then(processPage);
