@@ -68,7 +68,6 @@ def driver_dash(request):
 def store(request):
     if request.user.is_authenticated:
         context = {}
-        context['key'] = settings.STRIPE_PUBLISHABLE_KEY
         if(request.method == "POST"):
             if(request.POST.get('delete', '')):
                 item = request.POST.get('delete', '')
@@ -121,6 +120,7 @@ def process_order(request):
                 o.store_selection = 'WAL'
                 o.user = request.user.email
                 o.customer_name = request.user.first_name
+                o.order_cost = float(request.POST['price'])/100
                 try:
                     asap = request.POST['asap']
                     o.is_delivery_asap = True
@@ -133,7 +133,7 @@ def process_order(request):
                     o.save()
                     request.user.profile.is_shopping = True
                     request.user.save()
-                return HttpResponseRedirect(reverse('shop:success'))
+                return HttpResponseRedirect(reverse('shop:checkout'))
         # except:
         #     return HttpResponseRedirect(reverse('shop:failure'))
 
@@ -144,7 +144,12 @@ def failure(request):
     return render(request, 'shop/failure.html')
 
 def checkout(request):
-    return render(request, 'shop/checkout.html')
+    context = {}
+
+    o = Order.objects.get(user=request.user.email)
+    context['stripe_price'] = o.order_cost*100
+    context['key'] = settings.STRIPE_PUBLISHABLE_KEY
+    return render(request, 'shop/checkout.html', context)
 
 def search(request):
     if not request.user.is_authenticated:
@@ -157,7 +162,11 @@ def search(request):
         context['items'] = getItems(query)
         return render(request, 'shop/search.html', context)
 
-
+def pay(request):
+    o = Order.objects.get(user=request.user.email)
+    o.has_paid = True
+    o.save()
+    return HttpResponseRedirect(reverse('shop:success'))
 
 
 def get_order_info(user):

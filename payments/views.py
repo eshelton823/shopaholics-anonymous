@@ -1,4 +1,6 @@
-import stripe 
+import stripe
+from django.shortcuts import redirect, reverse
+
 
 from django.views.generic.base import TemplateView
 from django.conf import settings
@@ -22,4 +24,4 @@ def charge(request):
             description='Order Charge',
             source=request.POST['stripeToken']
         )
-        return render(request, 'payments/charge.html')
+        return reverse('shop:pay')

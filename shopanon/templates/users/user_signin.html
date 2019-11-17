@@ -5,7 +5,7 @@
       <div class="container">
         <div class="card mb-4 shadow-sm">
         <div class="card-header domcolor">
-        <h4> Sign in with Google! </h4>
+        <h4 class="txt"> Sign in with Google! </h4>
         </div>
         <div class="card-body">
           <a class="btn btn-lg btn-primary accent" href="{% url 'social:begin' 'google-oauth2' %}?next={{dashboard}}"><i class="fab fa-google"></i> Login with Google</a>
@@ -20,7 +20,7 @@
         <div class="container">
           <div class="card mb-4 shadow-sm">
       <div class="card-header domcolor">
-        <h4 class="my-0 font-weight-normal">Don't have Google?</h4>
+        <h4 class=" txt my-0 font-weight-normal">Don't have Google?</h4>
       </div>
       <div class="card-body">
         <p class="accent-text">{{ error }}</p>
