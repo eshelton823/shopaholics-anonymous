@@ -46,7 +46,7 @@ $(function() {
       // Alert the user they have been assigned a random username
       username = data.identity;
       print(
-        "You are: " +
+        "You have been assigned a random username of: " +
           '<span class="me">' +
           username +
           "</span>",
@@ -66,27 +66,39 @@ $(function() {
   function createOrJoinChannel() {
   // Extract the room's channel name from the page URL
   let channelName = window.location.pathname.split("/").slice(-2, -1)[0];
-  print(`Attempting to join the chat channel...`);
+
+  print(`Attempting to join the "${channelName}" chat channel...`);
+
   chatClient
     .getChannelByUniqueName(channelName)
     .then(function(channel) {
       roomChannel = channel;
       setupChannel(channelName);
     })
-  }
+    .catch(function() {
+      // If it doesn't exist, let's create it
+      chatClient
+        .createChannel({
+          uniqueName: channelName,
+          friendlyName: `${channelName} Chat Channel`
+        })
+        .then(function(channel) {
+          roomChannel = channel;
+          setupChannel(channelName);
+        });
+    });
+    }
 
-// Set up channel after it has been found / created
+    // Set up channel after it has been found / created
 function setupChannel(name) {
-  roomChannel.join().catch(function(err) {
-    console.error(
-      "Couldn't join channel " + name + ' because ' + err
+  roomChannel.join().then(function(channel) {
+    print(
+      `Joined channel ${name} as <span class="me"> ${username} </span>.`,
+      true
     );
+    channel.getMessages(30).then(processPage);
   });
-  print(
-    `Joined channel as <span class="me"> ${username} </span>.`,
-    true
-  );
-    roomChannel.getMessages(30).then(processPage);
+
   // Listen for new messages sent to the channel
   roomChannel.on("messageAdded", function(message) {
     printMessage(message.author, message.body);
