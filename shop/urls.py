@@ -19,4 +19,5 @@ urlpatterns = [
     path('shop/reset', views.reset, name='reset'),
     path('shop/match', views.match, name='match'),
     path('shop/swap', views.swap, name='swap'),
+    path('shop/checkout', views.checkout, name='checkout'),
 ]

@@ -19,9 +19,9 @@
         <span class="accent-text">Your shopping session</span>
         <!--<span class="badge badge-secondary badge-pill">3</span>-->
       </h4>
-      <div class="card domcolor-t pt-1 px-1 px-md-1">
+      <div class="card domcolor pt-1 px-1 px-md-1">
         <div class="my-3 p-3">
-          <h3 class="card-title">My Shopping List</h3>
+          <h3 class="card-title txt">My Shopping List</h3>
           <ul class="list-group list-group-flush list-group-cart">
             {% for item in user.profile.cart.items %}
               <li class="list-group-item">
@@ -29,14 +29,16 @@
                   <form action="" method="post" class="col-md-2">
                       {% csrf_token %}
                       <input type="hidden" name="delete" value="{{item}}"></input>
-                      <input class="btn btn-secondary my-2 my-sm-0 second-accent" type="submit" value="X"/>
+                      <input class="btn btn-secondary my-2 my-sm-0 accent" type="submit" value="X"/>
                   </form>
                   <p class="col-md-7">{{item.title}}</p>
                   <p class="col-md-3">{{item.price}}</p>
                 </div>
               </li>
             {% empty %}
+            <div class="txt">
               No items.
+            </div>
             {% endfor %}
           </ul>
         </div>
@@ -81,12 +83,12 @@
     <div class="col-md-8 order-md-1">
       <h3 class="mb-3">Build My Cart</h3>
       <div class="d-md-flex w-100 my-md-3 pl-md-3">
-  <div class="card domcolor-t mr-md-9 w-100 pt-3 px-3 px-md-2 text-center overflow-hidden">
+  <div class="card domcolor mr-md-9 w-100 pt-3 px-3 px-md-2 text-center overflow-hidden">
     <div class="my-3 py-3">
-      <h3 class="card-title">Search</h3>
+      <h3 class="card-title txt">Search</h3>
       <form class="form-inline my-2 my-lg-0 card-body" method="GET">
         <input class="form-control mr-sm-2 w-75" type="text" placeholder="Search" aria-label="Search" name="search">
-        <button class="btn btn-secondary my-2 my-sm-0 second-accent" type="submit">Search</button>
+        <button class="btn btn-secondary my-2 my-sm-0 accent" type="submit">Search</button>
       </form>
       <ul class="list-group list-group-flush list-group-items">
         {% for item in items %}
@@ -111,19 +113,21 @@
             </div>
           </li>
         {% empty %}
+        <div class="txt">
           No items.
+          </div>
         {% endfor %}
       </ul>
     </div>
   </div>
 </div>
-      <form action="{% url 'shop:process_order' %}" method="post">
+      <form action="{% url 'shop:checkout' %}" method="post">
         {% csrf_token %}
         <h4 class="mb-3">Order Information</h4>
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="del_add">Delivery Address</label>
-            <input type="text" class="form-control" id="del_add" name="del_add" placeholder="" required>
+            <input type="text" class="form-control" id="del_add" name="del_add" placeholder="" maxlength="100" required>
             <small class="text-muted">E.g. 123 Main St. Charlottesville, VA 22903</small>
             <div class="invalid-feedback">
               Delivery address is required
@@ -131,12 +135,16 @@
           </div>
           <div class="col-md-6 mb-3">
             <label for="appt_suite">Apartment Suite Number</label>
-            <input type="text" class="form-control" id="appt_suite" name="appt_suite" placeholder="None">
+            <input type="text" class="form-control" id="appt_suite" name="appt_suite" maxlength="20" placeholder="None">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="phone">Phone Number</label>
+            <input type="tel" class="form-control" id="phone" name="phone" pattern="[0-9]{9}" title="Please enter only numbers" placeholder="None">
           </div>
         </div>
         <div class="mb-3">
           <label for="del_instr">Special Instructions</label>
-          <input type="text" class="form-control" id="del_instr" name="del_instr" value="" placeholder="Add any special instructions here">
+          <input type="text" class="form-control" id="del_instr" name="del_instr" value="" maxlength="120" placeholder="Add any special instructions here">
         </div>
         <br>
         <div class="custom-control custom-checkbox">
@@ -156,56 +164,22 @@
               Please provide a valid option.
             </div>
           </div>
+
+
         <hr class="mb-4">
         {% if disabled %}
         <input class="btn btn-primary btn-lg btn-block bg-warning" type="submit" value="Cannot Submit: Order In Progress" disabled>
         {% else %}
-        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="{{ key }}"
-            data-description="Complete Payment"
-            data-amount="{{stripe_price}}"
-            data-locale="auto">
-        </script>
-        
+        <!--<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"-->
+            <!--data-key="{{ key }}"-->
+            <!--data-description="Complete Payment"-->
+            <!--data-amount="{{stripe_price}}"-->
+            <!--data-locale="auto">-->
+        <!--</script>-->
+        <input class="btn btn-primary btn-lg w-50 btn-block domcolor txt" type="submit" value="Proceed to Checkout">
         {% endif %}
       </form>
     </div>
   </div>
    </div>
 {% endblock %}
-
-        <!--<br>-->
-        <!--<h4 class="mb-3">Payment Information</h4>-->
-        <!--<div class="row">-->
-          <!--<div class="col-md-6 mb-3">-->
-            <!--<label for="cc-name">Name on card</label>-->
-            <!--<input type="text" class="form-control" id="cc-name" placeholder="" required>-->
-            <!--<small class="text-muted">Full name as displayed on card</small>-->
-            <!--<div class="invalid-feedback">-->
-              <!--Name on card is required-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div class="col-md-6 mb-3">-->
-            <!--<label for="cc-number">Credit card number</label>-->
-            <!--<input type="text" class="form-control" id="cc-number" placeholder="" required>-->
-            <!--<div class="invalid-feedback">-->
-              <!--Credit card number is required-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-        <!--<div class="row">-->
-          <!--<div class="col-md-3 mb-3">-->
-            <!--<label for="cc-expiration">Expiration</label>-->
-            <!--<input type="text" class="form-control" id="cc-expiration" placeholder="" required>-->
-            <!--<div class="invalid-feedback">-->
-              <!--Expiration date required-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div class="col-md-3 mb-3">-->
-            <!--<label for="cc-cvv">CVV</label>-->
-            <!--<input type="text" class="form-control" id="cc-cvv" placeholder="" required>-->
-            <!--<div class="invalid-feedback">-->
-              <!--Security code required-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->

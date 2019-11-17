@@ -1,0 +1,135 @@
+main {
+    padding-top:55px;
+    padding-bottom:70px;
+}
+html {
+    position: relative;
+    min-height: 100%;
+    scroll-behavior: smooth;
+}
+.topper{
+    padding-top: 120px;
+    margin-bottom: 0px;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    line-height: 60px; /* Vertically center the text there */
+    background-color: #f5f5f5;
+}
+.social {
+    height: 32px;
+    width: 32px;
+}
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+.anchor {
+    padding-top: 10px;
+}
+
+.all-bg{
+    background-color: #DAD4D1;
+}
+
+.txt{
+    color: #DAD4D1;
+}
+
+.domcolor {
+    background-color: #4E1D81;
+    border-color: #4E1D81;
+}
+
+.domcolor-t {
+background-color: rgba(93, 204, 53, .5)
+}
+
+.dom-text {
+color: #5dcc35
+}
+
+.accent {
+background-color: #22BBA6;
+border-color: #22BBA6;
+}
+
+.accent-text {
+color: #22BBA6;
+}
+
+.second-accent{
+background-color: #ff569c;
+border-color: #ff569c
+}
+
+.navbar.navbar-expand-md.navbar-dark.bg-dark.fixed-top li a {
+    color: #22BBA6;
+}
+
+body {
+	color: #171824;
+	
+}
+.navbar-wrapper {
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   z-index: 20;
+}
+
+.navbar-wrapper .container {
+   padding-left: 0;
+   padding-right: 0;
+}
+
+.navbar-wrapper .navbar {
+   padding-left: 15px;
+   padding-right: 15px;
+}
+
+@media (min-width: 768px) {
+  .navbar-wrapper {
+    margin-top: 20px;
+  }
+}
+
+/* Carousel base class */
+.carousel {
+  margin-bottom: 4rem;
+}
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {
+  bottom: 3rem;
+  z-index: 10;
+}
+
+/* Declare heights because of positioning of img element */
+.carousel-item {
+  height: 32rem;
+  background-color: #777;
+}
+.carousel-item > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 80%;
+  height: 32rem;
+}
+
+.carousel-caption{
+background: rgba(255, 255, 255, .8);
+}
+.list-group-cart{
+    max-height: 300px;
+    overflow-y: auto;
+}
+.list-group-items{
+    max-height: 300px;
+    overflow-y: auto;
+}

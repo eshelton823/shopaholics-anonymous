@@ -15,7 +15,7 @@ class Profile(models.Model):
     # personal -- updated on sign-in and profile
     # first_name = models.CharField(max_length=20)
     # last_name = models.CharField(max_length=20)
-    email = models.EmailField(max_length=50)
+    email = models.EmailField(max_length=254)
     # username = models.CharField(max_length=20, default="")
     USERNAME_FIELD = 'username'
     # EMAIL_FIELD = 'email'

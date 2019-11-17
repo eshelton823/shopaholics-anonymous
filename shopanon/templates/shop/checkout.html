@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Pay for your purchase now!</h2>
+<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="{{ key }}"
+            data-description="Complete Payment"
+            data-amount="{{stripe_price}}"
+            data-locale="auto">
+</script>
+{% endblock %}

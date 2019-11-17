@@ -8,8 +8,8 @@
 
 <div class="container">
     <div class="card mb-4 shadow-sm">
-      <div class="card-header domcolor">
-        <h4 class="my-0 font-weight-normal">User Information</h4>
+      <div class="card-header domcolor ">
+        <h4 class="my-0 font-weight-normal txt">User Information</h4>
       </div>
       <div class="card-body">
         <h1 class="card-title pricing-card-title">{{ user.first_name }} {{ user.last_name }}</h1>
@@ -19,13 +19,13 @@
           <li>Email: <span class="text-muted">{{ user.email }}</span></li>
             <!-- Get on signup! -->
         </ul>
-        <a class="btn btn-md btn-primary second-accent" href="{% url 'shop:driver_dash' %}" role="button"> View Driver Dashboard </a>
+        <a class="btn btn-md btn-primary accent" href="{% url 'shop:driver_dash' %}" role="button"> View Driver Dashboard </a>
         <!--<button type="button" class="btn btn-lg btn-primary accent">Edit User Information</button>-->
       </div>
     </div>
     <div class="card mb-4 shadow-sm">
       <div class="card-header domcolor">
-        <h4 class="my-0 font-weight-normal">Shopping Status</h4>
+        <h4 class="my-0 txt font-weight-normal">Shopping Status</h4>
       </div>
 
       <div class="card-body">
@@ -44,7 +44,7 @@
     </div>
     <div class="card mb-4 shadow-sm">
       <div class="card-header domcolor">
-        <h4 class="my-0 font-weight-normal">Current Order</h4>
+        <h4 class="my-0 txt font-weight-normal">Current Order</h4>
       </div>
       <div class="card-body">
           <h1 class="card-title pricing-card-title">Primary Identity: <small class="text-muted">{{ identity }}</small></h1>

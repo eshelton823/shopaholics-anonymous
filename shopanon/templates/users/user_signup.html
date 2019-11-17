@@ -24,25 +24,25 @@
             {% csrf_token %}
             <div class="form-group">
                 <label for="firstname">First Name</label>
-                <input type="text" class="form-control" id="firstname" name="firstname" pattern="[A-Za-z '\-]*" title="Please enter only letters, spaces, dashes, or apostrophes" required>
+                <input type="text" class="form-control" id="firstname" name="firstname" maxlength="30" pattern="[A-Za-z '\-]*" title="Please enter only letters, spaces, dashes, or apostrophes" required>
             </div>
             <div class="form-group">
                 <label for="lastname">Last Name</label>
-                <input type="text" class="form-control" id="lastname" name="lastname" pattern="[A-Za-z '\-]*" title="Please enter only letters, spaces, dashes, or apostrophes" required>
+                <input type="text" class="form-control" id="lastname" name="lastname" maxlength="150" pattern="[A-Za-z '\-]*" title="Please enter only letters, spaces, dashes, or apostrophes" required>
             </div>
             <div class="form-group">
                 <label for="username">Username</label>
                 <p class="accent-text">{{ username }}</p>
-                <input type="text" class="form-control" id="username" name="username" pattern="[A-Za-z0-9]*" title="Please enter only letters or numbers" required>
+                <input type="text" class="form-control" id="username" name="username" maxlength="150" pattern="[A-Za-z0-9]*" title="Please enter only letters or numbers" required>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
                 <p class="accent-text">{{ email }}</p>
-                <input type="email" class="form-control" id="email" name="email" required>
+                <input type="email" class="form-control" id="email" maxlength="254" name="email" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" name ="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+                <input type="password" class="form-control" id="password" name ="password" maxlength="52" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
             </div>
 
         <input type="submit" class="btn btn-lg btn-primary accent" value="Submit">

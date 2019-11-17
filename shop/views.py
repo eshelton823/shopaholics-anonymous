@@ -143,6 +143,9 @@ def success(request):
 def failure(request):
     return render(request, 'shop/failure.html')
 
+def checkout(request):
+    return render(request, 'shop/checkout.html')
+
 def search(request):
     if not request.user.is_authenticated:
         return redirect('/profile/signin')
@@ -153,6 +156,8 @@ def search(request):
         context = {}
         context['items'] = getItems(query)
         return render(request, 'shop/search.html', context)
+
+
 
 
 def get_order_info(user):
@@ -168,7 +173,7 @@ def get_order_info(user):
     else:
         context['status'] = "Shopping"
         o = Order.objects.filter(user=user.email)[0]
-        context['current_order'] = order_to_list(o)
+        context['current_order'] = "" #order_to_list(o)
         # print(user.email)
         context['price'] = o.order_cost
         if o.driver != "":
