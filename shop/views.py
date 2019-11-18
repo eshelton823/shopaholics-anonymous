@@ -120,7 +120,7 @@ def process_order(request):
                 o.store_selection = 'WAL'
                 o.user = request.user.email
                 o.customer_name = request.user.first_name
-                o.order_cost = float(request.POST['price'])/100
+                o.order_cost = round(float(request.POST['price'])/100, 2)
                 try:
                     asap = request.POST['asap']
                     o.is_delivery_asap = True
@@ -145,7 +145,6 @@ def failure(request):
 
 def checkout(request):
     context = {}
-
     o = Order.objects.get(user=request.user.email)
     context['stripe_price'] = o.order_cost*100
     context['key'] = settings.STRIPE_PUBLISHABLE_KEY
@@ -179,17 +178,25 @@ def get_order_info(user):
         context['driver'] = "N/A"
         context['drop'] = "N/A"
         context['disabled'] = "Not Currently Shopping"
+        context['paid'] = "N/A"
     else:
         context['status'] = "Shopping"
         o = Order.objects.filter(user=user.email)[0]
         context['current_order'] = "" #order_to_list(o)
         # print(user.email)
         context['price'] = o.order_cost
+        if o.has_paid:
+            context['paid'] = "You have paid for your order!"
+        else:
+            context['paid'] = "You have not paid for your order. Pay now to start matching!"
         if o.driver != "":
             context['driver'] = o.driver
             context['disabled'] = "Resolve Order"
         else:
-            context["driver"] = "Unmatched"
+            if o.has_paid:
+                context["driver"] = "Unmatched"
+            else:
+                context["driver"] = "Pay for your order to start matching"
             context['disabled'] = "Drop Order"
         context['drop'] = o.desired_delivery_time_range_upper_bound
         context['chat_room'] = o.chat_room
