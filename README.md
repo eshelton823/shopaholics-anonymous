@@ -11,3 +11,8 @@
 5. Grant necessary permissions with `GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO app;`
 6. To grant the ability to create the test database, add `psql -c "ALTER USER app CREATEDB;" -U postgres`.
 7. Run the server to confirm operation.
+
+#### To drop your local database and create a new one (having completed the above steps already)...
+1. Get into psql (see step 2 above)
+2. Run 'DROP DATABASE shopaholics_anonymous;'
+3. Repeat steps 4-7 above

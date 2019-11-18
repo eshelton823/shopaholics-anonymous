@@ -24,7 +24,7 @@ def home(request):
 def order_to_list(o):
     context = {}
     ol = json.loads(o.order_list)
-    ol = ast.literal_eval(ol)
+
     try:
         print(ol["items"])
     except:
@@ -61,6 +61,7 @@ def driver_dash(request):
         return redirect('/profile/signin')
     if request.user.profile.driver_filled:
         context = get_driver_info(request.user)
+        #context = get_order_info(request.user)
         return render(request, 'shop/driver_dash.html', context)
     else:
         return redirect('/profile/driver_info')
@@ -68,7 +69,6 @@ def driver_dash(request):
 def store(request):
     if request.user.is_authenticated:
         context = {}
-        context['key'] = settings.STRIPE_PUBLISHABLE_KEY
         if(request.method == "POST"):
             if(request.POST.get('delete', '')):
                 item = request.POST.get('delete', '')
@@ -121,6 +121,8 @@ def process_order(request):
                 o.store_selection = 'WAL'
                 o.user = request.user.email
                 o.customer_name = request.user.first_name
+                o.has_paid = False
+                o.order_cost = round(float(request.POST['price'])/100, 2)
                 try:
                     asap = request.POST['asap']
                     o.is_delivery_asap = True
@@ -133,7 +135,7 @@ def process_order(request):
                     o.save()
                     request.user.profile.is_shopping = True
                     request.user.save()
-                return HttpResponseRedirect(reverse('shop:success'))
+                return HttpResponseRedirect(reverse('shop:checkout'))
         # except:
         #     return HttpResponseRedirect(reverse('shop:failure'))
 
@@ -142,6 +144,13 @@ def success(request):
 
 def failure(request):
     return render(request, 'shop/failure.html')
+
+def checkout(request):
+    context = {}
+    o = Order.objects.get(user=request.user.email)
+    context['stripe_price'] = o.order_cost*100
+    context['key'] = settings.STRIPE_PUBLISHABLE_KEY
+    return render(request, 'shop/checkout.html', context)
 
 def search(request):
     if not request.user.is_authenticated:
@@ -154,6 +163,12 @@ def search(request):
         context['items'] = getItems(query)
         return render(request, 'shop/search.html', context)
 
+def pay(request):
+    o = Order.objects.get(user=request.user.email)
+    o.has_paid = True
+    o.save()
+    return HttpResponseRedirect(reverse('shop:success'))
+
 
 def get_order_info(user):
     context = {}
@@ -161,21 +176,29 @@ def get_order_info(user):
     if not user.profile.is_shopping:
         context['status'] = "Not Shopping"
         context['current_order'] = "You aren't shopping right now!"
-        context['price'] = "$0.00"
+        # context['price'] = "$0.00"
         context['driver'] = "N/A"
         context['drop'] = "N/A"
         context['disabled'] = "Not Currently Shopping"
+        context['paid'] = "N/A"
     else:
         context['status'] = "Shopping"
         o = Order.objects.filter(user=user.email)[0]
         context['current_order'] = order_to_list(o)
         # print(user.email)
-        context['price'] = o.order_cost
+        # context['price'] =
+        if o.has_paid:
+            context['paid'] = "You have paid for your order!"
+        else:
+            context['paid'] = "You have not paid for your order. Pay now to start matching!"
         if o.driver != "":
             context['driver'] = o.driver
             context['disabled'] = "Resolve Order"
         else:
-            context["driver"] = "Unmatched"
+            if o.has_paid:
+                context["driver"] = "Unmatched"
+            else:
+                context["driver"] = "Pay for your order to start matching"
             context['disabled'] = "Drop Order"
         context['drop'] = o.desired_delivery_time_range_upper_bound
         context['chat_room'] = o.chat_room
@@ -199,7 +222,7 @@ def get_order_info(user):
         else:
             context['apt'] = "Not specified"
         context['instructions'] = o.delivery_instructions
-        context['cost'] = o.order_cost
+        context['cost'] = "$" + str(o.order_cost)
         context['list'] = o.order_list
         # print(o.customer_name)
     else:
@@ -229,10 +252,10 @@ def get_driver_info(d):
         else:
             context['apt'] = "Not specified"
         context['instructions'] = o.delivery_instructions
-        context['cost'] = o.order_cost
-        context['list'] = o.order_list
+        context['cost'] = "$" + str(o.order_cost)
+        context['list'] = order_to_list(o)
         context['chat_room'] = o.chat_room
-        #context['current_order'] = order_to_list(o)
+        context['current_order'] = order_to_list(o)
         # print(o.customer_name)
     else:
         context['current'] = "None"
@@ -254,7 +277,7 @@ def get_driver_info(d):
     else:
         context['matching'] = "Start matching"
         # context['disable'] = ""
-    context['money'] = d.profile.money_earned
+    context['money'] = "$" + str(d.profile.money_earned)
     context['deliveries'] = d.profile.deliveries_made
     context['plate'] = d.profile.license_plate_number
     context['make'] = d.profile.car_make
@@ -308,7 +331,7 @@ def match(request):
     # print("matching!")
     # NOTE: Currently a person could be matched to their own order!! Decide as a team if that's OK or not
     drivers = Profile.objects.filter(is_matching=True).order_by('started_matching')
-    orders = Order.objects.filter(driver="").order_by('id')
+    orders = Order.objects.filter(driver="", has_paid=True).order_by('id')
     queuedrivers = []
     queueorders = []
     for driver in drivers:
@@ -333,4 +356,5 @@ def match(request):
         Room.objects.create(name='Shopper Chat', slug=slug, description="Chat about your order")
         o.chat_room = slug
         o.save()
+    # print(request.path_info)
     return HttpResponseRedirect(reverse('shop:dashboard'))

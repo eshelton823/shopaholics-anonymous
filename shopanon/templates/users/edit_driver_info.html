@@ -16,23 +16,23 @@
             {% csrf_token %}
             <div class="form-group">
                 <label for="licensePlateNumberInput">License Plate Number</label>
-                <input type="text" class="form-control" id="licensePlateNumberInput" name="licensePlateNumberInput" value="{{ plate }}" placeholder="{{ plate }}" required>
+                <input type="text" class="form-control" id="licensePlateNumberInput" name="licensePlateNumberInput" value="{{ plate }}" placeholder="{{ plate }}" maxlength="10" pattern="[A-Za-z0-9 \-]*" title="Please enter only letters, numbers, dashes, or spaces" required>
             </div>
             <div class="form-group">
                 <label for="carMakeInput">Car Make</label>
-                <input type="text" class="form-control" id="carMakeInput" name="carMakeInput" value="{{ make }}" placeholder="{{ make }}" required>
+                <input type="text" class="form-control" id="carMakeInput" name="carMakeInput" value="{{ make }}" placeholder="{{ make }}" pattern="[A-Za-z ]*" maxlength="16" title="Please enter only letters or spaces" required>
             </div>
             <div class="form-group">
                 <label for="carModelInput">Car Model</label>
-                <input type="text" class="form-control" id="carModelInput" name ="carModelInput" value="{{ model }}" placeholder="{{ model }}" required>
+                <input type="text" class="form-control" id="carModelInput" name ="carModelInput" value="{{ model }}" placeholder="{{ model }}" pattern="[A-Za-z0-9 ]*" maxlength="16" title="Please enter only letters, numbers, or spaces" required>
             </div>
             <div class="form-group">
                 <label for="driverLicenseNumberInput">License Number</label>
-                <input type="text" class="form-control" id="driverLicenseNumberInput" name="driverLicenseNumberInput" value="{{ license }}" placeholder="{{ license }}" required>
+                <input type="text" class="form-control" id="driverLicenseNumberInput" name="driverLicenseNumberInput" value="{{ license }}" placeholder="{{ license }}" maxlength="12" pattern="[A-Za-z0-9]*" title="Please enter only letters or numbers" required>
             </div>
             <div class="form-group">
                 <label for="stateOfLicenseIssuanceInput">State Of License Issuance</label>
-                <input type="text" class="form-control" id="stateOfLicenseIssuanceInput" name="stateOfLicenseIssuanceInput" value="{{ state }}" placeholder="{{ state }}" required>
+                <input type="text" class="form-control" id="stateOfLicenseIssuanceInput" name="stateOfLicenseIssuanceInput" value="{{ state }}" placeholder="{{ state }}" maxlength="25" pattern="[A-Za-z]*" title="Please enter only letters" required>
             </div>
         <input type="submit" class="btn btn-lg btn-primary accent" value="Submit">
         </form>
