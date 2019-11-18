@@ -174,7 +174,7 @@ def get_order_info(user):
     if not user.profile.is_shopping:
         context['status'] = "Not Shopping"
         context['current_order'] = "You aren't shopping right now!"
-        context['price'] = "$0.00"
+        # context['price'] = "$0.00"
         context['driver'] = "N/A"
         context['drop'] = "N/A"
         context['disabled'] = "Not Currently Shopping"
@@ -182,9 +182,9 @@ def get_order_info(user):
     else:
         context['status'] = "Shopping"
         o = Order.objects.filter(user=user.email)[0]
-        context['current_order'] = "" #order_to_list(o)
+        context['current_order'] = order_to_list(o)
         # print(user.email)
-        context['price'] = o.order_cost
+        # context['price'] =
         if o.has_paid:
             context['paid'] = "You have paid for your order!"
         else:
@@ -220,7 +220,7 @@ def get_order_info(user):
         else:
             context['apt'] = "Not specified"
         context['instructions'] = o.delivery_instructions
-        context['cost'] = o.order_cost
+        context['cost'] = "$" + str(o.order_cost)
         context['list'] = o.order_list
         # print(o.customer_name)
     else:
@@ -250,10 +250,10 @@ def get_driver_info(d):
         else:
             context['apt'] = "Not specified"
         context['instructions'] = o.delivery_instructions
-        context['cost'] = o.order_cost
+        context['cost'] = "$" + str(o.order_cost)
         context['list'] = o.order_list
         context['chat_room'] = o.chat_room
-        #context['current_order'] = order_to_list(o)
+        context['current_order'] = order_to_list(o)
         # print(o.customer_name)
     else:
         context['current'] = "None"
@@ -275,7 +275,7 @@ def get_driver_info(d):
     else:
         context['matching'] = "Start matching"
         # context['disable'] = ""
-    context['money'] = d.profile.money_earned
+    context['money'] = "$" + str(d.profile.money_earned)
     context['deliveries'] = d.profile.deliveries_made
     context['plate'] = d.profile.license_plate_number
     context['make'] = d.profile.car_make
