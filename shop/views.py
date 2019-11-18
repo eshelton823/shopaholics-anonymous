@@ -61,6 +61,7 @@ def driver_dash(request):
         return redirect('/profile/signin')
     if request.user.profile.driver_filled:
         context = get_driver_info(request.user)
+        #context = get_order_info(request.user)
         return render(request, 'shop/driver_dash.html', context)
     else:
         return redirect('/profile/driver_info')
@@ -251,7 +252,7 @@ def get_driver_info(d):
             context['apt'] = "Not specified"
         context['instructions'] = o.delivery_instructions
         context['cost'] = "$" + str(o.order_cost)
-        context['list'] = o.order_list
+        context['list'] = order_to_list(o)
         context['chat_room'] = o.chat_room
         context['current_order'] = "" #order_to_list(o)
         # print(o.customer_name)

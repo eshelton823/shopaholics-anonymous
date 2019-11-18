@@ -1,4 +1,7 @@
 $(function() {
+  Notification.requestPermission().then(function(result) {
+    console.log(result);
+  });
   // Reference to the chat messages area
   let $chatWindow = $("#messages");
 
@@ -23,7 +26,7 @@ $(function() {
   }
 
 // Helper function to print chat message to the chat window
- function printMessage(fromUser, message) {
+ function printMessage(fromUser, message, onLoad) {
    let $user = $('<span class="username">').text(fromUser + ":");
    if (fromUser === username) {
      $user.addClass("me");
@@ -33,6 +36,21 @@ $(function() {
    $container.append($user).append($message);
    $chatWindow.append($container);
    $chatWindow.scrollTop($chatWindow[0].scrollHeight);
+   if(onLoad == false){
+     if(Notification.permission === "granted" && fromUser !== username){
+       console.log("Notifying.");
+       var notification = new Notification("New message from " +fromUser+": "+message);
+     }
+     // Otherwise, we need to ask the user for permission
+     else if (Notification.permission === "denied") {
+       Notification.requestPermission().then(function (permission) {
+         // If the user accepts, let's create a notification
+        if (permission === "granted") {
+          var notification = new Notification("New message: "+message);
+        }
+      });
+    }
+   }
  }
 
   // Get an access token for the current user, passing a device ID
@@ -46,10 +64,10 @@ $(function() {
       // Alert the user they have been assigned a random username
       username = data.identity;
       print(
-        "You are: " +
+        "Welcome " +
           '<span class="me">' +
           username +
-          "</span>",
+          "</span>!",
         true
       );
 
@@ -66,35 +84,55 @@ $(function() {
   function createOrJoinChannel() {
   // Extract the room's channel name from the page URL
   let channelName = window.location.pathname.split("/").slice(-2, -1)[0];
-  print(`Attempting to join the chat channel...`);
+
   chatClient
     .getChannelByUniqueName(channelName)
     .then(function(channel) {
       roomChannel = channel;
       setupChannel(channelName);
     })
+    .catch(function() {
+      // If it doesn't exist, let's create it
+      chatClient
+        .createChannel({
+          uniqueName: channelName,
+          friendlyName: `${channelName} Chat Channel`
+        })
+        .then(function(channel) {
+          roomChannel = channel;
+          setupChannel(channelName);
+        });
+    });
+    }
+
+    // Set up channel after it has been found / created
+function setupChannel(name) {
+  try{
+    if(roomChannel.state.status !== "joined"){
+      roomChannel.join().then(function(channel) {
+        print(
+          `Created and joined channel!`,
+          true
+        );
+      });
+    }
+    else{
+      roomChannel.getMessages(30).then(processPage);
+    }
+  }
+  catch{
+    console.log("Failed to join on normal route.")
   }
 
-// Set up channel after it has been found / created
-function setupChannel(name) {
-  roomChannel.join().catch(function(err) {
-    console.error(
-      "Couldn't join channel " + name + ' because ' + err
-    );
-  });
-  print(
-    `Joined channel as <span class="me"> ${username} </span>.`,
-    true
-  );
-    roomChannel.getMessages(30).then(processPage);
   // Listen for new messages sent to the channel
   roomChannel.on("messageAdded", function(message) {
-    printMessage(message.author, message.body);
+    printMessage(message.author, message.body, false);
   });
 }
 function processPage(page) {
+  console.log("Processing...");
   page.items.forEach(message => {
-    printMessage(message.author, message.body);
+    printMessage(message.author, message.body, true);
   });
   if (page.hasNextPage) {
     page.nextPage().then(processPage);

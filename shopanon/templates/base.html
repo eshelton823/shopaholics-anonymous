@@ -9,6 +9,7 @@
     <meta name="generator" content="Jekyll v3.8.5">
     <title>Shopaholics Anonymous</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/803e80983a.js" crossorigin="anonymous"></script>
     <!--<link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/starter-template/">-->
   <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/carousel/">
 
@@ -64,6 +65,9 @@
             <a class="nav-link accent-text" href="{% url 'logout' %}">Sign Out</a>
          {% else %}
             <a class="nav-link accent-text" href="{% url 'users:user_signin' %}">Sign In</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link accent-text" href="{% url 'users:user_signup' %}">Sign Up</a>
          {% endif %}
       </li>
     </ul>
