@@ -329,7 +329,7 @@ def match(request):
     # print("matching!")
     # NOTE: Currently a person could be matched to their own order!! Decide as a team if that's OK or not
     drivers = Profile.objects.filter(is_matching=True).order_by('started_matching')
-    orders = Order.objects.filter(driver="").order_by('id')
+    orders = Order.objects.filter(driver="", has_paid=True).order_by('id')
     queuedrivers = []
     queueorders = []
     for driver in drivers:
