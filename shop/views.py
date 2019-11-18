@@ -121,6 +121,7 @@ def process_order(request):
                 o.store_selection = 'WAL'
                 o.user = request.user.email
                 o.customer_name = request.user.first_name
+                o.has_paid = False
                 o.order_cost = round(float(request.POST['price'])/100, 2)
                 try:
                     asap = request.POST['asap']

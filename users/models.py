@@ -120,4 +120,4 @@ class Order(models.Model):
     current_address_dropoff_street_and_street_number = models.CharField(max_length=35, default="")
     customer_name = models.CharField(max_length=20, default="")
 
-    has_paid = models.BooleanField(default=False)
+    has_paid = models.BooleanField(null=True, default=False)
