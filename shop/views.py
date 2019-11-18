@@ -182,7 +182,7 @@ def get_order_info(user):
     else:
         context['status'] = "Shopping"
         o = Order.objects.filter(user=user.email)[0]
-        context['current_order'] = order_to_list(o)
+        context['current_order'] = "" #order_to_list(o)
         # print(user.email)
         # context['price'] =
         if o.has_paid:
@@ -253,7 +253,7 @@ def get_driver_info(d):
         context['cost'] = "$" + str(o.order_cost)
         context['list'] = o.order_list
         context['chat_room'] = o.chat_room
-        context['current_order'] = order_to_list(o)
+        context['current_order'] = "" #order_to_list(o)
         # print(o.customer_name)
     else:
         context['current'] = "None"
@@ -354,4 +354,5 @@ def match(request):
         Room.objects.create(name='Shopper Chat', slug=slug, description="Chat about your order")
         o.chat_room = slug
         o.save()
+    # print(request.path_info)
     return HttpResponseRedirect(reverse('shop:dashboard'))

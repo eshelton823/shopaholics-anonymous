@@ -139,8 +139,8 @@ class MatchTests(TestCase):
         #
         # #waiting for matches
         # Order.objects.create(user='c2@email.com', driver='d1@email.com', store_selection="WAL")
-        Order.objects.create(user='c3@email.com', order_placed = timezone.now() + timezone.timedelta(days=-1), delivery_instructions="drop check", store_selection="WAL", order_cost=45)
-        Order.objects.create(user='b1@email.com', order_placed=timezone.now() + timezone.timedelta(hours=-1), store_selection="WAL")
+        Order.objects.create(user='c3@email.com', order_placed = timezone.now() + timezone.timedelta(days=-1), delivery_instructions="drop check", store_selection="WAL", order_cost=45, has_paid=True)
+        Order.objects.create(user='b1@email.com', order_placed=timezone.now() + timezone.timedelta(hours=-1), store_selection="WAL", has_paid=True)
 
         self.factory = RequestFactory()
         self.client = Client()
@@ -227,7 +227,6 @@ class MatchTests(TestCase):
     def test_driver_gets_money(self, mock_reset, mock_match):
         request = self.factory.get('/dashboard')
         mock_match(request)
-
         request.user = self.user
         o1 = Order.objects.get(delivery_instructions="drop check")
         driver = Profile.objects.get(email=o1.driver).email
@@ -282,7 +281,7 @@ class SwapTests(TestCase):
         d1.profile.driver_filled = True
         d1.save()
 
-        Order.objects.create(user='c3@email.com', driver='None', order_placed = timezone.now() + timezone.timedelta(days=-1), delivery_instructions="swap check", store_selection="WAL", order_cost=45)
+        Order.objects.create(user='c3@email.com', driver='None', order_placed = timezone.now() + timezone.timedelta(days=-1), delivery_instructions="swap check", store_selection="WAL", order_cost=45, has_paid=True)
 
         User.objects.create_user(username="customer3", password='12345', email='c3@email.com')
         u3 = User.objects.get(username="customer3")
