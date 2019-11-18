@@ -2,28 +2,94 @@
 {% block content %}
 <br><br><br>
 <div class="container">
+
 <h3>Your order has been placed! We're in the process of matching you with a driver. When you have been matched,
 your driver's name will appear on your dashboard.</h3>
+
 </div>
 <br><hr>
-<h4><span class="dom-text">What do I do now?</span></h4>
+<h3>What do I do now?</h3>
 <br>
 <div class="container">
     <!-- Example row of columns -->
-    <div class="row">
-      <div class="col-md-4 text-center">
-          <h6>I want to check out my order status!</h6>
-        <p><a class="btn btn-secondary second-accent" href="dashboard" role="button">Return to Dashboard &raquo;</a></p>
-      </div>
+    <!--<div class="row">-->
+      <!--<div class="col-md-4 text-center">-->
+          <!--<h6>I want to check out my order status!</h6>-->
+        <!--<p><a class="btn btn-secondary accent" href="{% url 'shop:match' %}" role="button">Return to Dashboard &raquo;</a></p>-->
+      <!--</div>-->
       <!--<div class="col-md-4 text-center">-->
           <!--<h6>I want to shop some more!</h6>-->
         <!--<p><a class="btn btn-secondary second-accent" href="store" role="button">Place Another Order &raquo;</a></p>-->
       <!--</div>-->
-      <div class="col-md-4 text-center">
-          <h6>I'm not sure; take me home!</h6>
-        <p><a class="btn btn-secondary second-accent" href="home" role="button">Return to Home &raquo;</a></p>
+      <!--<div class="col-md-4 text-center">-->
+          <!--<h6>I'm not sure; take me home!</h6>-->
+        <!--<p><a class="btn btn-secondary accent" href="home" role="button">Return to Home &raquo;</a></p>-->
+      <!--</div>-->
+    <!--</div>-->
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-4 shadow-sm">
+<!--<<<<<<< HEAD-->
+        <!--<div class="card-header domcolor">-->
+        <!--<h4 class="txt"> Sign in with Google! </h4>-->
+        <!--</div>-->
+        <!--<div class="card-body">-->
+          <!--<a class="btn btn-lg btn-primary accent" href="{% url 'social:begin' 'google-oauth2' %}?next={{dashboard}}"><i class="fab fa-google"></i> Login with Google</a>-->
+
+        <!--</div>-->
+      <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<hr>-->
+    <!--<div>-->
+        <!--<h3></h3>-->
+        <!--<div class="container">-->
+          <!--<div class="card mb-4 shadow-sm">-->
+      <!--<div class="card-header domcolor">-->
+        <!--<h4 class=" txt my-0 font-weight-normal">Don't have Google?</h4>-->
+      <!--</div>-->
+      <!--<div class="card-body">-->
+        <!--<p class="accent-text">{{ error }}</p>-->
+        <!--<form action="{% url 'users:validate_login' %}" method="post">-->
+            <!--{% csrf_token %}-->
+            <!--<div class="form-group">-->
+                <!--<label for="username">Username</label>-->
+                <!--<input type="text" class="form-control" id="username" name="username" pattern="[A-Za-z0-9]*" title="Please enter only letters or numbers" required>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label for="password">Password</label>-->
+                <!--<input type="password" class="form-control" id="password" name ="password" required>-->
+            <!--</div>-->
+
+        <!--<input type="submit" class="btn btn-lg btn-primary accent" value="Submit">-->
+        <!--</form>-->
+<!--=======-->
+          <div class="card-header d-flex justify-content-center domcolor">
+            <h4 class="my-0 txt font-weight-normal">I want to check out my order status!</h4>
+          </div>
+          <div class="">
+            <div class="col">
+              <div class="card-body d-flex justify-content-center">
+                  <a class="btn-lg btn-secondary accent" href="{% url 'shop:match' %}" role="button">Return to Dashboard &raquo;</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+<!--&gt;>>>>>> master-->
+
+      <div class="col-md-6">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header d-flex justify-content-center domcolor">
+            <h4 class="my-0 txt font-weight-normal">I'm not sure; take me home!</h4>
+          </div>
+          <div class="card-body d-flex justify-content-center">
+                    <a class="btn-lg btn-secondary accent" href="home" role="button">Return to Home &raquo;</a>
+
+          </div>
+        </div>
       </div>
     </div>
-
 
 {% endblock %}
