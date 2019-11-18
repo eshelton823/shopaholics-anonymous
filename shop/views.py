@@ -24,7 +24,7 @@ def home(request):
 def order_to_list(o):
     context = {}
     ol = json.loads(o.order_list)
-    ol = ast.literal_eval(ol)
+    #ol = json.load(ol)
     try:
         print(ol["items"])
     except:
