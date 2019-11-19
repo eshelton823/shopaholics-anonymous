@@ -1,19 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Pay for your purchase now!</h2>
-<form action="{% url 'shop:pay' %}" method="post">
+<div class="container" style="padding-top:50px">
+
+  <h2>Pay for your purchase now!</h2>
+  <form action="{% url 'shop:pay' %}" method="post">
     {% csrf_token %}
-<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="{{ key }}"
-            data-description="Complete Payment"
-            data-amount="{{stripe_price}}"
-            data-locale="auto">
-</script>
-</form>
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="{{ key }}"
+                data-description="Complete Payment"
+                data-amount="{{stripe_price}}"
+                data-locale="auto">
+    </script>
+  </form>
 <!--<form action="{% url 'shop:pay' %}" method="post" hidden>-->
     <!--<div class="form-group">-->
                 <!--<label for="carMakeInput">Car Make</label>-->
                 <!--<input type="text" class="form-control" id="carMakeInput" name="carMakeInput" value="{{ make }}" placeholder="{{ make }}" pattern="[A-Za-z ]*" maxlength="16" title="Please enter only letters or spaces" required>-->
             <!--</div>-->
       <!--</form>-->
+</div>
 {% endblock %}
