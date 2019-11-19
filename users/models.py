@@ -121,3 +121,6 @@ class Order(models.Model):
     customer_name = models.CharField(max_length=20, default="")
 
     has_paid = models.BooleanField(null=True, default=False)
+    is_completed = models.BooleanField(null=True, default=False)
+    past_user = models.CharField(null=True, max_length=50, default='')
+    past_driver = models.CharField(null=True, max_length=50, default='')

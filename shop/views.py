@@ -315,14 +315,19 @@ def reset(request):
             d.has_order = False
             d.money_earned += price
             d.save()
+        o.past_user = o.user
+        o.past_driver = o.driver
         o.user = "COMPLETE"
         o.customer_name = "COMPLETE"
         o.driver = "COMPLETE"
+        o.is_completed = True
         o.save()
     else:
         o.user = "DROPPED"
         o.customer_name = "DROPPED"
         o.driver = "DROPPED"
+        o.past_user = request.user.email
+        o.past_driver = None
         o.save()
     request.user.profile.is_shopping = False
     request.user.save()
