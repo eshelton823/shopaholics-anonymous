@@ -46,7 +46,7 @@ html {
 }
 
 .domcolor-t {
-background-color: rgba(93, 204, 53, .5)
+background-color: #4E1D81;
 }
 
 .dom-text {
@@ -133,3 +133,13 @@ background: rgba(255, 255, 255, .8);
     max-height: 300px;
     overflow-y: auto;
 }
+
+.nav a.nav-link.now {
+    color: #DAD4D1;
+    background-color: #4E1D81 !important;
+}
+.nav-link.wait{
+color: #4E1D81;
+}
+
+.nav-link:hover {color: #22BBA6;}
