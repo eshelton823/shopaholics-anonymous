@@ -149,6 +149,7 @@ def checkout(request):
     context = {}
     o = Order.objects.get(user=request.user.email)
     context['stripe_price'] = o.order_cost*100
+    context['list'] = order_to_list(o)
     context['price'] = o.order_cost
     context['key'] = settings.STRIPE_PUBLISHABLE_KEY
     return render(request, 'shop/checkout.html', context)
@@ -191,7 +192,7 @@ def get_order_info(user):
         if o.has_paid:
             context['paid'] = "You have paid for your order!"
         else:
-            context['paid'] = "You have not paid for your order. Pay now to start matching!"
+            context['paid'] = "Unpaid. Pay now to start matching!"
         if o.driver != "":
             context['driver'] = o.driver
             context['disabled'] = "Resolve Order"
