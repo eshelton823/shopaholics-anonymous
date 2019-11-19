@@ -101,6 +101,11 @@ def store(request):
             context['disabled'] = True
         else:
             context['disabled'] = False
+        if request.session.get('empty') is not None:
+            context['empty'] = "Your cart is empty. Please add items before checking out."
+            request.session['empty'] = None
+        else:
+            context['empty'] = ''
         return render(request, 'shop/store.html', context)
     else:
         return redirect('profile/signin')
@@ -113,6 +118,10 @@ def process_order(request):
             o.delivery_address = request.POST['del_add']
             o.order_list = json.dumps(request.user.profile.cart)
             print(o.order_list)
+            # print("HERE" + str(len(o.order_list)))
+            if len(o.order_list) == 13:
+                request.session['empty'] = True
+                return HttpResponseRedirect(reverse('shop:store'))
             request.user.profile.cart = get_default_cart()
             try:
                 o.delivery_apt_suite = request.POST['appt_suite']
