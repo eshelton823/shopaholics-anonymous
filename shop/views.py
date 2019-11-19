@@ -149,6 +149,7 @@ def checkout(request):
     context = {}
     o = Order.objects.get(user=request.user.email)
     context['stripe_price'] = o.order_cost*100
+    context['price'] = o.order_cost
     context['key'] = settings.STRIPE_PUBLISHABLE_KEY
     return render(request, 'shop/checkout.html', context)
 
