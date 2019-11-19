@@ -195,6 +195,8 @@ try:
         django_heroku.settings(locals())
         # Connect to PostgreSQL if on Heroku
         DATABASES['default'] = dj_database_url.config(default=psql, conn_max_age=600, ssl_require=True)
+        SECURE_SSL_REDIRECT = True
+        SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 except:
     pass
 
