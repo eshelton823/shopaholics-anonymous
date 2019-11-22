@@ -106,6 +106,7 @@ class Order(models.Model):
 
     #delivery - order
     order_placed = models.TimeField(default=timezone.now)
+    order_date = models.DateTimeField(default=timezone.now)
     order_start_time = models.TimeField(null=True, blank=True)#when they accept the order
     order_deliver_time = models.TimeField(null=True, blank=True)
     current_store_to_go_to = models.CharField(max_length=20, default="")
