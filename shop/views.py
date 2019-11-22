@@ -19,6 +19,8 @@ DRIVER_MARGIN = 10.00
 TAX = .06
 
 def home(request):
+    if(request.user.is_authenticated):
+        return render(request, 'shop/dashboard.html', context)
     return render(request, 'shop/home.html')
 
 def order_to_list(o):
@@ -52,6 +54,8 @@ def dashboard(request):
             request.user.profile.email = request.user.email
             request.user.profile.save()
         context = get_order_info(request.user)
+        context['past_orders'] = list(Order.objects.filter(past_user__contains=request.user.username))
+        print(context['past_orders'])
         return render(request, 'shop/dashboard.html', context)
     else:
         return redirect('/profile/signin')
@@ -62,6 +66,7 @@ def driver_dash(request):
     if request.user.profile.driver_filled:
         context = get_driver_info(request.user)
         #context = get_order_info(request.user)
+        context['past_deliveries'] = list(Order.objects.filter(past_driver__contains=request.user.username))
         return render(request, 'shop/driver_dash.html', context)
     else:
         return redirect('/profile/driver_info')
