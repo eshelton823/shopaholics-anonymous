@@ -159,7 +159,7 @@ def checkout(request):
     o = Order.objects.get(user=request.user.email)
     context['stripe_price'] = o.order_cost*100
     context['list'] = order_to_list(o)
-    context['price'] = o.order_cost
+    context['price'] = '${:,.2f}'.format(o.order_cost)
     context['key'] = settings.STRIPE_PUBLISHABLE_KEY
     return render(request, 'shop/checkout.html', context)
 
@@ -233,7 +233,7 @@ def get_order_info(user):
         else:
             context['apt'] = "Not specified"
         context['instructions'] = o.delivery_instructions
-        context['cost'] = "$" + str(o.order_cost)
+        context['cost'] = '${:,.2f}'.format(o.order_cost)
         context['list'] = o.order_list
         # print(o.customer_name)
     else:
@@ -263,7 +263,7 @@ def get_driver_info(d):
         else:
             context['apt'] = "Not specified"
         context['instructions'] = o.delivery_instructions
-        context['cost'] = "$" + str(o.order_cost)
+        context['cost'] = '${:,.2f}'.format(o.order_cost)
         context['list'] = order_to_list(o)
         context['chat_room'] = o.chat_room
         context['current_order'] = order_to_list(o)

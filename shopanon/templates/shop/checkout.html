@@ -11,7 +11,7 @@
             <div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Shopping List: {{ list }}</li>
-                    <li class="list-group-item">Price: ${{ price }}</li>
+                    <li class="list-group-item">Price: {{ price }}</li>
                     <li class="list-group-item"><center><form action="{% url 'shop:pay' %}" method="post">
                     {% csrf_token %}
                     <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
