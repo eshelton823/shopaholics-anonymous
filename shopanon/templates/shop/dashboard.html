@@ -125,7 +125,28 @@
                     <h4 class="my-0 txt font-weight-normal">Past Orders</h4>
                 </div>
                 <div class="card-body">
-                    
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Driver</th>
+                          <th scope="col">Date</th>
+                          <th scope="col">Price</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for o in past_orders %}
+                        <tr>
+                          <th scope="row">{{o.id}}</th>
+                          <td>{{o.past_driver}}</td>
+                          <td>{{o.order_placed }}</td>
+                          <td>${{o.order_cost|stringformat:".2f"}}</td>
+                        </tr>
+                        {% empty %}
+                            No orders found.
+                        {% endfor %}
+                      </tbody>
+                    </table>
                 </div>
             </div>
         </div>
