@@ -20,7 +20,7 @@ TAX = .06
 
 def home(request):
     if(request.user.is_authenticated):
-        return render(request, 'shop/dashboard.html', context)
+        return redirect('shop:dashboard')
     return render(request, 'shop/home.html')
 
 def order_to_list(o):
