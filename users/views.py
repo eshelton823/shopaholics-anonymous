@@ -18,13 +18,13 @@ class UserViewSet(viewsets.ModelViewSet):
 
 def user_signup(request, context={'email':"", 'username':""}):
     if request.user.is_authenticated:
-        return render(request, 'shop/dashboard.html')
+        return HttpResponseRedirect(reverse('shop:dashboard'))
     form = UserCreationThroughSignupForm(request.POST)
     return render(request, 'users/user_signup.html', context)
 
 def user_signin(request):
     if request.user.is_authenticated:
-        return render(request, 'shop/dashboard.html')
+        return HttpResponseRedirect(reverse('shop:dashboard'))
     return render(request, 'users/user_signin.html')
 
 def driver_info(request):
