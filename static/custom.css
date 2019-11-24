@@ -1,6 +1,7 @@
 main {
     padding-top:55px;
     padding-bottom:70px;
+    min-height: 90vh;
 }
 html {
     position: relative;
@@ -33,28 +34,33 @@ html {
 }
 
 .all-bg{
-    background-color: rbga(192, 192, 192, .7)
+    background-color: #DAD4D1;
+}
+
+.txt{
+    color: #DAD4D1;
 }
 
 .domcolor {
-    background-color: #5dcc35
+    background-color: #4E1D81;
+    border-color: #4E1D81;
 }
 
 .domcolor-t {
-background-color: rgba(93, 204, 53, .5)
+background-color: #4E1D81;
 }
 
 .dom-text {
-color: #5dcc35
+color: #4E1D81;
 }
 
 .accent {
-background-color: #ff8656;
-border-color: #ff8656
+background-color: #22BBA6;
+border-color: #22BBA6;
 }
 
 .accent-text {
-color: #ff8656
+color: #22BBA6;
 }
 
 .second-accent{
@@ -63,12 +69,13 @@ border-color: #ff569c
 }
 
 .navbar.navbar-expand-md.navbar-dark.bg-dark.fixed-top li a {
-    color: #5dcc35;
+    color: #22BBA6;
 }
 
-h1 {font-family: "Palatino"}
-.A {font-family: "Candara"}
+body {
+	color: #171824;
 
+}
 .navbar-wrapper {
    position: absolute;
    top: 0;
@@ -127,3 +134,13 @@ background: rgba(255, 255, 255, .8);
     max-height: 300px;
     overflow-y: auto;
 }
+
+.nav a.nav-link.now {
+    color: #DAD4D1;
+    background-color: #4E1D81 !important;
+}
+.nav-link.wait{
+color: #4E1D81;
+}
+
+.nav-link:hover {color: #22BBA6;}
