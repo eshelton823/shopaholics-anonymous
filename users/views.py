@@ -28,6 +28,8 @@ def user_signin(request):
     return render(request, 'users/user_signin.html')
 
 def driver_info(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('users:user_signup'))
     return render(request, 'users/driver_info.html')
 
 def validate_login(request):
