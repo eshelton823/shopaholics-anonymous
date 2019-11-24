@@ -23,6 +23,8 @@ def user_signup(request, context={'email':"", 'username':""}):
     return render(request, 'users/user_signup.html', context)
 
 def user_signin(request):
+    if request.user.is_authenticated:
+        return render(request, 'shop/dashboard.html')
     return render(request, 'users/user_signin.html')
 
 def driver_info(request):
