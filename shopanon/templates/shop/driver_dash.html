@@ -83,6 +83,43 @@
         <!--<button type="button" class="btn btn-lg btn-primary accent">Change Customer Preferences</button>-->
       </div>
     </div>
+    <div class="card mb-4 shadow-sm d-flex align-items-stretch w-100">
+        <div class="card-header domcolor">
+            <h4 class="my-0 txt font-weight-normal">Past Orders</h4>
+        </div>
+        <div class="card-body">
+            {% if past_deliveries %}
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Driver</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for o in past_deliveries %}
+                <tr>
+                  <th scope="row">{{o.id}}</th>
+                  <td>{{o.past_user}}</td>
+                  <td>{{o.order_date | date:"F d, Y"}}</td>
+                  <td>${{o.order_cost | stringformat:".2f"}}</td>
+                </tr>
+                {% empty %}
+                    No orders found.
+                {% endfor %}
+              </tbody>
+            </table>
+            {% else %}
+            <div>
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li>No deliveries matched and completed yet.</li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </div
         </div>
       </div>
 </div>
