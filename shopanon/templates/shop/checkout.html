@@ -1,33 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
+<br>
+<div class="container">
 
-<!--<div class="container">-->
-    <div class="card mb-4 shadow-sm d-flex justify-content-center w-50">
+    <div class="card mx-auto mb-4 shadow-sm d-flex justify-content-center w-50">
         <div class="card-header d-flex justify-content-center domcolor txt">
-<h2>Pay for your purchase now!</h2>
+            <h2>Pay for your purchase now!</h2>
         </div>
         <div class="card-body d-flex justify-content-center">
-            <p>Price: ${{ price }}</p>
-            <br>
-<form action="{% url 'shop:pay' %}" method="post">
-    {% csrf_token %}
-<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="{{ key }}"
-            data-description="Complete Payment"
-            data-amount="{{stripe_price}}"
-            data-locale="auto">
-</script>
-</form>
+            <div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Shopping List: {{ list }}</li>
+                    <li class="list-group-item">Price: {{ price }}</li>
+                    <li class="list-group-item"><center><form action="{% url 'shop:pay' %}" method="post">
+                    {% csrf_token %}
+                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="{{ key }}"
+                            data-description="Complete Payment"
+                            data-amount="{{stripe_price}}"
+                            data-locale="auto">
+                    </script>
+                    </form></center></li>
+                </ul>
             </div>
-
         </div>
-<!--</div>-->
-
-<!--<form action="{% url 'shop:pay' %}" method="post" hidden>-->
-    <!--<div class="form-group">-->
-                <!--<label for="carMakeInput">Car Make</label>-->
-                <!--<input type="text" class="form-control" id="carMakeInput" name="carMakeInput" value="{{ make }}" placeholder="{{ make }}" pattern="[A-Za-z ]*" maxlength="16" title="Please enter only letters or spaces" required>-->
-            <!--</div>-->
-      <!--</form>-->
+    </div>
 </div>
 {% endblock %}

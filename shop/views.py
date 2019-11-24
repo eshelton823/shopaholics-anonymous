@@ -19,6 +19,8 @@ DRIVER_MARGIN = 10.00
 TAX = .06
 
 def home(request):
+    if(request.user.is_authenticated):
+        return redirect('shop:dashboard')
     return render(request, 'shop/home.html')
 
 def order_to_list(o):
@@ -52,6 +54,8 @@ def dashboard(request):
             request.user.profile.email = request.user.email
             request.user.profile.save()
         context = get_order_info(request.user)
+        context['past_orders'] = list(Order.objects.filter(past_user__contains=request.user.username))
+        print(context['past_orders'])
         return render(request, 'shop/dashboard.html', context)
     else:
         return redirect('/profile/signin')
@@ -62,6 +66,7 @@ def driver_dash(request):
     if request.user.profile.driver_filled:
         context = get_driver_info(request.user)
         #context = get_order_info(request.user)
+        context['past_deliveries'] = list(Order.objects.filter(past_driver__contains=request.user.username))
         return render(request, 'shop/driver_dash.html', context)
     else:
         return redirect('/profile/driver_info')
@@ -101,6 +106,11 @@ def store(request):
             context['disabled'] = True
         else:
             context['disabled'] = False
+        if request.session.get('empty') is not None:
+            context['empty'] = "Your cart is empty. Please add items before checking out."
+            request.session['empty'] = None
+        else:
+            context['empty'] = ''
         return render(request, 'shop/store.html', context)
     else:
         return redirect('profile/signin')
@@ -113,6 +123,10 @@ def process_order(request):
             o.delivery_address = request.POST['del_add']
             o.order_list = json.dumps(request.user.profile.cart)
             print(o.order_list)
+            # print("HERE" + str(len(o.order_list)))
+            if len(o.order_list) == 13:
+                request.session['empty'] = True
+                return HttpResponseRedirect(reverse('shop:store'))
             request.user.profile.cart = get_default_cart()
             try:
                 o.delivery_apt_suite = request.POST['appt_suite']
@@ -149,7 +163,8 @@ def checkout(request):
     context = {}
     o = Order.objects.get(user=request.user.email)
     context['stripe_price'] = o.order_cost*100
-    context['price'] = o.order_cost
+    context['list'] = order_to_list(o)
+    context['price'] = '${:,.2f}'.format(o.order_cost)
     context['key'] = settings.STRIPE_PUBLISHABLE_KEY
     return render(request, 'shop/checkout.html', context)
 
@@ -191,7 +206,7 @@ def get_order_info(user):
         if o.has_paid:
             context['paid'] = "You have paid for your order!"
         else:
-            context['paid'] = "You have not paid for your order. Pay now to start matching!"
+            context['paid'] = "Unpaid. Pay now to start matching!"
         if o.driver != "":
             context['driver'] = o.driver
             context['disabled'] = "Resolve Order"
@@ -223,7 +238,7 @@ def get_order_info(user):
         else:
             context['apt'] = "Not specified"
         context['instructions'] = o.delivery_instructions
-        context['cost'] = "$" + str(o.order_cost)
+        context['cost'] = '${:,.2f}'.format(o.order_cost)
         context['list'] = o.order_list
         # print(o.customer_name)
     else:
@@ -253,7 +268,7 @@ def get_driver_info(d):
         else:
             context['apt'] = "Not specified"
         context['instructions'] = o.delivery_instructions
-        context['cost'] = "$" + str(o.order_cost)
+        context['cost'] = '${:,.2f}'.format(o.order_cost)
         context['list'] = order_to_list(o)
         context['chat_room'] = o.chat_room
         context['current_order'] = order_to_list(o)
@@ -315,14 +330,19 @@ def reset(request):
             d.has_order = False
             d.money_earned += price
             d.save()
+        o.past_user = o.user
+        o.past_driver = o.driver
         o.user = "COMPLETE"
         o.customer_name = "COMPLETE"
         o.driver = "COMPLETE"
+        o.is_completed = True
         o.save()
     else:
         o.user = "DROPPED"
         o.customer_name = "DROPPED"
         o.driver = "DROPPED"
+        o.past_user = request.user.email
+        o.past_driver = None
         o.save()
     request.user.profile.is_shopping = False
     request.user.save()

@@ -30,7 +30,7 @@ def match():
             d = queuedrivers.pop(0)
             o = queueorders.pop(0)
             slug = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
-            Room.objects.create(name='Shopper Chat', slug=slug, description="Chat about your order")
+            Room.objects.create(name="Shopper Chat", slug=slug, description="Chat about your order")
             o.chat_room = slug
             print(slug)
             o.save()

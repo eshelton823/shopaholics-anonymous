@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
+<br><br><br>
 {% if disabled %}
-<br>
-<br>
-<br>
+
 <h3 class="text-center accent-text">You already have an order submitted; you can only shop for one order at a time!</h3>
 {% endif %}
+<h3 class="text-center accent-text">{{ empty }}</h3>
 
    <div class="container">
   <div class="py-5 text-center">
@@ -180,11 +180,13 @@
             <!--data-locale="auto">-->
         <!--</script>-->
         <input class="btn btn-primary btn-lg w-50 btn-block domcolor txt" type="submit" value="Proceed to Checkout">
+        <small class="text-muted">Above delivery information will be saved for future orders.</small>
         {% endif %}
       </form>
     </div>
   </div>
    </div>
+
    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7dsJd3bbXAqoM-Gz82qqYaKLKZwfPaFc&libraries=places"></script>
    <script type="text/javascript">
       var input = document.getElementById('del_add');
