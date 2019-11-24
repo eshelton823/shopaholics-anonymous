@@ -44,7 +44,7 @@ class ViewTests(TestCase):
         response = self.client.get("/profile/signin/")
         #Check it's 200
         self.assertEqual(response.status_code, 200)
-    def testHomePage(self): 
+    def testHomePage(self):
         #Get home page
         response = self.client.get("/")
         #Check it's 200
@@ -139,8 +139,8 @@ class MatchTests(TestCase):
         #
         # #waiting for matches
         # Order.objects.create(user='c2@email.com', driver='d1@email.com', store_selection="WAL")
-        Order.objects.create(user='c3@email.com', order_placed = timezone.now() + timezone.timedelta(days=-1), delivery_instructions="drop check", store_selection="WAL", order_cost=45, has_paid=True)
-        Order.objects.create(user='b1@email.com', order_placed=timezone.now() + timezone.timedelta(hours=-1), store_selection="WAL", has_paid=True)
+        Order.objects.create(user='customer3', order_placed = timezone.now() + timezone.timedelta(days=-1), delivery_instructions="drop check", store_selection="WAL", order_cost=45, has_paid=True)
+        Order.objects.create(user='both1', order_placed=timezone.now() + timezone.timedelta(hours=-1), store_selection="WAL", has_paid=True)
 
         self.factory = RequestFactory()
         self.client = Client()
@@ -150,22 +150,22 @@ class MatchTests(TestCase):
     def test_match_earlier_driver(self, mock_match):
         request = self.factory.get('/dashboard')
         mock_match(request)
-        o3 = Order.objects.get(user='c3@email.com')
-        self.assertEqual(o3.driver, 'd3@email.com')
+        o3 = Order.objects.get(user='customer3')
+        self.assertEqual(o3.driver, 'driver3')
 
     @mock.patch('shop.views.match', side_effect=match)
     def test_match_earlier_order(self, mock_match):
         request = self.factory.get('/dashboard')
         mock_match(request)
-        o1 = Order.objects.get(user='c3@email.com')
+        o1 = Order.objects.get(user='customer3')
         self.assertNotEqual(o1.driver, "")
 
     @mock.patch('shop.views.match', side_effect=match)
     def test_match_multiple(self, mock_match):
         request = self.factory.get('/dashboard')
         mock_match(request)
-        o1 = Order.objects.get(user='c3@email.com')
-        o2 = Order.objects.get(user='b1@email.com')
+        o1 = Order.objects.get(user='customer3')
+        o2 = Order.objects.get(user='both1')
         self.assertTrue(o1.driver != "" and o2.driver != "")
 
     @mock.patch('shop.views.reset', side_effect=reset)
@@ -229,7 +229,7 @@ class MatchTests(TestCase):
         mock_match(request)
         request.user = self.user
         o1 = Order.objects.get(delivery_instructions="drop check")
-        driver = Profile.objects.get(email=o1.driver).email
+        driver = User.objects.get(username=o1.driver).profile.email
         mock_reset(request)
         d1 = Profile.objects.get(email=driver)
         self.assertEquals(d1.money_earned, 45.0)
@@ -242,7 +242,7 @@ class MatchTests(TestCase):
 
         request.user = self.user
         o1 = Order.objects.get(delivery_instructions="drop check")
-        driver = Profile.objects.get(email=o1.driver).email
+        driver = User.objects.get(username=o1.driver).profile.email
         mock_reset(request)
         d1 = Profile.objects.get(email=driver)
         self.assertEquals(d1.deliveries_made, 1)

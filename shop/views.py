@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import redirect, reverse
-from users.models import Order, Profile, get_default_cart
+from users.models import Order, Profile, get_default_cart, User
 from django.http import HttpResponseRedirect
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import timezone
@@ -133,7 +133,7 @@ def process_order(request):
             finally:
                 o.delivery_instructions = request.POST['del_instr']
                 o.store_selection = 'WAL'
-                o.user = request.user.email
+                o.user = request.user.username
                 o.customer_name = request.user.first_name
                 o.has_paid = False
                 o.order_cost = round(float(request.POST['price'])/100, 2)
@@ -161,7 +161,7 @@ def failure(request):
 
 def checkout(request):
     context = {}
-    o = Order.objects.get(user=request.user.email)
+    o = Order.objects.get(user=request.user.username)
     context['stripe_price'] = o.order_cost*100
     context['list'] = order_to_list(o)
     context['price'] = '${:,.2f}'.format(o.order_cost)
@@ -180,7 +180,7 @@ def search(request):
         return render(request, 'shop/search.html', context)
 
 def pay(request):
-    o = Order.objects.get(user=request.user.email)
+    o = Order.objects.get(user=request.user.username)
     o.has_paid = True
     o.save()
     return HttpResponseRedirect(reverse('shop:success'))
@@ -199,7 +199,7 @@ def get_order_info(user):
         context['paid'] = "N/A"
     else:
         context['status'] = "Shopping"
-        o = Order.objects.filter(user=user.email)[0]
+        o = Order.objects.filter(user=user.username)[0]
         context['current_order'] = order_to_list(o)
         # print(user.email)
         # context['price'] =
@@ -224,7 +224,7 @@ def get_order_info(user):
     else:
         context["identity"] = "Shopper"
     if user.profile.is_shopping:
-        o = Order.objects.filter(user=user.email)[0]
+        o = Order.objects.filter(user=user.username)[0]
         context['chat_room'] = o.chat_room
         # print(o)
         context['current'] = o.customer_name
@@ -254,7 +254,7 @@ def get_order_info(user):
 def get_driver_info(d):
     context = {}
     if d.profile.has_order:
-        o = Order.objects.filter(driver=d.email)[0]
+        o = Order.objects.filter(driver=d.username)[0]
         # print(o)
         context['current'] = o.customer_name
         context['status'] = "You have an order!"
@@ -318,15 +318,15 @@ def swap(request):
 def reset(request):
     if not request.user.profile.is_shopping:
         return HttpResponseRedirect(reverse('shop:dashboard'))
-    o = Order.objects.filter(user=request.user.email)[0]
+    o = Order.objects.filter(user=request.user.username)[0]
     price = o.order_cost
     if o.driver != "":
-        if o.driver == request.user.email:
+        if o.driver == request.user.username:
             request.user.profile.has_order = False
             request.user.profile.money_earned += price
             request.user.save()
         else:
-            d = Profile.objects.filter(email=o.driver)[0]
+            d = User.objects.filter(username=o.driver)[0].profile
             d.has_order = False
             d.money_earned += price
             d.save()
@@ -341,7 +341,7 @@ def reset(request):
         o.user = "DROPPED"
         o.customer_name = "DROPPED"
         o.driver = "DROPPED"
-        o.past_user = request.user.email
+        o.past_user = request.user.username
         o.past_driver = None
         o.save()
     request.user.profile.is_shopping = False
@@ -372,7 +372,7 @@ def match(request):
         d.deliveries_made += 1
         d.save()
         o.order_start_time = timezone.now()
-        o.driver = d.email
+        o.driver = d.user.username
         slug = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
         Room.objects.create(name='Shopper Chat', slug=slug, description="Chat about your order")
         o.chat_room = slug
