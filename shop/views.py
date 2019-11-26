@@ -110,7 +110,7 @@ def store(request):
             context['empty'] = "Your cart is empty. Please add items before checking out."
             request.session['empty'] = None
         else:
-            context['empty'] = ''
+            context['empty'] = False
         return render(request, 'shop/store.html', context)
     else:
         return redirect('profile/signin')

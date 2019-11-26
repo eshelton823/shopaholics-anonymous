@@ -2,11 +2,20 @@
 {% block content %}
 <br><br><br>
 {% if disabled %}
-
-<h3 class="text-center accent-text">You already have an order submitted; you can only shop for one order at a time!</h3>
+<div class="container">
+  <div class="d-flex justify-content-center">
+        <input class="btn btn-primary btn-lg btn-block btn-warning text-center" type="submit" value="You already have an order submitted; you can only shop for one order at a time!" disabled>
+  </div>
+</div>
+<!--<h3 class="text-center accent-text">You already have an order submitted; you can only shop for one order at a time!</h3>-->
 {% endif %}
-<h3 class="text-center accent-text">{{ empty }}</h3>
-
+{% if empty %}
+<div class="container">
+  <div class="d-flex justify-content-center">
+        <input class="btn btn-primary btn-lg btn-block btn-warning w-50 text-center" type="submit" value="{{ empty }}" disabled>
+  </div>
+</div>
+{% endif %}
    <div class="container">
   <div class="py-5 text-center">
     <br>
@@ -172,7 +181,7 @@
 
         <hr class="mb-4">
         {% if disabled %}
-        <input class="btn btn-primary btn-lg btn-block bg-warning" type="submit" value="Cannot Submit: Order In Progress" disabled>
+        <input class="btn btn-primary btn-lg btn-block btn-warning" type="submit" value="Cannot Submit: Order In Progress" disabled>
         {% else %}
         <!--<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"-->
             <!--data-key="{{ key }}"-->
