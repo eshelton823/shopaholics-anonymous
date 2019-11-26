@@ -4,18 +4,22 @@ body {
   margin: 0;
   height: 100%;
   width: 100%;
-  background-color: #f7f7f7;
+  overflow: hidden;
 }
 
 section {
   height: 70%;
   position: fixed;
-  width: 800px;
+  width: 90%;
 }
 #messages {
   padding: 10px;
   height: 100%;
   overflow-y: auto;
+}
+
+.message{
+    background-color: #fff;
 }
 
 #messages p {
@@ -61,7 +65,7 @@ section {
   background-color: #f7f7f7;
   position: fixed;
   bottom: 0;
-  width: 50%;
+  width: 90%;
 }
 
 #message-input {

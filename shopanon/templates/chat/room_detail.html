@@ -6,10 +6,11 @@
   <title>{{room.name}} | Shopaholics Chat</title>
   <link rel="shortcut icon" href="//www.twilio.com/marketing/bundles/marketing/img/favicons/favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css" />
-  <link rel="stylesheet" href="{% static "chat/styles/room_detail.css" %}">
+  <link rel="stylesheet" href="{% static "custom.css" %}">
+  <link rel="stylesheet" href="{% static "/chat/styles/room_detail.css" %}">
 </head>
 
-<body>
+<body class="card">
   <div class="container">
     <div class="columns">
       <div class="column">
@@ -19,7 +20,7 @@
           <form id="message-form">
             <div class="field">
               <div class="control">
-                <textarea class="textarea" id="message-input" placeholder="Your message here" rows="1" autofocus></textarea>
+                <input class="text" id="message-input" placeholder="Your message here" rows="1" autofocus></input>
               </div>
             </div>
             <button type="submit" class="button">Send</button>

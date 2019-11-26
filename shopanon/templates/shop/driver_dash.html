@@ -76,7 +76,8 @@
           <li>Customer: <span class="text-muted">{{ current }}</span></li>
         </ul>
         {% if chat_room %}
-        <iframe src="/rooms/{{ chat_room }}" class="w-100" height="500px"></iframe>
+        <h3>Chat with the customer:</h3>
+        <iframe src="/rooms/{{ chat_room }}" class="w-100" height="500px" frameBorder="0" scrolling="no"></iframe>
         {% else %}
         <a class="btn btn-md btn-primary accent" href="{% url 'shop:swap' %}" role="button" >{{ matching }}</a>
         {% endif %}
