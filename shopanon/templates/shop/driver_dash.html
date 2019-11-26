@@ -101,7 +101,7 @@
               <tbody>
                 {% for o in past_deliveries %}
                 <tr>
-                  <th scope="row">{{o.id}}</th>
+                  <th scope="row"><a class="btn btn-default" role="button" href="/order/{{o.id}}">{{o.id}}</a></th>
                   <td>{{o.past_user}}</td>
                   <td>{{o.order_date | date:"F d, Y"}}</td>
                   <td>${{o.order_cost | stringformat:".2f"}}</td>

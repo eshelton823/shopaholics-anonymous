@@ -140,7 +140,7 @@
                       <tbody>
                         {% for o in past_orders %}
                         <tr>
-                          <th scope="row">{{o.id}}</th>
+                          <th scope="row"><a href="/order/{{o.id}}">{{o.id}}</a></th>
                           <td>{{o.past_driver}}</td>
                           <td>{{o.order_date | date:"F d, Y"}}</td>
                           <td>${{o.order_cost | stringformat:".2f"}}</td>
