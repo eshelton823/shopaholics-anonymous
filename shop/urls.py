@@ -21,4 +21,5 @@ urlpatterns = [
     path('shop/swap', views.swap, name='swap'),
     path('shop/checkout', views.checkout, name='checkout'),
     path('shop/pay', views.pay, name="pay"),
+    path('order/<int:order_id>', views.view_order, name="view_order"),
 ]

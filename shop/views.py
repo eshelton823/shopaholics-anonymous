@@ -379,3 +379,16 @@ def match(request):
         o.save()
     # print(request.path_info)
     return HttpResponseRedirect(reverse('shop:dashboard'))
+
+def view_order(request, order_id):
+    o = Order.objects.filter(id=order_id)
+    context = {}
+    if(len(o) != 0):
+        o = o[0]
+    else:
+        return HttpResponseRedirect(reverse('shop:home'))
+    if (not request.user.is_authenticated or (o.past_driver != request.user.username or o.past_user != request.user.username)):
+        return HttpResponseRedirect(reverse('shop:home'))
+    print("Can load")
+    context['order'] = o
+    return render(request, 'shop/view_order.html', context)
