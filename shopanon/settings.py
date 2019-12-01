@@ -31,7 +31,7 @@ SECRET_KEY = 'q=cmugn0-(28i^rt#e(!zmr#0welvba-=tzmw18-(o)1sd2zk#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["shopaholics-anonymous.herokuapp.com", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["shopaholics-anonymous.herokuapp.com", "shopanontest.herokuapp.com", "localhost", "127.0.0.1"]
 
 
 # Application definition
