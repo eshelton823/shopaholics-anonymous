@@ -201,6 +201,7 @@ try:
         DATABASES['default'] = dj_database_url.config(default=psql, conn_max_age=600, ssl_require=True)
         SECURE_SSL_REDIRECT = True
         SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+        print("Heroku setup complete.")
 except:
     pass
 
