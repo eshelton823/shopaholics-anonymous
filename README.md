@@ -11,6 +11,7 @@
 1. Sign up and sign in with either Google or a unique username and password
 2. Choose whether to act as a customer or a driver
 3. View your information on the Dashboard
+4. Create a grocery list or shop for someone else's groceries!
 #### If you're a customer...
 1. Create a grocery list of items and specify dropoff time and location
 2. Pay for your list using Stripe (see test information below)
@@ -20,7 +21,7 @@
 6. View past orders by clicking on their ID at the bottom of your Dashboard
 
 #### If you're a driver...
-1. Access your Driver Dashboard for the first time to fill out your driver-specific information
+1. Access your Driver Dashboard for the first time to fill out your driver-specific information. You can edit this later from the Driver Dashboard
 2. Click on Start Matching to make yourself available to match with an order
 3. Once you're matched with an order, you can see the grocery list, dropoff location, and delivery instructions on your Driver Dashboard
 4. Chat with your customer via instant messaging on your Driver Dashboard
@@ -46,7 +47,7 @@
 Our chat functionality uses Twilio (https://www.twilio.com/)
 
 #### Store Information
-Our search results are from Walmart (https://www.walmart.com/)
+Our search results are from Walmart for our Charlottesville location (https://www.walmart.com/)
 
 #### Other Notable Features
 * Security
