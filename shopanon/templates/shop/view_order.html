@@ -30,7 +30,7 @@
                 <div class="card-body">
                     <ul class="list-unstyled mt-3 mb-4">
                         <li>Username: <span class="text-muted">{{ order.past_driver}}</span></li>
-                        <li>Accepted: <span class="text-muted">{{ order.order_start_time }}</span></li>
+                        <li>Accepted: <span class="text-muted">{% if order.order_start_time != None %}{{ order.order_start_time }}, {{order.order_date | date:"F d, Y"}}{% else %}Not accepted.{% endif %}</span></li>
                         <li>Order complete: <span class="text-muted">
                             {% if order.is_completed %}
                             Yes!
@@ -85,7 +85,9 @@
                     <h4 class="my-0 txt font-weight-normal">Delivery Instructions</h4>
                 </div>
                 <div class="card-body">
-
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Special instructions: <span class="text-muted">{% if order.delivery_instructions == "" %}None{% else %}{{order.delivery_instructions}}{% endif %}</span></li>
+                    </ul>
                 </div>
             </div>
         </div>
