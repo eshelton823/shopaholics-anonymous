@@ -34,35 +34,6 @@ DEBUG_PROPAGATE_EXCEPTIONS=True
 
 ALLOWED_HOSTS = ["shopaholics-anonymous.herokuapp.com", "shopanontest.herokuapp.com", "localhost", "127.0.0.1"]
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        },
-     'console':{
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
-
 
 # Application definition
 
@@ -213,7 +184,7 @@ TWILIO_CHAT_SERVICE_SID = os.environ.get('TWILIO_CHAT_SERVICE_SID', 'IS8bc83def1
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 MEDIA_ROOT = os.path.join(BASE_DIR, STATIC_ROOT, 'media/')
-MEDIA_URL = STATIC_URL+'media/'
+MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
