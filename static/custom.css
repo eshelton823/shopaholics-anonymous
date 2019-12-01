@@ -150,3 +150,5 @@ iframe{
 .nav-link:hover {color: #22BBA6;}
 
 .img-responsive{width:100%;}
+
+.map-container{position: relative; overflow: hidden;height: 400px;}

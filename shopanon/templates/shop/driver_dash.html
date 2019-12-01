@@ -70,8 +70,9 @@
           <!--<li>Dropoff Location: <span class="text-muted">{{ drop }}</span></li>-->
             <li>Cost: <span class="text-muted">{{ cost }}</span></li>
             <li>Customer: <span class="text-muted">{{ current }}</span></li>
-          <li>Dropoff Address: <span class="text-muted">{{ address }}</span>     Apartment: <span class="text-muted">{{ apt }}</span></li>
-          <li>Delivery Instructions: <span class="text-muted">{{ instructions }}</span></li>
+            <li>Delivery Instructions: <span class="text-muted">{{ instructions }}</span></li>
+          <li>Dropoff Address: <span class="text-muted">{{ address }}</span>     Apartment: <span class="text-muted">{{ apt }}</span>
+          <div height="200px" id="driverMap" class="map-container"></div></li>
         </ul>
         {% if list == "N/A" %}
         {% else %}
@@ -150,5 +151,34 @@
     </div
         </div>
       </div>
+      <script type="text/javascript" >
+        console.log("Running map")
+        var geocoder;
+        var map;
+        var address = "{{address}}";
+        function initMap() {
+          var map = new google.maps.Map(document.getElementById('driverMap'), {
+            zoom: 14,
+            center: {lat: 0, lng: 0}
+          });
+          geocoder = new google.maps.Geocoder();
+          codeAddress(geocoder, map);
+        }
+
+        function codeAddress(geocoder, map) {
+          geocoder.geocode({'address': address}, function(results, status) {
+            if (status === 'OK') {
+              map.setCenter(results[0].geometry.location);
+              var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+              });
+            } else {
+              alert('Geocode was not successful for the following reason: ' + status);
+            }
+          });
+        }
+      </script>
+      <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7dsJd3bbXAqoM-Gz82qqYaKLKZwfPaFc&callback=initMap"></script>
 </div>
 {% endblock %}
