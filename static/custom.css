@@ -119,6 +119,8 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+  min-width: 80%;
+  height: 32rem;
 }
 
 .carousel-caption{
