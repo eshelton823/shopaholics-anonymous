@@ -145,6 +145,10 @@ iframe{
     overflow:hidden;
 }
 
+.carousel-inner img {
+  margin: auto;
+}
+
 .nav-link:hover {color: #22BBA6;}
 
 .img-responsive{width:100%;}
