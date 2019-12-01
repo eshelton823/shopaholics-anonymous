@@ -212,8 +212,8 @@ TWILIO_API_SECRET = os.environ.get('TWILIO_API_SECRET', 'vCehwvuELDq6SvtXlKhUftj
 TWILIO_CHAT_SERVICE_SID = os.environ.get('TWILIO_CHAT_SERVICE_SID', 'IS8bc83def1e234d238bae23ccacf6315f')
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, STATIC_ROOT, 'media/')
+MEDIA_URL = STATIC_URL+'media/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
