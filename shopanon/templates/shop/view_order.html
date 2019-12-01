@@ -1,17 +1,93 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-    <div class="row">
+    <div class="row pt-4">
         <div class="col-md-6">
-            User info in card
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header domcolor">
+                    <h4 class="my-0 txt font-weight-normal">Customer Info</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Username: <span class="text-muted">{{ order.past_user }}</span></li>
+                        <li>Address: <span class="text-muted">{{ order.delivery_address }}</span></li>
+                        <li>Apartment Number: <span class="text-muted">
+                            {% if order.delivery_apt_suite %}
+                            {{ order.delivery_apt_suite }}
+                            {% else %}
+                            No apartment number provided.
+                            {% endif %}
+                        </span></li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="col-md-6">
-            Driver info in card
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header domcolor">
+                    <h4 class="my-0 txt font-weight-normal">Driver Info</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Username: <span class="text-muted">{{ order.past_driver}}</span></li>
+                        <li>Accepted: <span class="text-muted">{{ order.order_start_time }}</span></li>
+                        <li>Order complete: <span class="text-muted">
+                            {% if order.is_completed %}
+                            Yes!
+                            {% else %}
+                            No.
+                            {% endif %}
+                        </span></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            Item list
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header domcolor">
+                    <h4 class="my-0 txt font-weight-normal">Order List</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width:5%;"></th>
+                                <th style="width:70%;">Name</th>
+                                <th style="width:25%;">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in current_order %}
+                            <tr class="img-responsive">
+                                <td>
+                                    <img src="{{i.image}}" width='100px' alt="" title="" />
+                                </td>
+                                <td style="width: 70%;">
+                                    <a href="https://walmart.com/ip/{{i.id}}" target="_blank">{{i.title}}</a>
+                                </td>
+                                <td style="width:25%;">
+                                    {{i.price}}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header domcolor">
+                    <h4 class="my-0 txt font-weight-normal">Delivery Instructions</h4>
+                </div>
+                <div class="card-body">
+
+                </div>
+            </div>
         </div>
     </div>
 </div>

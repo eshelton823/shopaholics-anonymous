@@ -111,8 +111,37 @@
                                 Refresh
                                 Match </a> {% endif %}
                         </li>
-                        <li>Grocery List: <span class="text-muted">{{ current_order }}</span></li>
                     </ul>
+                    {% if current_order == "You aren't shopping right now!" %}
+
+                    {% else %}
+                    <h3>Grocery List:</h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width:5%;"></th>
+                                <th style="width:70%;">Name</th>
+                                <th style="width:25%;">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in current_order %}
+                            <tr class="img-responsive">
+                                <td>
+                                    <img src="{{i.image}}" width='100px' alt="" title="" />
+                                </td>
+                                <td style="width: 70%;">
+                                    <a href="https://walmart.com/ip/{{i.id}}" target="_blank">{{i.title}}</a>
+                                </td>
+                                <td style="width:25%;">
+                                    {{i.price}}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <br>
+                    {% endif %}
                     {% if status == "Shopping" %}
                         {% if chat_room %}
                             <h3>Chat with your driver:</h3>

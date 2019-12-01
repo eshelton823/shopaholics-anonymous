@@ -32,18 +32,9 @@ def order_to_list(o):
     except:
         ol = ast.literal_eval(ol)
         print(ol["items"])
-    print("\n")
-    print("Starting with:", ol)
-    print(len(ol))
-    print("\n")
-    print("Items", ol["items"])
-    print("\n")
+    context['current_order'] = []
     for i in range(len(ol['items'])):
-        print(ol['items'][i]['title'])
-        if(i == 0):
-            context['current_order'] = ol['items'][i]['title']
-        else:
-            context['current_order'] = context['current_order'] + ", " + ol['items'][i]['title']
+        context['current_order'].append({'title':ol['items'][i]['title'], 'image':ol['items'][i]['image'], 'id':ol['items'][i]['id'], 'price':ol['items'][i]['price']})
     print(context)
     return context['current_order']
 
@@ -387,8 +378,13 @@ def view_order(request, order_id):
         o = o[0]
     else:
         return HttpResponseRedirect(reverse('shop:home'))
-    if (not request.user.is_authenticated or (o.past_driver != request.user.username or o.past_user != request.user.username)):
+    print(o.past_driver, o.past_user, request.user.username)
+    if ((not request.user.is_authenticated)):
+        return HttpResponseRedirect(reverse('shop:home'))
+        #Broken up for clarity
+    elif (o.past_driver != request.user.username and o.past_user != request.user.username):
         return HttpResponseRedirect(reverse('shop:home'))
     print("Can load")
+    context['current_order'] = order_to_list(o)
     context['order'] = o
     return render(request, 'shop/view_order.html', context)
