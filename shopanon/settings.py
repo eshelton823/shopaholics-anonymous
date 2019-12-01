@@ -29,9 +29,9 @@ load_dotenv(dotenv_path)
 SECRET_KEY = 'q=cmugn0-(28i^rt#e(!zmr#0welvba-=tzmw18-(o)1sd2zk#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["shopaholics-anonymous.herokuapp.com", "localhost", "127.0.0.1"]
 
 
 # Application definition
