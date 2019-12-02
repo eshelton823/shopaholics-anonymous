@@ -89,7 +89,7 @@
     </div>
     <div class="col-md-8 order-md-1">
       <h3 class="mb-3">Build My Cart</h3>
-      <div class="d-md-flex w-100 my-md-3 pl-md-3">
+      <div class="d-md-flex w-100 my-md-3">
   <div class="card domcolor mr-md-9 w-100 pt-3 px-3 px-md-2 text-center overflow-hidden">
     <div class="my-3 py-3">
       <h3 class="card-title txt">Search for Items </h3>
@@ -114,7 +114,7 @@
                 <form action="" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="item" value="{{item}}"></input>
-                    <input type="submit" value="Add to cart"/>
+                    <button class="btn btn-secondary my-2 my-sm-0 accent" type="submit"><i class="fas fa-shopping-cart"></i></button>
                 </form>
               </div>
             </div>
@@ -187,7 +187,7 @@
             <!--data-locale="auto">-->
         <!--</script>-->
         <input class="btn btn-primary btn-lg w-50 btn-block domcolor txt" type="submit" value="Proceed to Checkout">
-        <small class="text-muted">Above delivery information will be saved for future orders.</small>
+        <!---<small class="text-muted">Above delivery information will be saved for future orders.</small>--->
         {% endif %}
       </form>
     </div>
