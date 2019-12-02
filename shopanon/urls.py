@@ -22,7 +22,7 @@ from django.contrib.auth.views import LogoutView
 from users.views import UserViewSet
 from rest_framework import routers
 
-router = routers.DefaultRouter()
+router = routers.DefaultRouter() 
 router.register(r'users', UserViewSet)
 
 app_name="shopanon"
@@ -38,3 +38,5 @@ urlpatterns = [
     url(r'^', include('chat.urls')),
     url(r'^', include('payments.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
+
+handler404 = 'shop.views.not_found'

@@ -387,3 +387,6 @@ def view_order(request, order_id):
     context['current_order'] = order_to_list(o)
     context['order'] = o
     return render(request, 'shop/view_order.html', context)
+
+def not_found(request, exception):
+    return render(request, 'shop/not_found.html')
