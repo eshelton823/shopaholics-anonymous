@@ -16,17 +16,16 @@
 </div>
 {% endif %}
    <div class="container">
-  <div class="py-5 text-center">
-    <br>
-    <h1>Shop Now!</h1>
-    <p class="lead">Search for groceries, add them to your cart, set your pickup date and time, and fill out payment info. We'll take care of the rest!</p>
-  </div>
+   <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Store</h1>
+</div>
+
 <div class="row">
-    <div class="col-md-4 order-md-2 mb-4">
-      <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span>Your shopping session</span>
+    <div class="col-md-4 order-md-2 mb-3">
+      <h3 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="mb-3">Your Shopping Session</span>
         <!--<span class="badge badge-secondary badge-pill">3</span>-->
-      </h4>
+      </h3>
       <div class="card domcolor pt-1 px-1 px-md-1">
         <div class="my-3 p-3">
           <h3 class="card-title txt">My Shopping List</h3>
@@ -39,10 +38,10 @@
                       <input type="hidden" name="delete" value="{{item}}"></input>
                       <input class="btn btn-secondary my-2 my-sm-0 accent" type="submit" value="X"/>
                   </form>
+                    <img src="{{ item.image }}" width="75" height="75">
                   <p class="col-md-7">{{item.title}}</p>
-                  <p class="col-md-3">{{item.price}}</p>
-                </div>
-              </li>
+                  <p class="col-md-5">{{item.price}}</p>
+
             {% empty %}
             <div class="txt">
               No items.
@@ -93,9 +92,9 @@
       <div class="d-md-flex w-100 my-md-3 pl-md-3">
   <div class="card domcolor mr-md-9 w-100 pt-3 px-3 px-md-2 text-center overflow-hidden">
     <div class="my-3 py-3">
-      <h3 class="card-title txt">Search</h3>
+      <h3 class="card-title txt">Search for Items </h3>
       <form class="form-inline my-2 my-lg-0 card-body" method="GET">
-        <input class="form-control mr-sm-2 w-75" type="text" placeholder="Search" aria-label="Search" name="search">
+        <input class="form-control mr-sm-2 w-75" type="text" placeholder="e.g. cheese" aria-label="Search" name="search">
         <button class="btn btn-secondary my-2 my-sm-0 accent" type="submit">Search</button>
       </form>
       <ul class="list-group list-group-flush list-group-items">
@@ -135,8 +134,7 @@
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="del_add">Delivery Address</label>
-            <input type="text" class="form-control" id="del_add" name="del_add" placeholder="" maxlength="100" required>
-            <small class="text-muted">E.g. 123 Main St. Charlottesville, VA 22903</small>
+            <input type="text" class="form-control" id="del_add" name="del_add" placeholder="e.g. 123 Main St. Charlottesville, VA 22903" maxlength="100" required>
             <div class="invalid-feedback">
               Delivery address is required
             </div>
