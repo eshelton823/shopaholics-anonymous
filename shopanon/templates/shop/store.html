@@ -29,25 +29,33 @@
       <div class="card domcolor pt-1 px-1 px-md-1">
         <div class="my-3 p-3">
           <h3 class="card-title txt">My Shopping List</h3>
-          <ul class="list-group list-group-flush list-group-cart">
-            {% for item in user.profile.cart.items %}
-              <li class="list-group-item">
-                <div class="row">
-                  <form action="" method="post" class="col-md-2">
-                      {% csrf_token %}
-                      <input type="hidden" name="delete" value="{{item}}"></input>
-                      <input class="btn btn-secondary my-2 my-sm-0 accent" type="submit" value="X"/>
-                  </form>
-                    <img src="{{ item.image }}" width="75" height="75">
-                  <p class="col-md-7">{{item.title}}</p>
-                  <p class="col-md-5">{{item.price}}</p>
-
-            {% empty %}
-            <div class="txt">
-              No items.
-            </div>
-            {% endfor %}
-          </ul>
+            <div class="row list-group" style="max-height:300px; overflow: auto">
+            {% if user.profile.cart.items %}
+              <table class="table table-striped" style="background-color:white">
+                  <tbody class="list-group">
+                      {% for item in user.profile.cart.items %}
+                      <tr class="img-responsive">
+                          <td style="width: 65%;">
+                              <a href="https://walmart.com/ip/{{i.id}}" target="_blank">{{item.title}}</a>
+                          </td>
+                          <td style="width:25%;">
+                              {{item.price}}
+                          </td>
+                          <td style="width: 10%;">
+                              <form action="" method="post" class="col-md-2">
+                                  {% csrf_token %}
+                                  <input type="hidden" name="delete" value="{{item}}"></input>
+                                  <button class="btn btn-secondary my-2 my-sm-0 accent" type="submit"><i class="fas fa-trash"></i></button>
+                              </form>
+                          </td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+              {% else %}
+              <span class="text-center txt">Empty cart.</span>
+              {% endif %}
+           </div>
         </div>
       </div>
       <ul class="list-group mb-3">
@@ -94,8 +102,10 @@
     <div class="my-3 py-3">
       <h3 class="card-title txt">Search for Items </h3>
       <form class="form-inline my-2 my-lg-0 card-body" method="GET">
-        <input class="form-control mr-sm-2 w-75" type="text" placeholder="e.g. cheese" aria-label="Search" name="search">
+        <div class="w-100 justify-content-center">
+        <input class="form-control mr-sm-2" type="text" placeholder="e.g. cheese" aria-label="Search" name="search">
         <button class="btn btn-secondary my-2 my-sm-0 accent" type="submit">Search</button>
+        </div>
       </form>
       <ul class="list-group list-group-flush list-group-items">
         {% for item in items %}
