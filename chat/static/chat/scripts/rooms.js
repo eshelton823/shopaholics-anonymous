@@ -150,4 +150,12 @@ $form.on("submit", function(e) {
     $input.val("");
   }
 });
+$form.on(‘keypress’,function(e) {
+  if (e.which == 13) {
+    if (roomChannel && $input.val().trim().length > 0) {
+        roomChannel.sendMessage($input.val());
+        $input.val(“”);
+    }
+  }
+});
 });
