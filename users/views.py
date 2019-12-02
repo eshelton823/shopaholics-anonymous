@@ -103,7 +103,12 @@ def create_account(request):
             u1 = User.objects.get(email=request.POST['email'])
             u1.profile.email = request.POST['email']
             u1.save()
-            return HttpResponseRedirect(reverse('shop:dashboard'))
+            print("before authenticate")
+            user = authenticate(username=request.POST['username'], password=request.POST['password'])
+            print("after authenticate", user)
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect(reverse('shop:dashboard'))
         except:
             print("smaller fail")
             return HttpResponseRedirect(reverse('shop:failure'))

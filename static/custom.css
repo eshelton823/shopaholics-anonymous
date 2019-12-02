@@ -1,5 +1,5 @@
 main {
-    padding-top:55px;
+    padding-top:60px;
     padding-bottom:70px;
     min-height: 90vh;
 }
@@ -143,4 +143,16 @@ background: rgba(255, 255, 255, .8);
 color: #4E1D81;
 }
 
+iframe{
+    overflow:hidden;
+}
+
+.carousel-inner img {
+  margin: auto;
+}
+
 .nav-link:hover {color: #22BBA6;}
+
+.img-responsive{width:100%;}
+
+.map-container{position: relative; overflow: hidden;height: 400px;}

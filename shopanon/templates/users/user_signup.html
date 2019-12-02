@@ -69,7 +69,8 @@
           </div>
           <div class="card-body">
             <p class="accent-text">{{ error }}</p>
-            <form action="{% url 'users:create_account' %}" method="post">
+            <form action="{% url 'users:create_account' %}" method="post" oninput='password2.setCustomValidity(password2.value != password.value ? "Passwords do not match." : "")'>
+                <!--password validation: https://stackoverflow.com/questions/49943610/can-i-check-password-confirmation-in-bootstrap-4-with-default-validation-options-->
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="firstname">First Name</label>
@@ -92,6 +93,10 @@
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" class="form-control" id="password" name ="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" class="form-control" id="password2" name ="password2" required>
                 </div>
 
             <input type="submit" class="btn btn-lg btn-primary accent" value="Submit">

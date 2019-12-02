@@ -29,9 +29,10 @@ load_dotenv(dotenv_path)
 SECRET_KEY = 'q=cmugn0-(28i^rt#e(!zmr#0welvba-=tzmw18-(o)1sd2zk#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+DEBUG_PROPAGATE_EXCEPTIONS=True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["shopaholics-anonymous.herokuapp.com", "shopanontest.herokuapp.com", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -181,12 +183,14 @@ TWILIO_API_SECRET = os.environ.get('TWILIO_API_SECRET', 'vCehwvuELDq6SvtXlKhUftj
 TWILIO_CHAT_SERVICE_SID = os.environ.get('TWILIO_CHAT_SERVICE_SID', 'IS8bc83def1e234d238bae23ccacf6315f')
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, STATIC_ROOT, 'media/')
+MEDIA_URL = STATIC_URL+'media/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Activate Django-Heroku.
 try:
@@ -197,6 +201,8 @@ try:
         DATABASES['default'] = dj_database_url.config(default=psql, conn_max_age=600, ssl_require=True)
         SECURE_SSL_REDIRECT = True
         SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+        BASE_URL = "https://shopaholics-anonymous.herokuapp.com"
+        print("Heroku setup complete.")
 except:
     pass
 

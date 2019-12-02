@@ -32,19 +32,9 @@ def order_to_list(o):
     except:
         ol = ast.literal_eval(ol)
         print(ol["items"])
-    print("\n")
-    print("Starting with:", ol)
-    print(len(ol))
-    print("\n")
-    print("Items", ol["items"])
-    print("\n")
+    context['current_order'] = []
     for i in range(len(ol['items'])):
-        print(ol['items'][i]['title'])
-        if(i == 0):
-            context['current_order'] = ol['items'][i]['title']
-        else:
-            context['current_order'] = context['current_order'] + ", " + ol['items'][i]['title']
-    print(context)
+        context['current_order'].append({'title':ol['items'][i]['title'], 'image':ol['items'][i]['image'], 'id':ol['items'][i]['id'], 'price':ol['items'][i]['price']})
     return context['current_order']
 
 def dashboard(request):
@@ -110,7 +100,7 @@ def store(request):
             context['empty'] = "Your cart is empty. Please add items before checking out."
             request.session['empty'] = None
         else:
-            context['empty'] = ''
+            context['empty'] = False
         return render(request, 'shop/store.html', context)
     else:
         return redirect('profile/signin')
@@ -379,3 +369,21 @@ def match(request):
         o.save()
     # print(request.path_info)
     return HttpResponseRedirect(reverse('shop:dashboard'))
+
+def view_order(request, order_id):
+    o = Order.objects.filter(id=order_id)
+    context = {}
+    if(len(o) != 0):
+        o = o[0]
+    else:
+        return HttpResponseRedirect(reverse('shop:home'))
+    # print(o.past_driver, o.past_user, request.user.username)
+    if ((not request.user.is_authenticated)):
+        return HttpResponseRedirect(reverse('shop:home'))
+        #Broken up for clarity
+    elif (o.past_driver != request.user.username and o.past_user != request.user.username):
+        return HttpResponseRedirect(reverse('shop:home'))
+    print(o.special_requests)
+    context['current_order'] = order_to_list(o)
+    context['order'] = o
+    return render(request, 'shop/view_order.html', context)

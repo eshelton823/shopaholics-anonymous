@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header domcolor">
+                    <h4 class="my-0 txt font-weight-normal">Customer Info</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Username: <span class="text-muted">{{ order.past_user }}</span></li>
+                        <li>Address: <span class="text-muted">{{ order.delivery_address }}</span></li>
+                        <li>Apartment Number: <span class="text-muted">
+                            {% if order.delivery_apt_suite %}
+                            {{ order.delivery_apt_suite }}
+                            {% else %}
+                            No apartment number provided.
+                            {% endif %}
+                        </span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header domcolor">
+                    <h4 class="my-0 txt font-weight-normal">Driver Info</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Username: <span class="text-muted">{{ order.past_driver}}</span></li>
+                        <li>Accepted: <span class="text-muted">{% if order.order_start_time != None %}{{ order.order_start_time }}, {{order.order_date | date:"F d, Y"}}{% else %}Not accepted.{% endif %}</span></li>
+                        <li>Order complete: <span class="text-muted">
+                            {% if order.is_completed %}
+                            Yes!
+                            {% else %}
+                            No.
+                            {% endif %}
+                        </span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header domcolor">
+                    <h4 class="my-0 txt font-weight-normal">Order List</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width:5%;"></th>
+                                <th style="width:70%;">Name</th>
+                                <th style="width:25%;">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in current_order %}
+                            <tr class="img-responsive">
+                                <td>
+                                    <img src="{{i.image}}" width='100px' alt="" title="" />
+                                </td>
+                                <td style="width: 70%;">
+                                    <a href="https://walmart.com/ip/{{i.id}}" target="_blank">{{i.title}}</a>
+                                </td>
+                                <td style="width:25%;">
+                                    {{i.price}}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header domcolor">
+                    <h4 class="my-0 txt font-weight-normal">Delivery Instructions</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Special instructions: <span class="text-muted">{% if order.delivery_instructions == "" %}None{% else %}{{order.delivery_instructions}}{% endif %}</span></li>
+                    </ul>
+                    <div height="200px" id="driverMap" class="map-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" >
+      console.log("Running map")
+      var geocoder;
+      var map;
+      var address = "{{order.delivery_address}}";
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('driverMap'), {
+          zoom: 14,
+          center: {lat: 0, lng: 0}
+        });
+        geocoder = new google.maps.Geocoder();
+        codeAddress(geocoder, map);
+      }
+
+      function codeAddress(geocoder, map) {
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+              map: map,
+              position: results[0].geometry.location
+            });
+          } else {
+            console.log('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+    </script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7dsJd3bbXAqoM-Gz82qqYaKLKZwfPaFc&callback=initMap"></script>
+</div>
+{% endblock %}

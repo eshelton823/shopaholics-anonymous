@@ -16,22 +16,27 @@
             <div class="form-group">
                 <label for="licensePlateNumberInput">License Plate Number</label>
                 <input type="text" class="form-control" id="licensePlateNumberInput" name="licensePlateNumberInput" pattern="[A-Za-z0-9 \-]*" maxlength="10" title="Please enter only letters, numbers, dashes, or spaces" required>
+                <small class="text-muted">E.g. ABX-89WR, WAHOOWA21</small>
             </div>
             <div class="form-group">
                 <label for="carMakeInput">Car Make</label>
                 <input type="text" class="form-control" id="carMakeInput" name="carMakeInput" pattern="[A-Za-z ]*" maxlength="16" title="Please enter only letters or spaces" required>
+                <small class="text-muted">E.g. Honda, Ford, Chevrolet, Volkswagen</small>
             </div>
             <div class="form-group">
                 <label for="carModelInput">Car Model</label>
                 <input type="text" class="form-control" id="carModelInput" name ="carModelInput" pattern="[A-Za-z0-9 ]*" maxlength="16" title="Please enter only letters, numbers, or spaces" required>
+                <small class="text-muted">E.g. Accord, Fusion, Corvette, Bug</small>
             </div>
             <div class="form-group">
                 <label for="driverLicenseNumberInput">Driver's License Number</label>
                 <input type="text" class="form-control" id="driverLicenseNumberInput" name="driverLicenseNumberInput" maxlength="12" pattern="[A-Za-z0-9]*" title="Please enter only letters or numbers" required>
+                <small class="text-muted">E.g. T123456789</small>
             </div>
             <div class="form-group">
                 <label for="stateOfLicenseIssuanceInput">State Of License Issuance</label>
                 <input type="text" class="form-control" id="stateOfLicenseIssuanceInput" name="stateOfLicenseIssuanceInput" maxlength="25" pattern="[A-Za-z]*" title="Please enter only letters" required>
+                <small class="text-muted">E.g. Virginia</small>
             </div>
         <input type="submit" class="btn btn-lg btn-primary accent" value="Submit">
         </form>
