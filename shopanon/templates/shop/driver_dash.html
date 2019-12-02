@@ -72,10 +72,11 @@
             <li>Customer: <span class="text-muted">{{ current }}</span></li>
             <li>Delivery Instructions: <span class="text-muted">{{ instructions }}</span></li>
           <li>Dropoff Address: <span class="text-muted">{{ address }}</span>     Apartment: <span class="text-muted">{{ apt }}</span>
-          <div height="200px" id="driverMap" class="map-container"></div></li>
         </ul>
         {% if list == "N/A" %}
         {% else %}
+        <div height="200px" id="driverMap" class="map-container"></div>
+        <br>
         <h3>Grocery List:</h3>
         <table class="table table-striped">
             <thead>
